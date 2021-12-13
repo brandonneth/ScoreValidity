@@ -5,66 +5,89 @@
 // SPDX-License-Identifier: (BSD-3-Clause)
 //////////////////////////////////////////////////////////////////////////////
 #include "RAJA/RAJA.hpp"
+#include <algorithm>
+#include <chrono>
+using namespace RAJA;
+template <idx_t I0, idx_t I1, idx_t I2>
+struct order_to_kpol3 {
+  using Policy = KernelPolicy<
+    statement::For<I0, loop_exec,
+      statement::For<I1, loop_exec,
+        statement::For<I2, loop_exec,
+          statement::Lambda<0>
+        >
+      >
+    >
+  >;
+};
 
-template <typename T>
-T *allocate(std::size_t size)
-{
-  T *ptr;
-#if defined(RAJA_ENABLE_CUDA)
-  cudaErrchk(
-      cudaMallocManaged((void **)&ptr, sizeof(T) * size, cudaMemAttachGlobal));
-#else
-  ptr = new T[size];
-#endif
-  return ptr;
+template <typename Policy>
+void enumerate_layouts() {
+  using namespace RAJA;
+  using VIEW = View<double, Layout<3>>;
+
+  idx_t N = 128;
+
+  VIEW a(new double[N*N*N], N,N,N);
+  VIEW b(new double[N*N*N], N,N,N);
+
+  auto lambda = [&](auto i0, auto i1, auto i2) {a(i0,i1,i2) = b(i0,i1,i2);};
+
+  auto segs = make_tuple(RangeSegment(0,N), RangeSegment(0,N), RangeSegment(0,N));
+
+  auto reset = make_kernel<Policy>(segs, [=](auto i0, auto i1, auto i2) {b(i0, i1, i2) = std::rand();});
+
+
+  std::array<idx_t, 3> perm{{0,1,2}};
+
+  do {
+    reset();
+    auto layout = make_permuted_layout({{N,N,N}}, perm);
+    a.set_layout(layout);
+    b.set_layout(layout);
+
+    auto knl = make_kernel<Policy>(segs, lambda);
+    
+    auto access = knl.execute_symbolically().at(0);
+    auto normalized = knl.normalize_access(access);
+
+    std::cout << "(";
+    std::cout << "[";
+    std::string s = "";
+    for(auto i : normalized) {
+      std::cout << s << i;
+      s = " ";
+    }
+    std::cout << "]";
+    std::cout << " , ";
+ 
+    auto start = std::chrono::high_resolution_clock::now();
+
+    knl();
+    auto stop = std::chrono::high_resolution_clock::now();
+
+    auto time = std::chrono::duration_cast<std::chrono::duration<double>>(stop - start).count();
+
+    std::cout << time << "),\n";
+  } while(std::next_permutation(perm.begin(), perm.end()));
 }
 
-template <typename T>
-void deallocate(T *&ptr)
-{
-  if (ptr) {
-#if defined(RAJA_ENABLE_CUDA)
-    cudaErrchk(cudaFree(ptr));
-#else
-    delete[] ptr;
-#endif
-    ptr = nullptr;
-  }
-}
+
 
 int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
 {
-#if defined(RAJA_ENABLE_CUDA)
-  using policy = RAJA::cuda_exec<256>;
-  const std::string policy_name = "CUDA";
-#elif defined(RAJA_ENABLE_OPENMP)
-  using policy = RAJA::omp_parallel_for_exec;
-  const std::string policy_name = "OpenMP";
-#else
-  using policy = RAJA::seq_exec;
-  const std::string policy_name = "sequential";
-#endif
 
-  std::cout << "Running vector addition with RAJA using the " << policy_name << " backend...";
+  using namespace RAJA;
 
-  constexpr int N = 1000000;
+  std::cout << "[";
+  enumerate_layouts<order_to_kpol3<0,1,2>::Policy>();
+  enumerate_layouts<order_to_kpol3<0,2,1>::Policy>();
+  enumerate_layouts<order_to_kpol3<1,0,2>::Policy>();
+  enumerate_layouts<order_to_kpol3<1,2,0>::Policy>();
+  enumerate_layouts<order_to_kpol3<2,0,1>::Policy>();
+  enumerate_layouts<order_to_kpol3<2,1,0>::Policy>();
 
-  int *a = allocate<int>(N);
-  int *b = allocate<int>(N);
-  int *c = allocate<int>(N);
+  std::cout << "]";
 
-  RAJA::forall<policy>(RAJA::TypedRangeSegment<int>(0, N), [=] RAJA_HOST_DEVICE (int i) { 
-    a[i] = -i;
-    b[i] = i;
-  });
-
-  RAJA::forall<policy>(RAJA::TypedRangeSegment<int>(0, N), [=] RAJA_HOST_DEVICE (int i) { 
-    c[i] = a[i] + b[i]; 
-  });
-
-  std::cout << "done." << std::endl;
-
-  deallocate(a);
-  deallocate(b);
-  deallocate(c);
+  return 0;
 }
