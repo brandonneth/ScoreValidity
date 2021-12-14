@@ -56,7 +56,7 @@ void enumerate_layouts() {
     std::string s = "";
     for(auto i : normalized) {
       std::cout << s << i;
-      s = " ";
+      s = ",";
     }
     std::cout << "]";
     std::cout << " , ";
