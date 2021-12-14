@@ -1,0 +1,151 @@
+\documentclass{article}
+
+
+\usepackage{comment}
+\usepackage{graphicx}
+\usepackage{csquotes}
+\usepackage{balance}
+\usepackage{setspace}
+
+\usepackage{listings}
+\usepackage{subcaption}
+\usepackage{xcolor}
+
+\lstset{ %
+language=C++,                % choose the language of the code
+basicstyle=\ttfamily\footnotesize,       % the size of the fonts that are used for the code
+columns=fullflexible,
+numbers=left,                   % where to put the line-numbers
+numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
+stepnumber=1,                   % the step between two line-numbers. If it is 1 each line will be numbered
+numbersep=5pt,                  % how far the line-numbers are from the code
+%backgroundcolor=\color{codeBG3},  % choose the background color. You must add \usepackage{color}
+showspaces=false,               % show spaces adding particular underscores
+showstringspaces=false,         % underline spaces within strings
+showtabs=false,                 % show tabs within strings adding particular underscores
+frame=single,           % adds a frame around the code
+tabsize=2,          % sets default tabsize to 2 spaces
+captionpos=b,           % sets the caption-position to bottom
+breaklines=true,        % sets automatic line breaking
+breakatwhitespace=false,    % sets if automatic breaks should only happen at whitespace
+keywordstyle=\color{blue},       % keyword style
+  %language=Octave,                 % the language of the code
+  otherkeywords={SearchVar,MV,TSS,tileExpr,Search,tFunc...},           % if you want to add more keywords to the set
+  numberstyle=\tiny\color{black}, % the style that is used for the line-numbers
+  rulecolor=\color{black},
+escapeinside={<@}{@>}
+}
+
+
+\newcommand{\todo}[1]{{\textcolor{red}{{\tt{TODO:}}\,\,#1 }}}
+\newcommand{\an}[1]{{\textcolor{blue}{Author's Note: #1}}}
+\newcommand{\ttt}[1]{{\texttt{#1}}}
+
+\begin{document}
+\todo{motivate.}
+We start with a simple example. A 3-dimensional kernel that makes a single access to a 3 dimensional View. As a RAJA kernel, it may look like the following.
+\begin{lstlisting}
+kernel<3D_POLICY>(loop_bounds, [=](auto i, auto j, auto k) 
+  {
+      A(k,j,i) = foo(i,j,k);
+  });
+\end{lstlisting}
+
+There are two variables relevant to the discussion: the policy \verb.3D_POLICY. and the layout of \verb.A..
+
+\subsection{Kernel Policies}
+The policy determines how the kernel is executed, from the order of the iteration to the schedule at each level. One possible definition of the policy is:
+\begin{lstlisting}
+using 3D_POLICY = KernelPolicy<
+  statement::For<0,omp_parallel_for_exec,
+    statement::For<1,loop_exec,
+      statement::For<2, loop_exec,
+        statement::Lambda<0>
+      >
+    >
+  >
+>;
+\end{lstlisting}
+This policy defines an execution schedule that iterates over the \verb.i. dimension in parallel, then over the \verb.j. and \verb.k. dimensions sequentially. 
+
+Another possible definition of the policy is:
+\begin{lstlisting}
+    using 3D_POLICY = KernelPolicy<
+      statement::For<1,omp_parallel_for_exec,
+        statement::For<0,loop_exec,
+          statement::For<2, loop_exec,
+            statement::Lambda<0>
+          >
+        >
+      >
+    >;
+\end{lstlisting}
+This policy defines a slightly different execution schedule. 
+Without having to change the order of the arguments in the lambda describing the loop body, this policy effectively implements a loop interchange transformation between the \verb.i. and \verb.j. dimension. 
+First, it iterates over the \verb.j. dimension in parallel, then over \verb.i. and \verb.k..
+
+For an $n$-dimensional kernel, there are $n!$ different possible dimension orderings of its kernel policy. 
+
+
+\subsection{View Layouts}
+
+Less visible in the description of a kernel but still important is the data layout of the Views in the computation. 
+The layout describes how a View's logical $d$-dimensional dataspace is mapped to the linear indices within physical memory. 
+For a 2-dimensional View, these layouts correspond to row-major order and column-major order. 
+
+Layouts are defined by permutations. 
+For example, for a 3D View, the permutation $(0,1,2)$ represents the \enquote{natural} layout, where the first index has the largest stride and the final index has stride 1.
+In contrast, the permutation $(2,0,1)$ represents a wholly different layout, where the middle index has the largest stride and the first index has stride 1. 
+
+For a $d$-diemnsional View, there are $d!$ different possible layouts.
+
+\section{Modeling the Cost of Layout Choices}
+
+Our goal is, given a kernel, identify which data layouts will lead to the best performance in terms of data locality. 
+This means that as much as possible we want the data accesses in consecutive iterations to access data with stride 1. 
+We want to shrink the search space as much as possible. 
+Thus, we need to find equivalences between different computations. 
+We describe some now.
+An important note: the semantics preserved by these equivalences are not program semantics. 
+We are only interested in the order the kernel traverses the data within its physical storage. 
+That traversal order is the preserved semantics.
+
+In describing kernel policies, we adopt the shorthand \verb.KPOL_012. to indicate that the order of \verb.For. indices in the policy is 0, then 1, then 2. 
+In describing View layouts, we adopt a similar shorthand \verb.A_012. to indicate the normal ordering.
+A policy or view without a trailing order indicates the natural order. 
+
+\subsection{Equivalence 1: Policy Order and Argument Order}
+
+Consider the two following kernels:
+\begin{lstlisting}
+kernel<KPOL_012>(bounds, [=](auto i0, auto i1, auto i2) {
+  A(i0,i1,i2) = ...;
+});
+kernel<KPOL_210>(bounds, [=](auto i0, auto i1, auto i2) {
+  A(i2,i1,i0) = ...;
+});
+\end{lstlisting}
+Here we see that in both kernels, the innermost loop iterates over the stride 1 index of the View. 
+This brings us to our first isomorphism: apply the same reordering to the policy order and the access argument order. 
+
+\subsection{Equivalence 2: Layout Order and Argument Order}
+
+The second equivalence is similar.
+\begin{lstlisting}
+kernel<KPOL>(bounds, [=](auto i0, auto i1, auto i2) {
+    A_012(i0,i1,i2) = ...;
+});
+kernel<KPOL_210>(bounds, [=](auto i0, auto i1, auto i2) {
+    A_210(i2,i1,i0) = ...;
+});
+\end{lstlisting}
+
+
+
+\subsection{Equivalence 3}
+
+
+\section{Additional Complexity: Mismatched Dimensions}
+
+
+\end{document}
