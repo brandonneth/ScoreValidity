@@ -15,6 +15,8 @@ def scorer1(order):
   concat = ''
   for i in order:
     concat += str(i)
+  while len(concat) < 3:
+    concat = '0' + concat
   return int(concat)
 
 def scorer2(order):
@@ -30,15 +32,15 @@ d = [(scorer1(order), scorer2(order), scorer3(order), time) for (order, time) in
 
 print(d)
 
-
-df = pd.DataFrame(d, columns=["Score 1", "Score 2", "Score 3", "Time"])
+df = pd.DataFrame(d, columns=["TraversalOrder", "LastDigit", "Score", "Time"])
 
 print(df)
 
 import matplotlib.pyplot as plt
-import seaborn as sns
- 
-#df.plot(x='Score 1', y='Time', kind='box')
+from plotnine import ggplot, geom_point, aes, geom_boxplot
 
+p1 = ggplot(df) + geom_boxplot(aes(x="factor(TraversalOrder)", y='Time'))
 
+p1.draw()
+plt.show()
 

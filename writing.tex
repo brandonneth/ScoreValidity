@@ -1,0 +1,197 @@
+\documentclass{article}
+
+
+\usepackage{comment}
+\usepackage{graphicx}
+\usepackage{csquotes}
+\usepackage{balance}
+\usepackage{setspace}
+
+\usepackage{listings}
+\usepackage{subcaption}
+\usepackage{xcolor}
+
+\lstset{ %
+language=C++,                % choose the language of the code
+basicstyle=\ttfamily\footnotesize,       % the size of the fonts that are used for the code
+columns=fullflexible,
+numbers=left,                   % where to put the line-numbers
+numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
+stepnumber=1,                   % the step between two line-numbers. If it is 1 each line will be numbered
+numbersep=5pt,                  % how far the line-numbers are from the code
+%backgroundcolor=\color{codeBG3},  % choose the background color. You must add \usepackage{color}
+showspaces=false,               % show spaces adding particular underscores
+showstringspaces=false,         % underline spaces within strings
+showtabs=false,                 % show tabs within strings adding particular underscores
+frame=single,           % adds a frame around the code
+tabsize=2,          % sets default tabsize to 2 spaces
+captionpos=b,           % sets the caption-position to bottom
+breaklines=true,        % sets automatic line breaking
+breakatwhitespace=false,    % sets if automatic breaks should only happen at whitespace
+keywordstyle=\color{blue},       % keyword style
+  %language=Octave,                 % the language of the code
+  otherkeywords={SearchVar,MV,TSS,tileExpr,Search,tFunc...},           % if you want to add more keywords to the set
+  numberstyle=\tiny\color{black}, % the style that is used for the line-numbers
+  rulecolor=\color{black},
+escapeinside={<@}{@>}
+}
+
+
+\newcommand{\todo}[1]{{\textcolor{red}{{\tt{TODO:}}\,\,#1 }}}
+\newcommand{\an}[1]{{\textcolor{blue}{Author's Note: #1}}}
+\newcommand{\ttt}[1]{{\texttt{#1}}}
+
+\begin{document}
+
+\section{Traversal Order}
+
+In this section, we describe how RAJALC estimates the cost of a particular layout choice and how cost metrics are reused where possible.
+When deciding between possible layout choices for a kernel, RAJALC determines the traversal order of each access in the kernel.
+An access' traversal order describes the order in which a kernel traverses the dimensions of a view's data as they are laid out in memory. 
+For example, the access \verb.A(i,j). to a row-major layout and the access \verb.B(j,i). to a column-major layout have the same traversal order because they both access memory with stride one.
+
+\subsection{Deriving the Traversal Order}
+
+Given an $n$-dimensional kernel that accesses a $d$-dimensional view, there are $n! * d!$ different possible combinations of kernel policy and data layout. 
+Estimating the cost of all of these choices separately is prohibitively expensive, especially using any sort of dynamic benchmarking. 
+However, the traversal order of an access compresses the kernel policy and data layout into a single feature that accurately predicts relative performance.
+
+Listing~\ref{MatMulTraversalOrder} shows two implementations of a matrix multiplication using different kernel policies and involving views using different data layouts.
+Deriving the traversal order for an access requires the extraction of three values: the policy order, the layout order, and the argument order. 
+For the access to \verb.C. in \verb.knl1., the policy order is $(0,1,2)$, the layout order is $(0,1)$, and the argument order is $(0,1)$. 
+In contrast, for the access to \verb.B. in \verb.knl2., the policy order is $(2,0,1)$, the layout order is $(1,0)$, and the argument order is $(2,1)$. 
+
+With these values in hand, we can derive the traversal order, using the access to \verb.B. in \verb.knl2. as a running example. 
+We start with the argument order $(2,1)$.
+The first step is to normalize the policy order.
+This step gives us the answer to the question: \enquote{What access has the same traversal order when the policy order is monotonically increasing (the normal policy order)?}
+This is calculated using the following: \verb,[policy_order.indexof(arg) for arg in arg_order],. 
+The index of $2$ in the policy is $0$, and the index of $1$ in the policy is $2$, so our intermediate value is $(0,2)$. 
+
+The second step is to permute this intermediate value based on the data layout. 
+We apply the layout permutation $(1,0)$ to our intermediate value $(0,2)$ to get our traversal order $(2,0)$. 
+This traversal order tells us that in the access to \verb.B. in \verb.knl2., the dimension of \verb.B. with the largest stride is traversed by the iterator at nesting depth 2 (the innermost iterator) and the dimension of \verb.B. with the smallest stride is traversed by the iterator at nesting depth 0 (the outermost iterator). 
+Listing~\ref{TraversalOrderDerivation} shows the algorithm for deriving the traversal order.
+
+\begin{figure}
+\begin{lstlisting}[
+  label={MatMulTraversalOrder}, 
+  caption={Two kernels implementing matrix multiplication using different kernel policies.}]
+View2D A(A_data, layout_01);
+View2D B(B_data, layout_10);
+View2D C(C_data, layout_01);
+
+auto loop_body = [=](auto i0, auto i1, auto i2) {
+  C(i0,i1) += A(i0,i2) * B(i2,i1);
+}
+
+using Policy_012 = KernelPolicy<
+  statement::For<0, loop_exec,
+    statement::For<1, loop_exec,
+      statement::For<2, loop_exec,
+        statement::Lambda<0>
+      >
+    >
+  >
+>;
+using Policy_201 = KernelPolicy<
+  statement::For<2, loop_exec,
+    statement::For<0, loop_exec,
+      statement::For<1, loop_exec,
+        statement::Lambda<0>
+      >
+    >
+  >
+>;
+
+auto knl1 = make_kernel<Policy_012>(bounds, loop_body);
+auto knl2 = make_kernel<Policy_201>(bounds, loop_body);
+\end{lstlisting}
+
+\end{figure}
+
+
+\begin{figure}
+\begin{lstlisting}[
+  label={TraversalOrderDerivation}, 
+  caption={Algorithm for deriving the traversal order of an access}
+]
+function derive_traversal_order(policy, layout, arguments) {
+  intermediate = [policy.indexof(argument) for argument in arguments];
+  traversal = [intermediate[p] for p in layout];
+  return traversal;
+}
+\end{lstlisting}
+
+\end{figure}
+
+\subsection{Traversal Order as a Performance Metric}
+
+Our claim is that the traversal order of an access is an accurate predictive metric for the relative performance of a layout choice. 
+We support this claim empirically using performance data from three microbenchmarks.
+For each microbenchmark, we record the execution time of every combination of kernel policy and data layout. 
+These execution times are then grouped by traversal order.
+If our claim is valid, then the groups of execution times will not overlap.
+
+Microbenchmark 1 is an access to a 3-dimensional view within a 3-dimensional loop. 
+
+
+
+
+
+
+\begin{comment}
+
+\todo{motivate.}
+We start with a simple example. A 3-dimensional kernel that makes a single access to a 3 dimensional View. As a RAJA kernel, it may look like the following.
+\begin{lstlisting}
+kernel<3D_POLICY>(loop_bounds, [=](auto i, auto j, auto k) 
+  {
+      A(k,j,i) = foo(i,j,k);
+  });
+\end{lstlisting}
+
+There are two variables relevant to the discussion: the policy \verb.3D_POLICY. and the layout of \verb.A..
+
+\subsection{Kernel Policies}
+The policy determines how the kernel is executed, from the order of the iteration to the schedule at each level. One possible definition of the policy is:
+\begin{lstlisting}
+using 3D_POLICY = KernelPolicy<
+  statement::For<0,omp_parallel_for_exec,
+    statement::For<1,loop_exec,
+      statement::For<2, loop_exec,
+        statement::Lambda<0>
+      >
+    >
+  >
+>;
+\end{lstlisting}
+This policy defines an execution schedule that iterates over the \verb.i. dimension in parallel, then over the \verb.j. and \verb.k. dimensions sequentially. 
+
+Another possible definition of the policy is:
+\begin{lstlisting}
+    using 3D_POLICY = KernelPolicy<
+      statement::For<1,omp_parallel_for_exec,
+        statement::For<0,loop_exec,
+          statement::For<2, loop_exec,
+            statement::Lambda<0>
+          >
+        >
+      >
+    >;
+\end{lstlisting}
+This policy defines a slightly different execution schedule. 
+Without having to change the order of the arguments in the lambda describing the loop body, this policy effectively implements a loop interchange transformation between the \verb.i. and \verb.j. dimension. 
+First, it iterates over the \verb.j. dimension in parallel, then over \verb.i. and \verb.k..
+
+For an $n$-dimensional kernel, there are $n!$ different possible dimension orderings of its kernel policy. 
+
+
+
+
+
+
+Claim: Traversal order is an indicator of performance. 
+
+\end{comment}
+\end{document}
