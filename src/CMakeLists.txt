@@ -5,21 +5,31 @@
 # SPDX-License-Identifier: (BSD-3-Clause)
 ###############################################################################
 
-set(example_depends RAJA)
+set(all_depends RAJA)
 
 if (ENABLE_OPENMP)
-  set(example_depends 
-    ${example_depends}
+  set(all_depends 
+    ${all_depends}
     openmp)
 endif ()
 
 if (ENABLE_CUDA)
-  set(example_depends 
-    ${example_depends}
+  set(all_depends 
+    ${all_depends}
     cuda)
 endif ()
 
 blt_add_executable(
-  NAME example.exe
-  SOURCES example.cpp
-  DEPENDS_ON ${example_depends})
+  NAME benchmark1.exe
+  SOURCES benchmark1.cpp
+  DEPENDS_ON ${all_depends})
+
+blt_add_executable(
+  NAME benchmark2.exe
+  SOURCES benchmark2.cpp
+  DEPENDS_ON ${all_depends})
+
+blt_add_executable(
+  NAME benchmark3.exe
+  SOURCES benchmark3.cpp
+  DEPENDS_ON ${all_depends})
