@@ -26,8 +26,8 @@ void enumerate_layouts() {
   using namespace RAJA;
   using VIEW = View<double, Layout<3>>;
 
-  idx_t N = 128;
-
+  idx_t N = 256;
+  idx_t R = 5;
   VIEW a(new double[N*N*N], N,N,N);
   VIEW b(new double[N*N*N], N,N,N);
 
@@ -60,14 +60,18 @@ void enumerate_layouts() {
     }
     std::cout << "]";
     std::cout << " , ";
+
+    auto time = 0.0;
+    for(int i = 0; i < R; i++) {
+      reset();
+      auto start = std::chrono::high_resolution_clock::now();
+      knl();
+      auto stop = std::chrono::high_resolution_clock::now();
+      time += std::chrono::duration_cast<std::chrono::duration<double>>(stop - start).count();
+    } 
+
+    time = time / R;
  
-    auto start = std::chrono::high_resolution_clock::now();
-
-    knl();
-    auto stop = std::chrono::high_resolution_clock::now();
-
-    auto time = std::chrono::duration_cast<std::chrono::duration<double>>(stop - start).count();
-
     std::cout << time << "),\n";
   } while(std::next_permutation(perm.begin(), perm.end()));
 }
