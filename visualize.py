@@ -15,8 +15,7 @@ def scorer1(order):
   concat = ''
   for i in order:
     concat += str(i)
-  while len(concat) < 3:
-    concat = '0' + concat
+
   return int(concat)
 
 def scorer2(order):
@@ -37,10 +36,16 @@ df = pd.DataFrame(d, columns=["TraversalOrder", "LastDigit", "Score", "Time"])
 print(df)
 
 import matplotlib.pyplot as plt
-from plotnine import ggplot, geom_point, aes, geom_boxplot
+from plotnine import ggplot, geom_point, aes, geom_boxplot, geom_jitter
 
-p1 = ggplot(df) + geom_boxplot(aes(x="factor(TraversalOrder)", y='Time'))
+p1 = ggplot(df, aes(x="factor(TraversalOrder)", y='Time', color='factor(TraversalOrder)')) + geom_boxplot()
+
+p1 += geom_jitter()
 
 p1.draw()
 plt.show()
+
+filename = sys.argv[1].split('.')[0] + "_boxplot.pdf"
+
+p1.save(filename=filename)
 
