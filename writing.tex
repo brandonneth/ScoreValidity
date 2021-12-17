@@ -129,69 +129,46 @@ function derive_traversal_order(policy, layout, arguments) {
 
 Our claim is that the traversal order of an access is an accurate predictive metric for the relative performance of a layout choice. 
 We support this claim empirically using performance data from three microbenchmarks.
-For each microbenchmark, we record the execution time of every combination of kernel policy and data layout. 
+For each microbenchmark, we record the 5-run average execution time of every combination of kernel policy and data layout. 
 These execution times are then grouped by traversal order.
-If our claim is valid, then the groups of execution times will not overlap.
+If our claim is valid, then the execution times for each traversal order will cluster and the groups of execution times will not overlap.
 
-Microbenchmark 1 is an access to a 3-dimensional view within a 3-dimensional loop. 
-
-
-
-
-
-
-\begin{comment}
-
-\todo{motivate.}
-We start with a simple example. A 3-dimensional kernel that makes a single access to a 3 dimensional View. As a RAJA kernel, it may look like the following.
-\begin{lstlisting}
-kernel<3D_POLICY>(loop_bounds, [=](auto i, auto j, auto k) 
-  {
-      A(k,j,i) = foo(i,j,k);
-  });
-\end{lstlisting}
-
-There are two variables relevant to the discussion: the policy \verb.3D_POLICY. and the layout of \verb.A..
-
-\subsection{Kernel Policies}
-The policy determines how the kernel is executed, from the order of the iteration to the schedule at each level. One possible definition of the policy is:
-\begin{lstlisting}
-using 3D_POLICY = KernelPolicy<
-  statement::For<0,omp_parallel_for_exec,
-    statement::For<1,loop_exec,
-      statement::For<2, loop_exec,
-        statement::Lambda<0>
-      >
-    >
-  >
->;
-\end{lstlisting}
-This policy defines an execution schedule that iterates over the \verb.i. dimension in parallel, then over the \verb.j. and \verb.k. dimensions sequentially. 
-
-Another possible definition of the policy is:
-\begin{lstlisting}
-    using 3D_POLICY = KernelPolicy<
-      statement::For<1,omp_parallel_for_exec,
-        statement::For<0,loop_exec,
-          statement::For<2, loop_exec,
-            statement::Lambda<0>
-          >
-        >
-      >
-    >;
-\end{lstlisting}
-This policy defines a slightly different execution schedule. 
-Without having to change the order of the arguments in the lambda describing the loop body, this policy effectively implements a loop interchange transformation between the \verb.i. and \verb.j. dimension. 
-First, it iterates over the \verb.j. dimension in parallel, then over \verb.i. and \verb.k..
-
-For an $n$-dimensional kernel, there are $n!$ different possible dimension orderings of its kernel policy. 
+Microbenchmark 1 is an access to a 3-dimensional view in a 3-dimensional loop. 
+Microbenchmark 2 is an access to a 2-dimensional view in a 3-dimensional loop, as in a matrix multiplication.
+Microbenchmark 3 is an access to a 3-dimensional view in a 4-dimensional loop.
 
 
 
+\begin{figure}
+  \includegraphics{benchmark1_boxplot.pdf}
+  \label{TraversalBenchmark1}
+  \caption{Execution times for 3-dimensional loop accessing 3-dimensional view, grouped by traversal order.}
+\end{figure}
+Figure~\ref{TraversalBenchmark1} shows the execution times for the different traversal orders for microbenchmark 1. 
+With the exception of traversal order $(2,1,0)$, the traversal orders show good clustering.
+\todo{explanation for why the $(2,1,0)$ ones don't cluster as much}
+Also, the six possible traversal orders show good differentiation, with the exception of $(0,1,2)$ and $(1,0,2)$. 
+This is likely because the bulk of the performance improvement comes from the innermost loop in a nest traversing the stride 1 dimension of the data.
 
 
 
-Claim: Traversal order is an indicator of performance. 
+\begin{figure}
+  \includegraphics{benchmark2_boxplot.pdf}
+  \label{TraversalBenchmark2}
+  \caption{Execution times for 3-dimensional loop accessing 2-dimensional view, grouped by traversal order.}
+\end{figure}
+Figure~\ref{TraversalBenchmark2} shows the execution times for the different traversal orders for microbenchmark 2. 
+While the traversal orders for this microbenchmark are all highly clustered, they are less differentiated from one another. 
+For example, we see that the orders $(0,2)$ and $(1,2)$ have similar performance, as do $(2,0)$ and $(2,1)$. 
+The similarity in performance is again attributable to the influence of the position of the innermost loop iterator. 
 
-\end{comment}
+\begin{figure}
+  \includegraphics{benchmark3_boxplot.pdf}
+  \label{TraversalBenchmark3}
+  \caption{Execution times for 4-dimensional loop accessing 3-dimensional view, grouped by traversal order.}
+\end{figure}
+
+Figure~\ref{TraversalBenchmark3} shows the execution times for the different traversal orders for microbenchmark 3. 
+A similar pattern as the previous microbenchmarks emerges here: grouping based on the position of the innermost iterator. 
+\todo{describe.}
 \end{document}
