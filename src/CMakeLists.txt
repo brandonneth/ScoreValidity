@@ -33,3 +33,8 @@ blt_add_executable(
   NAME benchmark3.exe
   SOURCES benchmark3.cpp
   DEPENDS_ON ${all_depends})
+
+blt_add_executable(
+  NAME intro-example.exe
+  SOURCES intro-example.cpp
+  DEPENDS_ON ${all_depends})

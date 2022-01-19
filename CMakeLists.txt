@@ -21,7 +21,7 @@ if (DEFINED RAJA_DIR)
   find_package(RAJA REQUIRED)
   blt_print_target_properties(TARGET RAJA)
 else ()
-  add_subdirectory(../RAJA build)
+  add_subdirectory(tpl/raja)
 endif ()
 
 if (ENABLE_CUDA)
