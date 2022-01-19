@@ -3,6 +3,6 @@
 	url = https://github.com/LLNL/blt.git
 [submodule "tpl/raja"]
 	path = tpl/raja
-	url = https://github.com/brandonneth/raja.git
+	url = https://github.com/brandonneth/RAJA.git
 	branch = autolayout
 
