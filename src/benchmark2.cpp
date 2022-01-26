@@ -20,7 +20,7 @@ struct order_to_kpol3 {
     >
   >;
 };
-idx_t N = 128;
+idx_t N = 512;
 idx_t R = 5;
 template <typename Policy, typename L1, typename L2, typename ViewType>
 void enumerate_layouts(L1 & reset_lam, L2 & comp_lam, ViewType & a, ViewType & b) {
