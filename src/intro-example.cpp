@@ -87,25 +87,30 @@ int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
   using namespace RAJA;
   using VIEW = View<double, Layout<2>>;
 
-  idx_t N = 1024;
-  idx_t R = 5;
+  idx_t N = 1028;
+  idx_t R = 10;
 
-  auto l_01 = make_permuted_layout({{N,N}}, {0,1});
-  auto l_10 = make_permuted_layout({{N,N}}, {1,0});
+  std::array<idx_t,2> s{{N,N}};
+  auto l_01 = make_permuted_layout(s, {0,1});
+  auto l_10 = make_permuted_layout(s, {1,0});
 
   VIEW a(new double[N*N], l_10);
   VIEW b(new double[N*N], l_01);
   VIEW c(new double[N*N], l_10);
+
 
   auto matmul_lam = [&](auto i, auto j, auto k) {
     c(i,j) += a(i,k) * b(k,j);
   };
 
   auto segs = make_tuple(RangeSegment(0,N),RangeSegment(0,N),RangeSegment(0,N));
-  auto matmul = make_kernel<order_to_kpol<0,1,2>>(segs, matmul_lam);
+
+  
+
+  auto matmul = make_kernel<order_to_kpol3<0,1,2>::Policy>(segs, matmul_lam);
   
   auto init_segs = make_tuple(RangeSegment(0,N), RangeSegment(0,N));
-  auto init = make_kernel<KernelPolicy<statement::For<0,omp_parallel_for_exec<statement::For<1,loop_exec,statement::Lambda<0>>>>>(init_segs, [&](auto i, auto j) {
+  auto init = make_kernel<KernelPolicy<statement::For<0,omp_parallel_for_exec,statement::For<1,loop_exec,statement::Lambda<0>>>>>(init_segs, [&](auto i, auto j) {
     a(i,j) = std::rand();
     b(i,j) = std::rand();
     c(i,j) = std::rand();
@@ -113,8 +118,60 @@ int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
 
   init();
   
-  
+  auto abad = permute_view(a, l_10); 
+  auto bbad = permute_view(b, l_01); 
+  auto cbad = permute_view(c, l_10); 
 
+  auto agood = permute_view(a, l_01); 
+  auto bgood = permute_view(b, l_10); 
+  auto cgood = permute_view(c, l_01); 
+
+
+  //set up the bad layouts
+  abad();
+  bbad();
+  cbad();
+
+  //run and time the kernel.
+  auto badtime = 0.0;
+  for(int i = 0; i < R; i++) {
+    auto start = std::chrono::high_resolution_clock::now();
+    matmul();
+    auto stop = std::chrono::high_resolution_clock::now();
+    badtime += std::chrono::duration_cast<std::chrono::duration<double>>(stop - start).count();
+  } 
+
+  std::cout  << badtime << "\n";
+
+  //run and time the conversion to good layouts, reseting them to the bad one each time.
+  auto changetime = 0.0;
+  for(int i = 0; i < R; i++) {
+    auto start = std::chrono::high_resolution_clock::now();
+    agood();
+    bgood();
+    cgood();
+    auto stop = std::chrono::high_resolution_clock::now();
+    changetime += std::chrono::duration_cast<std::chrono::duration<double>>(stop - start).count();
+    abad();
+    bbad();
+    cbad();
+  } 
+
+  std::cout  << changetime << "\n";
+
+  
+  //run and time the comp for good layouts
+  agood();
+  bgood();
+  cgood();
+  auto goodtime = 0.0;
+  for(int i = 0; i < R; i++) {
+    auto start = std::chrono::high_resolution_clock::now();
+    matmul();
+    auto stop = std::chrono::high_resolution_clock::now();
+    goodtime += std::chrono::duration_cast<std::chrono::duration<double>>(stop - start).count();
+  } 
+  std::cout << goodtime << "\n";
 
   return 0;
 }
