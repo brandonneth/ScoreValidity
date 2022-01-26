@@ -20,36 +20,30 @@ struct order_to_kpol3 {
     >
   >;
 };
+idx_t N = 128;
+idx_t R = 5;
+template <typename Policy, typename L1, typename L2, typename ViewType>
+void enumerate_layouts(L1 & reset_lam, L2 & comp_lam, ViewType & a, ViewType & b) {
 
-template <typename Policy>
-void enumerate_layouts() {
   using namespace RAJA;
-  using VIEW = View<double, Layout<2>>;
-
-  idx_t N = 256;
-  idx_t R = 5;
-  VIEW a(new double[N*N], N,N);
-  VIEW b(new double[N*N], N,N);
-
-  auto lambda = [&](auto i0, auto i1, auto i2) {a(i0,i1) = b(i0,i1);};
 
   auto segs = make_tuple(RangeSegment(0,N), RangeSegment(0,N), RangeSegment(0,N));
-
-  auto reset = make_kernel<Policy>(segs, [=](auto i0, auto i1, auto i2) {b(i0, i1) = std::rand();});
+  auto reset_knl = make_kernel<Policy>(segs,reset_lam);
 
 
   std::array<idx_t, 2> perm{{0,1}};
 
   do {
-    reset();
+    std::cerr << "    layout order " << perm[0] << perm[1] << "\n";
+    reset_knl();
     auto layout = make_permuted_layout({{N,N}}, perm);
     a.set_layout(layout);
     b.set_layout(layout);
 
-    auto knl = make_kernel<Policy>(segs, lambda);
+    auto comp_knl = make_kernel<Policy>(segs, comp_lam);
     
-    auto access = knl.execute_symbolically().at(0);
-    auto normalized = knl.normalize_access(access);
+    auto access = comp_knl.execute_symbolically().at(0);
+    auto normalized = comp_knl.normalize_access(access);
 
     std::cout << "(";
     std::cout << "[";
@@ -63,9 +57,9 @@ void enumerate_layouts() {
 
     auto time = 0.0;
     for(int i = 0; i < R; i++) {
-      reset();
+      reset_knl();
       auto start = std::chrono::high_resolution_clock::now();
-      knl();
+      comp_knl();
       auto stop = std::chrono::high_resolution_clock::now();
       time += std::chrono::duration_cast<std::chrono::duration<double>>(stop - start).count();
     } 
@@ -76,22 +70,58 @@ void enumerate_layouts() {
   } while(std::next_permutation(perm.begin(), perm.end()));
 }
 
+template <typename L1, typename L2, typename ViewType>
+void enumerate_policies(L1 & reset_lam, L2 & comp_lam, ViewType & a, ViewType & b) {
 
+  std::cerr << "  policy order 012\n";
+  enumerate_layouts<order_to_kpol3<0,1,2>::Policy>(reset_lam, comp_lam, a, b);
+  std::cerr << "  policy order 021\n";
+  enumerate_layouts<order_to_kpol3<0,2,1>::Policy>(reset_lam, comp_lam, a, b);
+  std::cerr << "  policy order 102\n";
+  enumerate_layouts<order_to_kpol3<1,0,2>::Policy>(reset_lam, comp_lam, a, b);
+  std::cerr << "  policy order 120\n";
+  enumerate_layouts<order_to_kpol3<1,2,0>::Policy>(reset_lam, comp_lam, a, b);
+  std::cerr << "  policy order 201\n";
+  enumerate_layouts<order_to_kpol3<2,0,1>::Policy>(reset_lam, comp_lam, a, b);
+  std::cerr << "  policy order 210\n";
+  enumerate_layouts<order_to_kpol3<2,1,0>::Policy>(reset_lam, comp_lam, a, b);
+
+}
 
 int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
 {
 
   using namespace RAJA;
+  using VIEW = View<double, Layout<2>>;
 
+  VIEW a(new double[N*N], N,N);
+  VIEW b(new double[N*N], N,N);
+
+
+
+  auto reset_lam =  [&](auto i0, auto i1, auto i2) {b(i0, i1) = std::rand();};
   std::cout << "[";
-  enumerate_layouts<order_to_kpol3<0,1,2>::Policy>();
-  enumerate_layouts<order_to_kpol3<0,2,1>::Policy>();
-  enumerate_layouts<order_to_kpol3<1,0,2>::Policy>();
-  enumerate_layouts<order_to_kpol3<1,2,0>::Policy>();
-  enumerate_layouts<order_to_kpol3<2,0,1>::Policy>();
-  enumerate_layouts<order_to_kpol3<2,1,0>::Policy>();
+
+  std::cerr << "arg order 01\n";
+  auto lambda01 = [&](auto i0, auto i1, auto i2) {a(i0,i1) = b(i0,i1);};
+  enumerate_policies(reset_lam, lambda01, a, b);
+  std::cerr << "arg order 10\n";
+  auto lambda10 = [&](auto i0, auto i1, auto i2) {a(i1,i0) = b(i1,i0);};
+  enumerate_policies(reset_lam, lambda10, a, b);
+  std::cerr << "arg order 02\n";
+  auto lambda02 = [&](auto i0, auto i1, auto i2) {a(i0,i2) = b(i0,i2);};
+  enumerate_policies(reset_lam, lambda02, a, b);
+  std::cerr << "arg order 20\n";
+  auto lambda20 = [&](auto i0, auto i1, auto i2) {a(i2,i0) = b(i2,i0);};
+  enumerate_policies(reset_lam, lambda20, a, b);
+  std::cerr << "arg order 21\n";
+  auto lambda21 = [&](auto i0, auto i1, auto i2) {a(i2,i1) = b(i2,i1);};
+  enumerate_policies(reset_lam, lambda21, a, b);
+  std::cerr << "arg order 12\n";
+  auto lambda12 = [&](auto i0, auto i1, auto i2) {a(i1,i2) = b(i1,i2);};
+  enumerate_policies(reset_lam, lambda12, a, b);
+
 
   std::cout << "]";
-
   return 0;
 }
