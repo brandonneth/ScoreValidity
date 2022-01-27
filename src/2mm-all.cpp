@@ -162,7 +162,7 @@ dec.set_format_after(t,layouts[t2],knl2);*/
   auto knl = dec.finalize();
 
   dec.print_to_stream(std::cout);
- 
+  std::cout << " " << dec.cost;
   auto start =std::chrono::high_resolution_clock::now();
   for(auto r = 0; r < R; r++) {
     knl();
