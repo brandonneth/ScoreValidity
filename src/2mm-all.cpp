@@ -179,6 +179,7 @@ dec.set_format_after(t,layouts[t2],knl2);*/
   }}}
 
   //now get the same stuff for the model selected variant
+  reset();
   auto fresh_dec = format_decisions(tie(b,c),knl1, knl2);
 
   std::cout << "\nModel: ";
