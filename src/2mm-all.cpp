@@ -159,28 +159,32 @@ dec.set_format_before(t,layouts[t0],knl1);
 dec.set_format_before(t,layouts[t1],knl2);
 dec.set_format_after(t,layouts[t2],knl2);*/
 
-auto knl = dec.finalize();
+  auto knl = dec.finalize();
 
-dec.print_to_stream(std::cout);
-//reset();
-
-//knl();
-
+  dec.print_to_stream(std::cout);
  
- auto start =std::chrono::high_resolution_clock::now();
- for(auto r = 0; r < R; r++) {
-   knl();
- }
- auto stop =std::chrono::high_resolution_clock::now();
-
- auto t =std::chrono::duration_cast<std::chrono::nanoseconds>(stop-start).count();
+  auto start =std::chrono::high_resolution_clock::now();
+  for(auto r = 0; r < R; r++) {
+    knl();
+  }
+  auto stop =std::chrono::high_resolution_clock::now();
  
- std::cout << " " << t / 5 << "\n";
- // }}}
+  auto t =std::chrono::duration_cast<std::chrono::nanoseconds>(stop-start).count();
+ 
+  std::cout << " " << t / 5 << "\n";
+  //}}}
   //}}}
   //}}}
   }}}
   }}}
+
+  //now get the same stuff for the model selected variant
+  auto fresh_dec = format_decisions(tie(b,c),knl1, knl2);
+
+  std::cout << "\nModel: ";
+  
+  auto modelselected = fresh_dec.finalize();
+  fresh_dec.print_to_stream(std::cout);
 
 
 }

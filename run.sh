@@ -14,3 +14,4 @@ cd ..
 ./build/bin/benchmark2.exe > benchmark2.times
 ./build/bin/benchmark3.exe > benchmark3.times
 ./build/bin/intro-example.exe > intro-example.times
+./build/bin/2mm-all.exe > 2mm-all-choices.txt
