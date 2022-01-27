@@ -38,3 +38,8 @@ blt_add_executable(
   NAME intro-example.exe
   SOURCES intro-example.cpp
   DEPENDS_ON ${all_depends})
+
+blt_add_executable(
+  NAME 2mm-all.exe
+  SOURCES 2mm-all.cpp
+  DEPENDS_ON ${all_depends})
