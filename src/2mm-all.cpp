@@ -123,7 +123,6 @@ int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
   auto knl1 = make_kernel<order_to_kpol3<0,1,2>::Policy>(segs, lam1);
   auto knl2 = make_kernel<order_to_kpol3<0,1,2>::Policy>(segs, lam2);
 
-  auto dec = format_decisions(tie(b,c), knl1, knl2);
 
   std::array<decltype(l_01), 2> layouts{{l_01,l_10}};
 
@@ -143,6 +142,9 @@ int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
   for(auto t0 = 0; t0 < 2; t0++) {
   for(auto t1 = 0; t1 < 2; t1++) {
   for(auto t2 = 0; t2 < 2; t2++) {*/
+  reset();
+  auto dec = format_decisions(tie(b,c), knl1, knl2);
+
 /*dec.set_format_before(a,layouts[a0],knl1);
 dec.set_format_before(a,layouts[a1],knl2);
 dec.set_format_after(a,layouts[a2],knl2);*/
@@ -163,14 +165,17 @@ dec.set_format_after(t,layouts[t2],knl2);*/
 
   dec.print_to_stream(std::cout);
   std::cout << " " << dec.cost;
-  auto start =std::chrono::high_resolution_clock::now();
+  unsigned long long t = 0 ;
   for(auto r = 0; r < R; r++) {
+    reset();
+    auto start =std::chrono::high_resolution_clock::now();
     knl();
+    auto stop =std::chrono::high_resolution_clock::now();
+
+    t += std::chrono::duration_cast<std::chrono::nanoseconds>(stop-start).count();
   }
-  auto stop =std::chrono::high_resolution_clock::now();
  
-  auto t =std::chrono::duration_cast<std::chrono::nanoseconds>(stop-start).count();
- 
+    
   std::cout << " " << t / 5 << "\n";
   //}}}
   //}}}
@@ -182,7 +187,7 @@ dec.set_format_after(t,layouts[t2],knl2);*/
   reset();
   auto fresh_dec = format_decisions(tie(b,c),knl1, knl2);
 
-  std::cout << "\nModel: ";
+  std::cout << "Model: ";
   
   auto modelselected = fresh_dec.finalize();
   fresh_dec.print_to_stream(std::cout);

@@ -2,16 +2,12 @@
 module load clang/13.0.0
 export CXX=clang++
 
-mkdir build
-cd build
-rm CMakeCache.txt
-cmake -DENABLE_OPENMP=On -DBLT_CXX_STD=c++17 -DENABLE_TESTS=Off -DENABLE_EXAMPLES=Off ..
-make -j8
+./build.sh
 
-cd ..
-
+echo "Running Benchmark 1"
 ./build/bin/benchmark1.exe > benchmark1.times
+echo "Running Benchmark 2"
 ./build/bin/benchmark2.exe > benchmark2.times
+echo "Running Benchmark 3"
 ./build/bin/benchmark3.exe > benchmark3.times
-./build/bin/intro-example.exe > intro-example.times
-./build/bin/2mm-all.exe > 2mm-all-choices.txt
+
