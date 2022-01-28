@@ -30,7 +30,7 @@ by_model = df.sort_values(by=['Model Place'])
 
 print(df)
 model_choice = model_choice_line.strip().split(' ')[-1]
-
+print('model choice:', model_choice)
 
 place_in_df = df.loc[model_choice]
 
@@ -41,25 +41,33 @@ by_model['x'] = by_model['Model Place']
 by_model['y'] = -1
 
 
+place_in_by_time = by_time.loc[model_choice]['x']
+place_in_by_model = by_model.loc[model_choice]['x']
+
+print(place_in_by_time)
 from plotnine import *
 tile_width = 0.95
 tile_height = 0.95
 
 p = ggplot()
-p += theme(figure_size=(18,4))
-p += geom_tile(by_time, aes('Time Place', 1, fill='Time Place', width=tile_width, height=tile_height) )
-p += geom_tile(by_model, aes('Model Place', -1, fill='Time Place', width=tile_width, height=tile_height))
+p += geom_tile(by_time, aes('Time Place', 0.5, fill='Time Place', width=tile_width, height=tile_height) )
+p += geom_tile(by_model, aes('Model Place', -0.5, fill='Time Place', width=tile_width, height=tile_height))
 
-p.draw(show=True)
+
 p = p + labs(color='T')
 p = p + theme_void()
 p = p + theme(figure_size=(12,5), plot_background=element_rect(fill='white'))
-p = p + annotate('text', x=0, y= 1, label='Execution Time', ha='right')
-p = p + annotate('text', x=0, y= -1, label='Model Score', ha='right')
+p = p + annotate('text', x=0, y= 0.5, label='Execution Time', ha='right')
+p = p + annotate('text', x=0, y= -0.5, label='Model Score', ha='right')
 p = p + lims(x=(-10, 65))
 p.draw(show=True)
 
+p = p + annotate('text', x=1, y= -1.1, ha='center', label='Lower')
+p = p + annotate('text', x=64, y= -1.1, ha='center', label='Higher')
 
-# = p + coord_equal(expand=False)   # new
-#p += theme_void()
-#p += theme(figure_size=(12, 4), plot_background=element_rect(fill='white')) # new
+
+
+p = p + annotate('rect', xmin=place_in_by_time-0.5, xmax=place_in_by_time+0.5, ymin=0, ymax=1, color='red', fill=None, size=.7)
+p = p + annotate('rect', xmin=place_in_by_model-0.5, xmax=place_in_by_model+0.5, ymin=-1, ymax=0, color='red', fill=None, size=.7)
+p.draw(show=True)
+p.save('2mm-all-choices.pdf')
