@@ -191,6 +191,7 @@ dec.set_format_after(t,layouts[t2],knl2);*/
   
   auto modelselected = fresh_dec.finalize();
   fresh_dec.print_to_stream(std::cout);
+  std::cout << " " << dec.cost;
 
 
 }
