@@ -87,8 +87,8 @@ int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
   using namespace RAJA;
   using VIEW = View<double, Layout<2>>;
 
-  idx_t N = 1028;
-  idx_t R = 10;
+  idx_t N = 1024;
+  idx_t R = 5;
 
   std::array<idx_t,2> s{{N,N}};
   auto l_01 = make_permuted_layout(s, {0,1});
@@ -191,7 +191,7 @@ dec.set_format_after(t,layouts[t2],knl2);*/
   
   auto modelselected = fresh_dec.finalize();
   fresh_dec.print_to_stream(std::cout);
-  std::cout << " " << dec.cost;
+  std::cout << " " << fresh_dec.cost;
 
 
 }
