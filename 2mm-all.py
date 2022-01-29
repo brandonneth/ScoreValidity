@@ -17,19 +17,22 @@ for line in lines:
     ids += [id]
     data += [[int(model),int(time)]]
     
+model_choice = model_choice_line.strip().split(' ')[1]
 
 df = pd.DataFrame(data, index = ids,columns=['Model Score', 'Execution Time (us)'])
+df.loc[df.index == model_choice, 'IsModelChoice'] = -1
 df = df.sort_values(by=['Execution Time (us)'], ascending=True)
 df['Time Place'] = range(1, len(df) + 1)
-df = df.sort_values(by=['Model Score'], ascending=True)
+df['Time Place Neg'] = df['Time Place'] * -1
+df = df.sort_values(by=['Model Score', 'IsModelChoice', 'Time Place'], ascending=True)
 df['Model Place'] = range(1, len(df) + 1)
-model_choice = model_choice_line.strip().split(' ')[-1]
+
 
 print(df[df.index == model_choice])
 df['IsModelChoice'] = 0
-df.loc[df.index == model_choice, 'IsModelChoice'] = -1
+
 by_time = df.sort_values(by=['Time Place'])
-by_model = df.sort_values(by=['Model Place', 'IsModelChoice', 'Time Place'])
+by_model = df.sort_values(by=['Model Place', 'IsModelChoice', 'Time Place Neg'])
 
 print(df)
 
