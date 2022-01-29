@@ -6,13 +6,13 @@ with open('2mm-all-choices.txt', 'r') as f:
     lines = f.readlines()
 
 model_choice_line = lines.pop()
-lines.pop()
+
 ids = []
 
 
 data = []
 for line in lines:
-    print(line)
+    #print(line)
     id,model,time = line.strip().split(' ')
     ids += [id]
     data += [[int(model),int(time)]]
@@ -21,15 +21,18 @@ for line in lines:
 df = pd.DataFrame(data, index = ids,columns=['Model Score', 'Execution Time (us)'])
 df = df.sort_values(by=['Execution Time (us)'], ascending=True)
 df['Time Place'] = range(1, len(df) + 1)
-
 df = df.sort_values(by=['Model Score'], ascending=True)
 df['Model Place'] = range(1, len(df) + 1)
+model_choice = model_choice_line.strip().split(' ')[-1]
 
+print(df[df.index == model_choice])
+df['IsModelChoice'] = 0
+df.loc[df.index == model_choice, 'IsModelChoice'] = -1
 by_time = df.sort_values(by=['Time Place'])
-by_model = df.sort_values(by=['Model Place'])
+by_model = df.sort_values(by=['Model Place', 'IsModelChoice', 'Time Place'])
 
 print(df)
-model_choice = model_choice_line.strip().split(' ')[-1]
+
 print('model choice:', model_choice)
 
 place_in_df = df.loc[model_choice]
@@ -67,7 +70,7 @@ p = p + annotate('text', x=64, y= -1.1, ha='center', label='Higher')
 
 
 
-p = p + annotate('rect', xmin=place_in_by_time-0.5, xmax=place_in_by_time+0.5, ymin=0, ymax=1, color='red', fill=None, size=.7)
+p = p + annotate('rect', xmin=place_in_by_time-0.5, xmax=place_in_by_time+0.5, ymin=0, ymax=1, color='red', fill=None, size=0.7)
 p = p + annotate('rect', xmin=place_in_by_model-0.5, xmax=place_in_by_model+0.5, ymin=-1, ymax=0, color='red', fill=None, size=.7)
 p.draw(show=True)
 p.save('2mm-all-choices.pdf')
