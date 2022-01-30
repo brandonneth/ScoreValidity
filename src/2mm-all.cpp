@@ -170,8 +170,10 @@ dec.set_format_after(t,layouts[t2],knl2);*/
 
   auto knl = dec.finalize();
 
+  //std::cerr << "model for c: " << dec.model_for_view(c) << "\n";
   dec.print_to_stream(std::cout);
   std::cout << " " << dec.cost;
+
   unsigned long long t = 0 ;
   for(auto r = 0; r < R; r++) {
     reset();
