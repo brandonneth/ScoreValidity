@@ -25,30 +25,22 @@ print('less than:\n', df['ModelScore'] < df['ModelScore'])
 
 print(df)
 
-
-print("grouped")
+print("num different scores:", df['ModelScore'].value_counts())
 
 df['RelativeOOO'] = 0
-
 def add_one_lg(row):
     df.loc[(df.ModelScore < row.ModelScore) & (df.Time > row.Time), 'RelativeOOO'] += 1
 
 def add_one_gl(row):
     df.loc[(df.ModelScore > row.ModelScore) & (df.Time < row.Time), 'RelativeOOO'] += 1
-
-
-print("before apply")
-print(df)
 df.apply(add_one_lg, axis=1)
 df.apply(add_one_gl, axis=1)
 
 
-print('after apply')
-print(df)
-from plotnine import *
-p = ggplot()
-p += geom_point(df, aes('Time', 'ModelScore', fill='RelativeOOO'))
-p.draw(show=True)
+#from plotnine import *
+#p = ggplot()
+#p += geom_point(df, aes(y='Time', x='ModelScore'))
+#p.draw(show=True)
 
 quit()
 
