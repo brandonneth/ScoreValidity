@@ -87,18 +87,26 @@ int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
   using namespace RAJA;
   using VIEW = View<double, Layout<2>>;
 
-  idx_t N = 1024;
+  idx_t I = 1024;
+  idx_t J = 512;
+  idx_t K = 2048;
+  idx_t L = 1512;
   idx_t R = 5;
 
-  std::array<idx_t,2> s{{N,N}};
-  auto l_01 = make_permuted_layout(s, {0,1});
-  auto l_10 = make_permuted_layout(s, {1,0});
-
-  VIEW a(new double[N*N], l_01);
-  VIEW b(new double[N*N], l_01);
-  VIEW t(new double[N*N], l_01);
-  VIEW c(new double[N*N], l_01);
-  VIEW d(new double[N*N], l_01);
+  
+  VIEW a(new double[I*J], I,J);
+  VIEW b(new double[J*K], J,K);
+  VIEW t(new double[I*K], I,K);
+  VIEW c(new double[K*L], K,L);
+  VIEW d(new double[I*L], I,L);
+  std::array<idx_t,2> bs{{J,K}};
+  auto bl_01 = make_permuted_layout(bs, {0,1});
+  auto bl_10 = make_permuted_layout(bs, {1,0});
+  
+  std::array<idx_t,2> cs{{K,L}};
+  auto cl_01 = make_permuted_layout(cs, {0,1});
+  auto cl_10 = make_permuted_layout(cs, {1,0});
+  
 
 
   auto lam1 = [&](auto i, auto j, auto k) {
@@ -110,21 +118,20 @@ int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
   };
 
 
-  auto segs = make_tuple(RangeSegment(0,N),RangeSegment(0,N),RangeSegment(0,N));
+  auto segs1 = make_tuple(RangeSegment(0,I),RangeSegment(0,J),RangeSegment(0,K));
+  auto segs2 = make_tuple(RangeSegment(0,I),RangeSegment(0,K),RangeSegment(0,L));
 
-  auto ra = permute_view(a,l_01);
-  auto rb = permute_view(b,l_01);
-  auto rc = permute_view(c,l_01);
-  auto rd = permute_view(d,l_01);
-  auto rt = permute_view(t,l_01);
+  auto rb = permute_view(b,bl_01);
+  auto rc = permute_view(c,cl_01);
 
-  auto reset = [&](){ra();rb();rc();rd();rt();};
+  auto reset = [&](){rb();rc();};
 
-  auto knl1 = make_kernel<order_to_kpol3<0,1,2>::Policy>(segs, lam1);
-  auto knl2 = make_kernel<order_to_kpol3<0,1,2>::Policy>(segs, lam2);
+  auto knl1 = make_kernel<order_to_kpol3<0,1,2>::Policy>(segs1, lam1);
+  auto knl2 = make_kernel<order_to_kpol3<0,1,2>::Policy>(segs2, lam2);
 
 
-  std::array<decltype(l_01), 2> layouts{{l_01,l_10}};
+  std::array<decltype(bl_01), 2> blayouts{{bl_01,bl_10}};
+  std::array<decltype(cl_01), 2> clayouts{{cl_01,cl_10}};
 
 
   /*for(auto a0 = 0; a0 < 2; a0++) {
@@ -148,12 +155,12 @@ int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
 /*dec.set_format_before(a,layouts[a0],knl1);
 dec.set_format_before(a,layouts[a1],knl2);
 dec.set_format_after(a,layouts[a2],knl2);*/
-dec.set_format_before(b,layouts[b0],knl1);
-dec.set_format_before(b,layouts[b1],knl2);
-dec.set_format_after(b,layouts[b2],knl2);
-dec.set_format_before(c,layouts[c0],knl1);
-dec.set_format_before(c,layouts[c1],knl2);
-dec.set_format_after(c,layouts[c2],knl2);
+dec.set_format_before(b,blayouts[b0],knl1);
+dec.set_format_before(b,blayouts[b1],knl2);
+dec.set_format_after(b,blayouts[b2],knl2);
+dec.set_format_before(c,clayouts[c0],knl1);
+dec.set_format_before(c,clayouts[c1],knl2);
+dec.set_format_after(c,clayouts[c2],knl2);
 /*dec.set_format_before(d,layouts[d0],knl1);
 dec.set_format_before(d,layouts[d1],knl2);
 dec.set_format_after(d,layouts[d2],knl2);
