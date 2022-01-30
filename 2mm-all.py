@@ -23,9 +23,6 @@ df = pd.DataFrame(data, index = ids,columns=['ModelScore', 'Time'])
 
 print('less than:\n', df['ModelScore'] < df['ModelScore'])
 
-print(df)
-
-print("num different scores:", df['ModelScore'].value_counts())
 
 df['RelativeOOO'] = 0
 def add_one_lg(row):
@@ -37,6 +34,9 @@ df.apply(add_one_lg, axis=1)
 df.apply(add_one_gl, axis=1)
 
 
+print(df)
+
+print("num different scores:", df['ModelScore'].value_counts())
 #from plotnine import *
 #p = ggplot()
 #p += geom_point(df, aes(y='Time', x='ModelScore'))
