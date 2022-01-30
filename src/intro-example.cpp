@@ -141,7 +141,7 @@ int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
     badtime += std::chrono::duration_cast<std::chrono::duration<double>>(stop - start).count();
   } 
 
-  std::cout  << badtime << "\n";
+  std::cout  << badtime / R << "\n";
 
   //run and time the conversion to good layouts, reseting them to the bad one each time.
   auto changetime = 0.0;
@@ -157,7 +157,7 @@ int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
     cbad();
   } 
 
-  std::cout  << changetime << "\n";
+  std::cout  << changetime / R << "\n";
 
   
   //run and time the comp for good layouts
@@ -171,7 +171,7 @@ int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
     auto stop = std::chrono::high_resolution_clock::now();
     goodtime += std::chrono::duration_cast<std::chrono::duration<double>>(stop - start).count();
   } 
-  std::cout << goodtime << "\n";
+  std::cout << goodtime / R<< "\n";
 
   return 0;
 }
