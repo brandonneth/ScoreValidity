@@ -87,7 +87,7 @@ int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
   using namespace RAJA;
   using VIEW = View<double, Layout<2>>;
 
-  idx_t N = 1028;
+  idx_t N = 2048;
   idx_t R = 10;
 
   std::array<idx_t,2> s{{N,N}};
