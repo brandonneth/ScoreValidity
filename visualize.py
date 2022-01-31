@@ -43,15 +43,14 @@ df['Access Order'] = pd.Categorical(df['Access Order'], categories=orders,ordere
 print(df)
 
 import matplotlib.pyplot as plt
-from plotnine import ggplot, geom_point, aes, geom_boxplot, geom_jitter
+from plotnine import *
 
 p1 = ggplot(df, aes(x="Access Order", y='Time', color='Access Order')) 
 p1 += geom_boxplot()
-
+p1 += scale_color_brewer(type='qual', palette=2)
 p1 += geom_jitter()
 
-p1.draw()
-plt.show()
+p1.draw(show=True)
 
 filename = sys.argv[1].split('.')[0] + "_boxplot.pdf"
 
