@@ -11,12 +11,13 @@ print(data)
 
 import pandas as pd
 
+orders = []
 def scorer1(order):
   concat = ''
   for i in order:
     concat += str(i)
-
-  return int(concat)
+  orders.append(concat)
+  return concat
 
 def scorer2(order):
   return order[-1]
@@ -30,15 +31,22 @@ def scorer3(order):
 d = [(scorer1(order), scorer2(order), scorer3(order), time) for (order, time) in data]
 
 print(d)
+print('orders:', orders)
 
-df = pd.DataFrame(d, columns=["TraversalOrder", "LastDigit", "Score", "Time"])
+df = pd.DataFrame(d, columns=["Access Order", "LastDigit", "Score", "Time"])
 
+orders = list(set(orders))
+orders.sort()
+orders.reverse()
+print(orders)
+df['Access Order'] = pd.Categorical(df['Access Order'], categories=list(set(orders)),ordered=True)
 print(df)
 
 import matplotlib.pyplot as plt
 from plotnine import ggplot, geom_point, aes, geom_boxplot, geom_jitter
 
-p1 = ggplot(df, aes(x="factor(TraversalOrder)", y='Time', color='factor(TraversalOrder)')) + geom_boxplot()
+p1 = ggplot(df, aes(x="Access Order", y='Time', color='Access Order')) 
+p1 += geom_boxplot()
 
 p1 += geom_jitter()
 
