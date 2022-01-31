@@ -171,7 +171,7 @@ int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
     auto stop = std::chrono::high_resolution_clock::now();
     goodtime += std::chrono::duration_cast<std::chrono::duration<double>>(stop - start).count();
   } 
-  std::cout << goodtime / R<< "\n";
+  std::cout << goodtime / R << "\n";
 
   return 0;
 }
