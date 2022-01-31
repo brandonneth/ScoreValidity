@@ -37,9 +37,9 @@ df = pd.DataFrame(d, columns=["Access Order", "LastDigit", "Score", "Time"])
 
 orders = list(set(orders))
 orders.sort()
-orders.reverse()
+
 print(orders)
-df['Access Order'] = pd.Categorical(df['Access Order'], categories=list(set(orders)),ordered=True)
+df['Access Order'] = pd.Categorical(df['Access Order'], categories=orders,ordered=True)
 print(df)
 
 import matplotlib.pyplot as plt
