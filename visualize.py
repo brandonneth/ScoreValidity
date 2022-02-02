@@ -50,8 +50,11 @@ p1 = ggplot(df, aes(x="Access Order", y='Time'))
 p1 += geom_boxplot()
 #p1 += scale_fill_brewer(type='qual', palette='Paired')
 p1 += geom_jitter()
-p1 += theme(axis_text_x=element_text(rotation=-45,color='black'))
-p1 += theme(axis_text_y=element_text(color='black'))
+p1 += theme(axis_title_y=element_text(size=14))
+p1 += theme(axis_title_x=element_text(size=14))
+
+p1 += theme(axis_text_x=element_text(size=12,rotation=-45,color='black'))
+p1 += theme(axis_text_y=element_text(size=12,color='black'))
 p1.draw(show=True)
 
 filename = sys.argv[1].split('.')[0] + "_boxplot.pdf"
