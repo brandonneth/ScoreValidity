@@ -23,11 +23,14 @@ df = pd.DataFrame(data)
 df['Computation'] = pd.Categorical(df['Computation'], categories=['BadLayout', 'LayoutChange', 'GoodLayout'])
 #df['Computation'] = pd.Categorical(df['Computation'], categories=['BadLayout', 'GoodLayout', 'LayoutChange' ])
 
-from plotnine import ggplot, aes, geom_col
+from plotnine import *
 
 g = (ggplot(df) + aes(x='Sequence', y='Execution Time (s)', fill='Computation') + geom_col())
+g += theme(axis_title_y=element_text(size=14))
+g += theme(axis_title_x=element_text(size=14))
 
-
+g += theme(axis_text_x=element_text(size=9))
+g += theme(axis_text_y=element_text(size=12))
 g.save('IntroExampleGraph.pdf')
 g.draw(show=True)
 
