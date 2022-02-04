@@ -67,7 +67,7 @@ void enumerate_layouts(L1 & reset_lam, L2 & comp_lam, ViewType & a, ViewType & b
 
     time = time / R;
  
-    std::cout << time << "),\n";
+    std::cout << time<< "," << N << "),\n";
   } while(std::next_permutation(perm.begin(), perm.end()));
 }
 

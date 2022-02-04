@@ -66,7 +66,7 @@ void enumerate_layouts(L1 & reset_lam, L2 & comp_lam, ViewType & a, ViewType & b
 
     time = time / R;
  
-    std::cout << time << "),\n";
+    std::cout << time << "," << N << "),\n";
   } while(std::next_permutation(perm.begin(), perm.end()));
 }
 
@@ -94,6 +94,7 @@ int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
   using namespace RAJA;
   using VIEW = View<double, Layout<2>>;
 
+  
   VIEW a(new double[N*N], N,N);
   VIEW b(new double[N*N], N,N);
 

@@ -28,12 +28,12 @@ def scorer3(order):
     score += abs(order[i] - i)
   return score
 
-d = [(scorer1(order), scorer2(order), scorer3(order), time) for (order, time) in data]
+d = [(scorer1(order), scorer2(order), scorer3(order), time, size) for (order, time, size) in data]
 
 print(d)
 print('orders:', orders)
 
-df = pd.DataFrame(d, columns=["Access Order", "LastDigit", "Score", "Time"])
+df = pd.DataFrame(d, columns=["Access Order", "LastDigit", "Score", "Time", "Size"])
 
 
 orders = list(set(orders))

@@ -75,7 +75,7 @@ void enumerate_layouts() {
 
     time = time / R;
  
-    std::cout << time << "),\n";
+    std::cout << time << "," << N << "),\n";
   } while(std::next_permutation(perm.begin(), perm.end()));
 }
 
