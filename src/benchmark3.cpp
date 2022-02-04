@@ -23,13 +23,13 @@ struct order_to_kpol4 {
   >;
 };
 
+  idx_t N = 64;
+  idx_t R = 5;
 template <typename Policy>
 void enumerate_layouts() {
   using namespace RAJA;
   using VIEW = View<double, Layout<3>>;
 
-  idx_t N = 64;
-  idx_t R = 5;
   VIEW a(new double[N*N*N], N,N,N);
   VIEW b(new double[N*N*N], N,N,N);
 
@@ -87,6 +87,9 @@ int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
   using namespace RAJA;
 
   std::cout << "[";
+
+  N = 32;
+  while (N <= 128) {
   enumerate_layouts<order_to_kpol4<3,0,1,2>::Policy>();
   enumerate_layouts<order_to_kpol4<3,0,2,1>::Policy>();
   enumerate_layouts<order_to_kpol4<3,1,0,2>::Policy>();
@@ -114,7 +117,8 @@ int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
   enumerate_layouts<order_to_kpol4<1,2,0,3>::Policy>();
   enumerate_layouts<order_to_kpol4<2,0,1,3>::Policy>();
   enumerate_layouts<order_to_kpol4<2,1,0,3>::Policy>();
-
+  N = N * 2;
+  }
 
   std::cout << "]";
 

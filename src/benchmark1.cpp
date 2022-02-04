@@ -97,13 +97,16 @@ int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
   using namespace RAJA;
   using VIEW = View<double, Layout<3>>;
 
+  N = 64;
+  std::cout << "[";
+  while(N <= 512) {
+
   VIEW a(new double[N*N*N], N,N,N);
   VIEW b(new double[N*N*N], N,N,N);
 
 
 
   auto reset_lam =  [&](auto i0, auto i1, auto i2) {b(i0, i1, i2) = std::rand();};
-  std::cout << "[";
 
   std::cerr << "arg order 012\n";
   auto lambda012 = [&](auto i0, auto i1, auto i2) {a(i0,i1,i2) = b(i0,i1,i2);};
@@ -123,8 +126,8 @@ int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
   std::cerr << "arg order 210\n";
   auto lambda210 = [&](auto i0, auto i1, auto i2) {a(i2,i1,i0) = b(i2,i1,i0);};
   enumerate_policies(reset_lam, lambda210, a, b);
-
-
+  N = N * 2;
+  }
   std::cout << "]";
 
   return 0;
