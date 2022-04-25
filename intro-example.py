@@ -14,10 +14,11 @@ with open('intro-example.times','r') as f:
 
 Sequence = ['BadLayoutOnly', 'GoodLayoutOnly', 'LayoutChangeOnly', 'SwitchAndRun','SwitchAndRun']
 computation = ['BadLayout', 'GoodLayout', 'LayoutChange', 'LayoutChange','GoodLayout']
-times = [badtime, goodtime, changetime,  changetime,goodtime,]
+times = [badtime, goodtime, changetime,  changetime,goodtime]
+sum_times = [badtime, goodtime, changetime, changetime+goodtime]
 data = {'Computation' : computation, 'Sequence' : Sequence, 'Execution Time (s)' : times}
 
-
+text_data = {'Total Times' : sum_times}
 
 df = pd.DataFrame(data)
 df['Computation'] = pd.Categorical(df['Computation'], categories=['BadLayout', 'LayoutChange', 'GoodLayout'])
@@ -31,6 +32,10 @@ g += theme(axis_title_x=element_text(size=14))
 
 g += theme(axis_text_x=element_text(size=9))
 g += theme(axis_text_y=element_text(size=12))
+
+change_label = "{:.3f}".format(changetime)
+print(change_label)
+g += annotate('text', x =3, y=0.1, label=change_label)
 g.save('IntroExampleGraph.pdf')
 g.draw(show=True)
 
