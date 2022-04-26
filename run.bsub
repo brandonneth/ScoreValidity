@@ -1,6 +1,5 @@
 #!/bin/bash
-#BSUB -n 1
-#BSUB -W 2:00
+#BSUB -W 12:00
 #BSUB -q pbatch
 
-lrun ./run.sh
+lrun -n 1 -N 1 ./run.sh
