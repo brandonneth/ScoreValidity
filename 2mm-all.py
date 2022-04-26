@@ -43,7 +43,7 @@ main_data = df.drop(default_choice)
 from plotnine import *
 p = ggplot(aes(x='Model Score', y='Execution Time (s)'))
 p += geom_point(main_data)
-p += geom_point(outlier_data, color='red')
+p += geom_point(outlier_data, color='red', shape='^')
 
 
 p += theme(axis_title_y=element_text(size=14))
