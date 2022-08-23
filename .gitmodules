@@ -1,3 +1,7 @@
 [submodule "blt"]
 	path = blt
 	url = https://github.com/LLNL/blt.git
+[submodule "RAJA"]
+	path = RAJA
+	url = https://github.com/brandonneth/RAJA.git
+	branch = format-decisions
