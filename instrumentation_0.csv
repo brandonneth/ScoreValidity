@@ -1,29 +1,33 @@
 Variant,Component,Time
-standard,Initialization,11
-standard,Constraint Setup,414
-standard,ISL Setup,40654
-standard,ISL Solve,6006
-standard,Kernels,506803
-standard,Conversion,6310
-standard,Computation,506888
+standard,Initialization,13
+standard,Constraint Setup,582
+standard,ISL Space Setup,83509
+standard,ISL Map Setup,18463
+standard,ISL Solve,8545
+standard,Kernels,542233
+standard,Conversion,5550
+standard,Computation,545785
 standard,Initialization,3
-standard,Constraint Setup,444
-standard,ISL Setup,43722
-standard,ISL Solve,6792
-standard,Kernels,507149
-standard,Conversion,5984
-standard,Computation,545878
+standard,Constraint Setup,555
+standard,ISL Space Setup,75846
+standard,ISL Map Setup,17421
+standard,ISL Solve,9403
+standard,Kernels,542979
+standard,Conversion,5310
+standard,Computation,529565
 lock,Initialization,4
-lock,Constraint Setup,414
-lock,ISL Setup,41605
-lock,ISL Solve,3633
-lock,Kernels,539313
-lock,Conversion,7122
-lock,Computation,547043
-lock,Initialization,19
-lock,Constraint Setup,443
-lock,ISL Setup,42924
-lock,ISL Solve,3837
-lock,Kernels,563140
-lock,Conversion,6106
-lock,Computation,555147
+lock,Constraint Setup,534
+lock,ISL Space Setup,77968
+lock,ISL Map Setup,17227
+lock,ISL Solve,4989
+lock,Kernels,531856
+lock,Conversion,6609
+lock,Computation,613455
+lock,Initialization,3
+lock,Constraint Setup,550
+lock,ISL Space Setup,76758
+lock,ISL Map Setup,16913
+lock,ISL Solve,4975
+lock,Kernels,589619
+lock,Conversion,7919
+lock,Computation,494587
