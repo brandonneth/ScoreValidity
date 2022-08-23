@@ -33,11 +33,11 @@ void enumerate_layouts() {
   VIEW a(new double[N*N*N], N,N,N);
   VIEW b(new double[N*N*N], N,N,N);
 
-  auto lambda = [&](auto i0, auto i1, auto i2, auto i3) {a(i0,i1,i2) = b(i0,i1,i2);};
+  auto lambda = [&](auto i0, auto i1, auto i2, auto) {a(i0,i1,i2) = b(i0,i1,i2);};
 
   auto segs = make_tuple(RangeSegment(0,N), RangeSegment(0,N), RangeSegment(0,N), RangeSegment(0,N));
 
-  auto reset = make_kernel<Policy>(segs, [=](auto i0, auto i1, auto i2, auto i3) {b(i0, i1, i2) = std::rand();});
+  auto reset = make_kernel<Policy>(segs, [=](auto i0, auto i1, auto i2, auto) {b(i0, i1, i2) = std::rand();});
 
 
   std::array<idx_t, 3> perm{{0,1,2}};

@@ -1,0 +1,29 @@
+Variant,Component,Time
+standard,Initialization,11
+standard,Constraint Setup,414
+standard,ISL Setup,40654
+standard,ISL Solve,6006
+standard,Kernels,506803
+standard,Conversion,6310
+standard,Computation,506888
+standard,Initialization,3
+standard,Constraint Setup,444
+standard,ISL Setup,43722
+standard,ISL Solve,6792
+standard,Kernels,507149
+standard,Conversion,5984
+standard,Computation,545878
+lock,Initialization,4
+lock,Constraint Setup,414
+lock,ISL Setup,41605
+lock,ISL Solve,3633
+lock,Kernels,539313
+lock,Conversion,7122
+lock,Computation,547043
+lock,Initialization,19
+lock,Constraint Setup,443
+lock,ISL Setup,42924
+lock,ISL Solve,3837
+lock,Kernels,563140
+lock,Conversion,6106
+lock,Computation,555147

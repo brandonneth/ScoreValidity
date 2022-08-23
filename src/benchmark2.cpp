@@ -102,25 +102,25 @@ int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
 
 
 
-  auto reset_lam =  [&](auto i0, auto i1, auto i2) {b(i0, i1) = std::rand();};
+  auto reset_lam =  [&](auto i0, auto i1, auto ) {b(i0, i1) = std::rand();};
 
   std::cerr << "arg order 01\n";
-  auto lambda01 = [&](auto i0, auto i1, auto i2) {a(i0,i1) = b(i0,i1);};
+  auto lambda01 = [&](auto i0, auto i1, auto ) {a(i0,i1) = b(i0,i1);};
   enumerate_policies(reset_lam, lambda01, a, b);
   std::cerr << "arg order 10\n";
-  auto lambda10 = [&](auto i0, auto i1, auto i2) {a(i1,i0) = b(i1,i0);};
+  auto lambda10 = [&](auto i0, auto i1, auto ) {a(i1,i0) = b(i1,i0);};
   enumerate_policies(reset_lam, lambda10, a, b);
   std::cerr << "arg order 02\n";
-  auto lambda02 = [&](auto i0, auto i1, auto i2) {a(i0,i2) = b(i0,i2);};
+  auto lambda02 = [&](auto i0, auto, auto i2) {a(i0,i2) = b(i0,i2);};
   enumerate_policies(reset_lam, lambda02, a, b);
   std::cerr << "arg order 20\n";
-  auto lambda20 = [&](auto i0, auto i1, auto i2) {a(i2,i0) = b(i2,i0);};
+  auto lambda20 = [&](auto i0, auto, auto i2) {a(i2,i0) = b(i2,i0);};
   enumerate_policies(reset_lam, lambda20, a, b);
   std::cerr << "arg order 21\n";
-  auto lambda21 = [&](auto i0, auto i1, auto i2) {a(i2,i1) = b(i2,i1);};
+  auto lambda21 = [&](auto, auto i1, auto i2) {a(i2,i1) = b(i2,i1);};
   enumerate_policies(reset_lam, lambda21, a, b);
   std::cerr << "arg order 12\n";
-  auto lambda12 = [&](auto i0, auto i1, auto i2) {a(i1,i2) = b(i1,i2);};
+  auto lambda12 = [&](auto, auto i1, auto i2) {a(i1,i2) = b(i1,i2);};
   enumerate_policies(reset_lam, lambda12, a, b);
   N = N * 2;
   }
