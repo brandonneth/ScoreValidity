@@ -1,0 +1,349 @@
+Experiment,Dimensionality,Problem Size,Views,Constraints,Variant,Component,Time (microseconds)
+1,2,32768,3,BestAnalytical,BaseRAJA,Computation,4831
+1,2,32768,3,BestAnalytical,HandTransformed,Computation,4461
+1,2,32768,3,BestAnalytical,HandTransformed,Conversion,688
+1,2,32768,3,BestAnalytical,Experiment1,Computation,4349
+1,2,32768,3,BestAnalytical,Experiment1,Conversion,694
+1,2,32768,3,BestAnalytical,Experiment1,Cost Estimation,302
+1,2,32768,3,BestAnalytical,Experiment1,ISL Space,3343
+1,2,32768,3,BestAnalytical,Experiment1,ISL Func,1139
+1,2,32768,3,BestAnalytical,Experiment1,ISL Solve,866
+1,2,32768,3,BestAnalytical,BaseRAJA,Computation,5332
+1,2,32768,3,BestAnalytical,HandTransformed,Computation,5320
+1,2,32768,3,BestAnalytical,HandTransformed,Conversion,950
+1,2,32768,3,BestAnalytical,Experiment1,Computation,6332
+1,2,32768,3,BestAnalytical,Experiment1,Conversion,973
+1,2,32768,3,BestAnalytical,Experiment1,Cost Estimation,530
+1,2,32768,3,BestAnalytical,Experiment1,ISL Space,3761
+1,2,32768,3,BestAnalytical,Experiment1,ISL Func,1239
+1,2,32768,3,BestAnalytical,Experiment1,ISL Solve,905
+1,2,32768,3,BestAnalytical,BaseRAJA,Computation,5057
+1,2,32768,3,BestAnalytical,HandTransformed,Computation,4333
+1,2,32768,3,BestAnalytical,HandTransformed,Conversion,515
+1,2,32768,3,BestAnalytical,Experiment1,Computation,4422
+1,2,32768,3,BestAnalytical,Experiment1,Conversion,733
+1,2,32768,3,BestAnalytical,Experiment1,Cost Estimation,326
+1,2,32768,3,BestAnalytical,Experiment1,ISL Space,3609
+1,2,32768,3,BestAnalytical,Experiment1,ISL Func,1235
+1,2,32768,3,BestAnalytical,Experiment1,ISL Solve,933
+1,2,65536,3,BestAnalytical,BaseRAJA,Computation,12297
+1,2,65536,3,BestAnalytical,HandTransformed,Computation,11603
+1,2,65536,3,BestAnalytical,HandTransformed,Conversion,1150
+1,2,65536,3,BestAnalytical,Experiment1,Computation,11860
+1,2,65536,3,BestAnalytical,Experiment1,Conversion,698
+1,2,65536,3,BestAnalytical,Experiment1,Cost Estimation,308
+1,2,65536,3,BestAnalytical,Experiment1,ISL Space,3426
+1,2,65536,3,BestAnalytical,Experiment1,ISL Func,1170
+1,2,65536,3,BestAnalytical,Experiment1,ISL Solve,871
+1,2,65536,3,BestAnalytical,BaseRAJA,Computation,12762
+1,2,65536,3,BestAnalytical,HandTransformed,Computation,11349
+1,2,65536,3,BestAnalytical,HandTransformed,Conversion,1249
+1,2,65536,3,BestAnalytical,Experiment1,Computation,11769
+1,2,65536,3,BestAnalytical,Experiment1,Conversion,964
+1,2,65536,3,BestAnalytical,Experiment1,Cost Estimation,334
+1,2,65536,3,BestAnalytical,Experiment1,ISL Space,3505
+1,2,65536,3,BestAnalytical,Experiment1,ISL Func,1200
+1,2,65536,3,BestAnalytical,Experiment1,ISL Solve,886
+1,2,65536,3,BestAnalytical,BaseRAJA,Computation,11987
+1,2,65536,3,BestAnalytical,HandTransformed,Computation,11416
+1,2,65536,3,BestAnalytical,HandTransformed,Conversion,972
+1,2,65536,3,BestAnalytical,Experiment1,Computation,11849
+1,2,65536,3,BestAnalytical,Experiment1,Conversion,842
+1,2,65536,3,BestAnalytical,Experiment1,Cost Estimation,321
+1,2,65536,3,BestAnalytical,Experiment1,ISL Space,3512
+1,2,65536,3,BestAnalytical,Experiment1,ISL Func,1195
+1,2,65536,3,BestAnalytical,Experiment1,ISL Solve,984
+1,2,131072,3,BestAnalytical,BaseRAJA,Computation,34628
+1,2,131072,3,BestAnalytical,HandTransformed,Computation,32953
+1,2,131072,3,BestAnalytical,HandTransformed,Conversion,2002
+1,2,131072,3,BestAnalytical,Experiment1,Computation,31103
+1,2,131072,3,BestAnalytical,Experiment1,Conversion,925
+1,2,131072,3,BestAnalytical,Experiment1,Cost Estimation,326
+1,2,131072,3,BestAnalytical,Experiment1,ISL Space,3610
+1,2,131072,3,BestAnalytical,Experiment1,ISL Func,1229
+1,2,131072,3,BestAnalytical,Experiment1,ISL Solve,911
+1,2,131072,3,BestAnalytical,BaseRAJA,Computation,31454
+1,2,131072,3,BestAnalytical,HandTransformed,Computation,32616
+1,2,131072,3,BestAnalytical,HandTransformed,Conversion,1269
+1,2,131072,3,BestAnalytical,Experiment1,Computation,33955
+1,2,131072,3,BestAnalytical,Experiment1,Conversion,864
+1,2,131072,3,BestAnalytical,Experiment1,Cost Estimation,322
+1,2,131072,3,BestAnalytical,Experiment1,ISL Space,3508
+1,2,131072,3,BestAnalytical,Experiment1,ISL Func,1202
+1,2,131072,3,BestAnalytical,Experiment1,ISL Solve,901
+1,2,131072,3,BestAnalytical,BaseRAJA,Computation,34429
+1,2,131072,3,BestAnalytical,HandTransformed,Computation,30660
+1,2,131072,3,BestAnalytical,HandTransformed,Conversion,1290
+1,2,131072,3,BestAnalytical,Experiment1,Computation,31985
+1,2,131072,3,BestAnalytical,Experiment1,Conversion,868
+1,2,131072,3,BestAnalytical,Experiment1,Cost Estimation,322
+1,2,131072,3,BestAnalytical,Experiment1,ISL Space,3477
+1,2,131072,3,BestAnalytical,Experiment1,ISL Func,1194
+1,2,131072,3,BestAnalytical,Experiment1,ISL Solve,897
+1,2,262144,3,BestAnalytical,BaseRAJA,Computation,97494
+1,2,262144,3,BestAnalytical,HandTransformed,Computation,83329
+1,2,262144,3,BestAnalytical,HandTransformed,Conversion,3453
+1,2,262144,3,BestAnalytical,Experiment1,Computation,80164
+1,2,262144,3,BestAnalytical,Experiment1,Conversion,2246
+1,2,262144,3,BestAnalytical,Experiment1,Cost Estimation,301
+1,2,262144,3,BestAnalytical,Experiment1,ISL Space,3406
+1,2,262144,3,BestAnalytical,Experiment1,ISL Func,1160
+1,2,262144,3,BestAnalytical,Experiment1,ISL Solve,863
+1,2,262144,3,BestAnalytical,BaseRAJA,Computation,99947
+1,2,262144,3,BestAnalytical,HandTransformed,Computation,81714
+1,2,262144,3,BestAnalytical,HandTransformed,Conversion,2921
+1,2,262144,3,BestAnalytical,Experiment1,Computation,96616
+1,2,262144,3,BestAnalytical,Experiment1,Conversion,2211
+1,2,262144,3,BestAnalytical,Experiment1,Cost Estimation,318
+1,2,262144,3,BestAnalytical,Experiment1,ISL Space,3528
+1,2,262144,3,BestAnalytical,Experiment1,ISL Func,1212
+1,2,262144,3,BestAnalytical,Experiment1,ISL Solve,925
+1,2,262144,3,BestAnalytical,BaseRAJA,Computation,105630
+1,2,262144,3,BestAnalytical,HandTransformed,Computation,85747
+1,2,262144,3,BestAnalytical,HandTransformed,Conversion,2698
+1,2,262144,3,BestAnalytical,Experiment1,Computation,78868
+1,2,262144,3,BestAnalytical,Experiment1,Conversion,2037
+1,2,262144,3,BestAnalytical,Experiment1,Cost Estimation,302
+1,2,262144,3,BestAnalytical,Experiment1,ISL Space,3413
+1,2,262144,3,BestAnalytical,Experiment1,ISL Func,1161
+1,2,262144,3,BestAnalytical,Experiment1,ISL Solve,861
+1,2,524288,3,BestAnalytical,BaseRAJA,Computation,229454
+1,2,524288,3,BestAnalytical,HandTransformed,Computation,207180
+1,2,524288,3,BestAnalytical,HandTransformed,Conversion,6439
+1,2,524288,3,BestAnalytical,Experiment1,Computation,197634
+1,2,524288,3,BestAnalytical,Experiment1,Conversion,4597
+1,2,524288,3,BestAnalytical,Experiment1,Cost Estimation,332
+1,2,524288,3,BestAnalytical,Experiment1,ISL Space,3509
+1,2,524288,3,BestAnalytical,Experiment1,ISL Func,1198
+1,2,524288,3,BestAnalytical,Experiment1,ISL Solve,901
+1,2,524288,3,BestAnalytical,BaseRAJA,Computation,206503
+1,2,524288,3,BestAnalytical,HandTransformed,Computation,197769
+1,2,524288,3,BestAnalytical,HandTransformed,Conversion,4674
+1,2,524288,3,BestAnalytical,Experiment1,Computation,216550
+1,2,524288,3,BestAnalytical,Experiment1,Conversion,3066
+1,2,524288,3,BestAnalytical,Experiment1,Cost Estimation,316
+1,2,524288,3,BestAnalytical,Experiment1,ISL Space,3476
+1,2,524288,3,BestAnalytical,Experiment1,ISL Func,1187
+1,2,524288,3,BestAnalytical,Experiment1,ISL Solve,907
+1,2,524288,3,BestAnalytical,BaseRAJA,Computation,216986
+1,2,524288,3,BestAnalytical,HandTransformed,Computation,211012
+1,2,524288,3,BestAnalytical,HandTransformed,Conversion,2844
+1,2,524288,3,BestAnalytical,Experiment1,Computation,215215
+1,2,524288,3,BestAnalytical,Experiment1,Conversion,2538
+1,2,524288,3,BestAnalytical,Experiment1,Cost Estimation,336
+1,2,524288,3,BestAnalytical,Experiment1,ISL Space,3538
+1,2,524288,3,BestAnalytical,Experiment1,ISL Func,1214
+1,2,524288,3,BestAnalytical,Experiment1,ISL Solve,902
+1,2,1048576,3,BestAnalytical,BaseRAJA,Computation,1123956
+1,2,1048576,3,BestAnalytical,HandTransformed,Computation,540601
+1,2,1048576,3,BestAnalytical,HandTransformed,Conversion,17090
+1,2,1048576,3,BestAnalytical,Experiment1,Computation,541737
+1,2,1048576,3,BestAnalytical,Experiment1,Conversion,10480
+1,2,1048576,3,BestAnalytical,Experiment1,Cost Estimation,324
+1,2,1048576,3,BestAnalytical,Experiment1,ISL Space,3534
+1,2,1048576,3,BestAnalytical,Experiment1,ISL Func,1209
+1,2,1048576,3,BestAnalytical,Experiment1,ISL Solve,906
+1,2,1048576,3,BestAnalytical,BaseRAJA,Computation,1174665
+1,2,1048576,3,BestAnalytical,HandTransformed,Computation,559709
+1,2,1048576,3,BestAnalytical,HandTransformed,Conversion,11078
+1,2,1048576,3,BestAnalytical,Experiment1,Computation,526262
+1,2,1048576,3,BestAnalytical,Experiment1,Conversion,7616
+1,2,1048576,3,BestAnalytical,Experiment1,Cost Estimation,316
+1,2,1048576,3,BestAnalytical,Experiment1,ISL Space,3413
+1,2,1048576,3,BestAnalytical,Experiment1,ISL Func,1165
+1,2,1048576,3,BestAnalytical,Experiment1,ISL Solve,865
+1,2,1048576,3,BestAnalytical,BaseRAJA,Computation,1122196
+1,2,1048576,3,BestAnalytical,HandTransformed,Computation,574693
+1,2,1048576,3,BestAnalytical,HandTransformed,Conversion,11373
+1,2,1048576,3,BestAnalytical,Experiment1,Computation,603240
+1,2,1048576,3,BestAnalytical,Experiment1,Conversion,6666
+1,2,1048576,3,BestAnalytical,Experiment1,Cost Estimation,310
+1,2,1048576,3,BestAnalytical,Experiment1,ISL Space,3500
+1,2,1048576,3,BestAnalytical,Experiment1,ISL Func,1192
+1,2,1048576,3,BestAnalytical,Experiment1,ISL Solve,888
+2,2,1000000,1,0,BaseRAJA,Computation,568739
+2,2,1000000,1,0,Experiment2,Computation,581952
+2,2,1000000,1,0,Experiment2,Conversion,3
+2,2,1000000,1,0,Experiment2,Cost Estimation,135
+2,2,1000000,1,0,Experiment2,ISL Space,1154
+2,2,1000000,1,0,Experiment2,ISL Func,411
+2,2,1000000,1,0,Experiment2,ISL Solve,499
+2,2,1000000,1,0,BaseRAJA,Computation,611664
+2,2,1000000,1,0,Experiment2,Computation,543586
+2,2,1000000,1,0,Experiment2,Conversion,3
+2,2,1000000,1,0,Experiment2,Cost Estimation,117
+2,2,1000000,1,0,Experiment2,ISL Space,1161
+2,2,1000000,1,0,Experiment2,ISL Func,414
+2,2,1000000,1,0,Experiment2,ISL Solve,495
+2,2,1000000,1,0,BaseRAJA,Computation,554634
+2,2,1000000,1,0,Experiment2,Computation,571664
+2,2,1000000,1,0,Experiment2,Conversion,0
+2,2,1000000,1,0,Experiment2,Cost Estimation,128
+2,2,1000000,1,0,Experiment2,ISL Space,1173
+2,2,1000000,1,0,Experiment2,ISL Func,422
+2,2,1000000,1,0,Experiment2,ISL Solve,516
+2,2,1000000,1,1,BaseRAJA,Computation,563203
+2,2,1000000,1,1,Experiment2,Computation,567996
+2,2,1000000,1,1,Experiment2,Conversion,2
+2,2,1000000,1,1,Experiment2,Cost Estimation,129
+2,2,1000000,1,1,Experiment2,ISL Space,1184
+2,2,1000000,1,1,Experiment2,ISL Func,428
+2,2,1000000,1,1,Experiment2,ISL Solve,333
+2,2,1000000,1,1,BaseRAJA,Computation,544137
+2,2,1000000,1,1,Experiment2,Computation,547720
+2,2,1000000,1,1,Experiment2,Conversion,1
+2,2,1000000,1,1,Experiment2,Cost Estimation,119
+2,2,1000000,1,1,Experiment2,ISL Space,1173
+2,2,1000000,1,1,Experiment2,ISL Func,410
+2,2,1000000,1,1,Experiment2,ISL Solve,325
+2,2,1000000,1,1,BaseRAJA,Computation,520267
+2,2,1000000,1,1,Experiment2,Computation,549390
+2,2,1000000,1,1,Experiment2,Conversion,3
+2,2,1000000,1,1,Experiment2,Cost Estimation,119
+2,2,1000000,1,1,Experiment2,ISL Space,1165
+2,2,1000000,1,1,Experiment2,ISL Func,409
+2,2,1000000,1,1,Experiment2,ISL Solve,321
+2,2,1000000,1,2,BaseRAJA,Computation,609990
+2,2,1000000,1,2,Experiment2,Computation,582384
+2,2,1000000,1,2,Experiment2,Conversion,3
+2,2,1000000,1,2,Experiment2,Cost Estimation,118
+2,2,1000000,1,2,Experiment2,ISL Space,1187
+2,2,1000000,1,2,Experiment2,ISL Func,425
+2,2,1000000,1,2,Experiment2,ISL Solve,230
+2,2,1000000,1,2,BaseRAJA,Computation,532040
+2,2,1000000,1,2,Experiment2,Computation,576734
+2,2,1000000,1,2,Experiment2,Conversion,0
+2,2,1000000,1,2,Experiment2,Cost Estimation,114
+2,2,1000000,1,2,Experiment2,ISL Space,1182
+2,2,1000000,1,2,Experiment2,ISL Func,417
+2,2,1000000,1,2,Experiment2,ISL Solve,232
+2,2,1000000,1,2,BaseRAJA,Computation,651044
+2,2,1000000,1,2,Experiment2,Computation,575045
+2,2,1000000,1,2,Experiment2,Conversion,1
+2,2,1000000,1,2,Experiment2,Cost Estimation,127
+2,2,1000000,1,2,Experiment2,ISL Space,1189
+2,2,1000000,1,2,Experiment2,ISL Func,422
+2,2,1000000,1,2,Experiment2,ISL Solve,238
+2,2,1000000,1,3,BaseRAJA,Computation,558921
+2,2,1000000,1,3,Experiment2,Computation,533984
+2,2,1000000,1,3,Experiment2,Conversion,4271
+2,2,1000000,1,3,Experiment2,Cost Estimation,134
+2,2,1000000,1,3,Experiment2,ISL Space,1162
+2,2,1000000,1,3,Experiment2,ISL Func,410
+2,2,1000000,1,3,Experiment2,ISL Solve,153
+2,2,1000000,1,3,BaseRAJA,Computation,534824
+2,2,1000000,1,3,Experiment2,Computation,550427
+2,2,1000000,1,3,Experiment2,Conversion,4312
+2,2,1000000,1,3,Experiment2,Cost Estimation,122
+2,2,1000000,1,3,Experiment2,ISL Space,1200
+2,2,1000000,1,3,Experiment2,ISL Func,425
+2,2,1000000,1,3,Experiment2,ISL Solve,156
+2,2,1000000,1,3,BaseRAJA,Computation,553876
+2,2,1000000,1,3,Experiment2,Computation,594982
+2,2,1000000,1,3,Experiment2,Conversion,1846
+2,2,1000000,1,3,Experiment2,Cost Estimation,127
+2,2,1000000,1,3,Experiment2,ISL Space,1157
+2,2,1000000,1,3,Experiment2,ISL Func,403
+2,2,1000000,1,3,Experiment2,ISL Solve,151
+2,2,1000000,1,4,BaseRAJA,Computation,543439
+2,2,1000000,1,4,Experiment2,Computation,543114
+2,2,1000000,1,4,Experiment2,Conversion,3783
+2,2,1000000,1,4,Experiment2,Cost Estimation,128
+2,2,1000000,1,4,Experiment2,ISL Space,1189
+2,2,1000000,1,4,Experiment2,ISL Func,422
+2,2,1000000,1,4,Experiment2,ISL Solve,136
+2,2,1000000,1,4,BaseRAJA,Computation,574687
+2,2,1000000,1,4,Experiment2,Computation,546925
+2,2,1000000,1,4,Experiment2,Conversion,1031
+2,2,1000000,1,4,Experiment2,Cost Estimation,120
+2,2,1000000,1,4,Experiment2,ISL Space,1182
+2,2,1000000,1,4,Experiment2,ISL Func,414
+2,2,1000000,1,4,Experiment2,ISL Solve,120
+2,2,1000000,1,4,BaseRAJA,Computation,541950
+2,2,1000000,1,4,Experiment2,Computation,559088
+2,2,1000000,1,4,Experiment2,Conversion,3576
+2,2,1000000,1,4,Experiment2,Cost Estimation,128
+2,2,1000000,1,4,Experiment2,ISL Space,1165
+2,2,1000000,1,4,Experiment2,ISL Func,406
+2,2,1000000,1,4,Experiment2,ISL Solve,117
+3,2,1000000,1,BestLayoutsAnalytical,BaseRAJA,Computation,55447
+3,2,1000000,1,BestLayoutsAnalytical,HandTransformed,Computation,48369
+3,2,1000000,1,BestLayoutsAnalytical,HandTransformed,Conversion,1912
+3,2,1000000,1,BestLayoutsAnalytical,Experiment3,Computation,49203
+3,2,1000000,1,BestLayoutsAnalytical,Experiment3,Conversion,4190
+3,2,1000000,1,BestLayoutsAnalytical,Experiment3,Cost Estimation,340
+3,2,1000000,1,BestLayoutsAnalytical,Experiment3,ISL Space,4594
+3,2,1000000,1,BestLayoutsAnalytical,Experiment3,ISL Func,3613
+3,2,1000000,1,BestLayoutsAnalytical,Experiment3,ISL Solve,23364
+3,2,1000000,1,BestLayoutsAnalytical,BaseRAJA,Computation,43434
+3,2,1000000,1,BestLayoutsAnalytical,HandTransformed,Computation,48517
+3,2,1000000,1,BestLayoutsAnalytical,HandTransformed,Conversion,2001
+3,2,1000000,1,BestLayoutsAnalytical,Experiment3,Computation,46095
+3,2,1000000,1,BestLayoutsAnalytical,Experiment3,Conversion,4140
+3,2,1000000,1,BestLayoutsAnalytical,Experiment3,Cost Estimation,345
+3,2,1000000,1,BestLayoutsAnalytical,Experiment3,ISL Space,4591
+3,2,1000000,1,BestLayoutsAnalytical,Experiment3,ISL Func,3619
+3,2,1000000,1,BestLayoutsAnalytical,Experiment3,ISL Solve,24106
+3,2,1000000,1,BestLayoutsAnalytical,BaseRAJA,Computation,44890
+3,2,1000000,1,BestLayoutsAnalytical,HandTransformed,Computation,47000
+3,2,1000000,1,BestLayoutsAnalytical,HandTransformed,Conversion,1766
+3,2,1000000,1,BestLayoutsAnalytical,Experiment3,Computation,49161
+3,2,1000000,1,BestLayoutsAnalytical,Experiment3,Conversion,4928
+3,2,1000000,1,BestLayoutsAnalytical,Experiment3,Cost Estimation,341
+3,2,1000000,1,BestLayoutsAnalytical,Experiment3,ISL Space,4579
+3,2,1000000,1,BestLayoutsAnalytical,Experiment3,ISL Func,3608
+3,2,1000000,1,BestLayoutsAnalytical,Experiment3,ISL Solve,23400
+3,2,1000000,2,BestLayoutsAnalytical,BaseRAJA,Computation,46498
+3,2,1000000,2,BestLayoutsAnalytical,HandTransformed,Computation,48156
+3,2,1000000,2,BestLayoutsAnalytical,HandTransformed,Conversion,4208
+3,2,1000000,2,BestLayoutsAnalytical,Experiment3,Computation,23838
+3,2,1000000,2,BestLayoutsAnalytical,Experiment3,Conversion,34700
+3,2,1000000,2,BestLayoutsAnalytical,Experiment3,Cost Estimation,699
+3,2,1000000,2,BestLayoutsAnalytical,Experiment3,ISL Space,9351
+3,2,1000000,2,BestLayoutsAnalytical,Experiment3,ISL Func,7350
+3,2,1000000,2,BestLayoutsAnalytical,Experiment3,ISL Solve,47467
+3,2,1000000,2,BestLayoutsAnalytical,BaseRAJA,Computation,46548
+3,2,1000000,2,BestLayoutsAnalytical,HandTransformed,Computation,47207
+3,2,1000000,2,BestLayoutsAnalytical,HandTransformed,Conversion,4145
+3,2,1000000,2,BestLayoutsAnalytical,Experiment3,Computation,23879
+3,2,1000000,2,BestLayoutsAnalytical,Experiment3,Conversion,33564
+3,2,1000000,2,BestLayoutsAnalytical,Experiment3,Cost Estimation,715
+3,2,1000000,2,BestLayoutsAnalytical,Experiment3,ISL Space,9310
+3,2,1000000,2,BestLayoutsAnalytical,Experiment3,ISL Func,7408
+3,2,1000000,2,BestLayoutsAnalytical,Experiment3,ISL Solve,47394
+3,2,1000000,2,BestLayoutsAnalytical,BaseRAJA,Computation,47789
+3,2,1000000,2,BestLayoutsAnalytical,HandTransformed,Computation,48269
+3,2,1000000,2,BestLayoutsAnalytical,HandTransformed,Conversion,4226
+3,2,1000000,2,BestLayoutsAnalytical,Experiment3,Computation,21162
+3,2,1000000,2,BestLayoutsAnalytical,Experiment3,Conversion,35598
+3,2,1000000,2,BestLayoutsAnalytical,Experiment3,Cost Estimation,684
+3,2,1000000,2,BestLayoutsAnalytical,Experiment3,ISL Space,9273
+3,2,1000000,2,BestLayoutsAnalytical,Experiment3,ISL Func,7358
+3,2,1000000,2,BestLayoutsAnalytical,Experiment3,ISL Solve,47513
+3,2,1000000,3,BestLayoutsAnalytical,BaseRAJA,Computation,45452
+3,2,1000000,3,BestLayoutsAnalytical,HandTransformed,Computation,47941
+3,2,1000000,3,BestLayoutsAnalytical,HandTransformed,Conversion,5513
+3,2,1000000,3,BestLayoutsAnalytical,Experiment3,Computation,56016
+3,2,1000000,3,BestLayoutsAnalytical,Experiment3,Conversion,10996
+3,2,1000000,3,BestLayoutsAnalytical,Experiment3,Cost Estimation,1087
+3,2,1000000,3,BestLayoutsAnalytical,Experiment3,ISL Space,13954
+3,2,1000000,3,BestLayoutsAnalytical,Experiment3,ISL Func,11355
+3,2,1000000,3,BestLayoutsAnalytical,Experiment3,ISL Solve,55853
+3,2,1000000,3,BestLayoutsAnalytical,BaseRAJA,Computation,45816
+3,2,1000000,3,BestLayoutsAnalytical,HandTransformed,Computation,45712
+3,2,1000000,3,BestLayoutsAnalytical,HandTransformed,Conversion,6028
+3,2,1000000,3,BestLayoutsAnalytical,Experiment3,Computation,55621
+3,2,1000000,3,BestLayoutsAnalytical,Experiment3,Conversion,14639
+3,2,1000000,3,BestLayoutsAnalytical,Experiment3,Cost Estimation,1051
+3,2,1000000,3,BestLayoutsAnalytical,Experiment3,ISL Space,13919
+3,2,1000000,3,BestLayoutsAnalytical,Experiment3,ISL Func,11171
+3,2,1000000,3,BestLayoutsAnalytical,Experiment3,ISL Solve,55225
+3,2,1000000,3,BestLayoutsAnalytical,BaseRAJA,Computation,46759
+3,2,1000000,3,BestLayoutsAnalytical,HandTransformed,Computation,47949
+3,2,1000000,3,BestLayoutsAnalytical,HandTransformed,Conversion,6096
+3,2,1000000,3,BestLayoutsAnalytical,Experiment3,Computation,53269
+3,2,1000000,3,BestLayoutsAnalytical,Experiment3,Conversion,12521
+3,2,1000000,3,BestLayoutsAnalytical,Experiment3,Cost Estimation,1043
+3,2,1000000,3,BestLayoutsAnalytical,Experiment3,ISL Space,13890
+3,2,1000000,3,BestLayoutsAnalytical,Experiment3,ISL Func,11156
+3,2,1000000,3,BestLayoutsAnalytical,Experiment3,ISL Solve,54853
