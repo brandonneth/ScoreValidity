@@ -1,0 +1,37 @@
+Variant,Component,Time
+standard,Initialization,59
+standard,Constraint Setup,486
+standard,ISL Space Setup,14889
+standard,ISL Map Setup,5136
+standard,ISL Solve,6451
+standard,Kernels,617476
+standard,Conversion,8073
+standard,Computation,591690
+standard,Initialization,7
+standard,Constraint Setup,522
+standard,ISL Space Setup,14576
+standard,ISL Map Setup,5051
+standard,ISL Solve,6515
+standard,Kernels,586240
+standard,Conversion,8158
+standard,Computation,578167
+lock,Initialization,8
+lock,Constraint Setup,497
+lock,ISL Space Setup,14717
+lock,ISL Map Setup,5034
+lock,ISL Solve,919
+lock,Kernels,551401
+lock,Conversion,10576
+lock,Computation,600247
+lock,Initialization,4
+lock,Constraint Setup,479
+lock,ISL Space Setup,14691
+lock,ISL Map Setup,5032
+lock,ISL Solve,887
+lock,Kernels,598427
+lock,Conversion,6950
+lock,Computation,555123
+original,Computation,973143
+original,Computation,984291
+hand,Computation,576458
+hand,Computation,544822
