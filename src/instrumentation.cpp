@@ -1141,10 +1141,10 @@ void experiment1(idx_t problemSize, bool quiet=false) {
   init_g();
 
   auto dec = format_decisions(tie(B,D,F), comp1, comp2, comp3);
-  dec.set_format_for(B,{1,0}, comp1);
-  dec.set_format_for(D,{1,0}, comp2);
-  dec.set_format_for(F,{0,1}, comp2);
-  dec.set_format_for(F,{1,0}, comp3);
+  dec.set_format_for(B,flayout10, comp1);
+  dec.set_format_for(D,flayout10, comp2);
+  dec.set_format_for(F,flayout01, comp2);
+  dec.set_format_for(F,flayout10, comp3);
 
   auto breakdown = dec.time_execution();
   auto conversion_time = get<0>(breakdown);
@@ -1259,16 +1259,16 @@ void experiment2(idx_t constraints, bool quiet=false) {
   
   auto dec = format_decisions(tie(F), comp1, comp2, comp3);
   if(constraints >= 1) {
-    dec.set_format_for(F,{0,1}, comp1);
+    dec.set_format_for(F,flayout01, comp1);
   }
   if(constraints >= 2) {
-    dec.set_format_for(F,{0,1}, comp2);
+    dec.set_format_for(F,flayout01, comp2);
   }
   if(constraints >= 3) {
-    dec.set_format_for(F,{1,0}, comp3);
+    dec.set_format_for(F,flayout10, comp3);
   }
   if(constraints >= 4) {
-    dec.set_output_format(F,{1,0});
+    dec.set_output_format(F,flayout10);
   }
 
   auto breakdown = dec.time_execution();
@@ -1291,9 +1291,198 @@ void experiment3(bool quiet=false) {
   idx_t computation=3;
   idx_t views = Views;
   std::string constraints="BestLayoutsAnalytical";
-  idx_t problemSize = 1000000; //10^6
+  idx_t problemSize = 1000000;
+
+  double root = std::pow(problemSize, 1.0/dimensionality);
+  camp::idx_t n = (camp::idx_t) root;
+
+  //BaseRAJA definitions
+  using VIEW = View<double, Layout<2>>;
+  VIEW A(new double[n*n], n,n);
+  VIEW B(new double[n*n], n,n);
+  VIEW C(new double[n*n], n,n);
+  VIEW D(new double[n*n], n,n);
+  VIEW E(new double[n*n], n,n);
+  VIEW F(new double[n*n], n,n);
+  VIEW G(new double[n*n], n,n);
+
+  auto lam_init_e = [&](auto i, auto j) {
+    E(i,j) = rand();
+  };
+  auto lam_init_f = [&](auto i, auto j) {
+    F(i,j) = rand();
+  };
+  auto lam_init_g = [&](auto i, auto j) {
+    G(i,j) = rand();
+  };
+
+  auto lam_comp1 = [&](auto i, auto j, auto k) {
+    E(i,j) += A(i,k) * B(k,j);
+  };
+  auto lam_comp2 = [&](auto i, auto j, auto k) {
+    F(i,j) += C(i,k) * D(k,j);
+  };
+  auto lam_comp3 = [&](auto i, auto j, auto k) {
+    G(i,j) += E(i,k) * F(k,j);
+  };
+
+  using INIT_POL = KernelPolicy<
+    statement::For<0, omp_parallel_for_exec,
+      statement::For<1, loop_exec,
+          statement::Lambda<0>
+        >
+    >
+  >;
+  using COMP_POL = KernelPolicy<
+    statement::For<0, omp_parallel_for_exec,
+      statement::For<1, loop_exec,
+        statement::For<2, loop_exec,
+            statement::Lambda<0>
+        >
+      >
+    >
+  >;
+
+
+  auto init_seg = make_tuple(RangeSegment(0,n), RangeSegment(0,n));
+  auto comp_seg = make_tuple(RangeSegment(0,n), RangeSegment(0,n), RangeSegment(0,n));
+
+  auto init_e = make_kernel<INIT_POL>(init_seg, lam_init_e);
+  auto init_f = make_kernel<INIT_POL>(init_seg, lam_init_f);
+  auto init_g = make_kernel<INIT_POL>(init_seg, lam_init_g);
+  
+  auto comp1 = make_kernel<COMP_POL>(comp_seg, lam_comp1);
+  auto comp2 = make_kernel<COMP_POL>(comp_seg, lam_comp2);
+  auto comp3 = make_kernel<COMP_POL>(comp_seg, lam_comp3);
+
+  std::array<idx_t, 2> sizes{{n,n}};
+  auto blayout = make_permuted_layout(sizes, {{1,0}});
+  auto dlayout = make_permuted_layout(sizes, {{1,0}});
+  auto flayout01 = make_permuted_layout(sizes, {{0,1}});
+  auto flayout10 = make_permuted_layout(sizes, {{1,0}});
+
+
+  
+  //BaseRAJA performance
+  init_e();
+  init_f();
+  init_g();
+
+  start();
+  comp1();
+  comp2();
+  comp3();
+  auto baseRAJA = stop();
+  if(!quiet) {
+    write_datapoint(3, dimensionality, problemSize, views, constraints, "BaseRAJA", "Computation", baseRAJA);
+  }
+
+  //HandTransformed
+  permute_view(F, flayout01)();
+  permute_view(B, flayout01)();
+  permute_view(D, flayout01)();
+  init_e();
+  init_f();
+  init_g();
+  camp::idx_t run_time = 0;
+  camp::idx_t conv_time = 0;
+  
+  start();
+    if constexpr (Views >= 1) {permute_view(B, flayout10)();}
+  conv_time += stop();
+  start();
+    comp1();
+  run_time += stop();
+  start();
+    if constexpr (Views >= 2) {permute_view(D, flayout10)();}
+    if constexpr (Views >= 3) {permute_view(F, flayout01)();}
+  conv_time += stop();
+  start();
+    comp2();
+  run_time += stop();
+  start();
+    if constexpr (Views >= 3) {permute_view(F, flayout10)();}
+  conv_time += stop();
+  start();
+    comp3();
+  run_time += stop();
+  if(!quiet) {
+  write_datapoint(3, dimensionality, problemSize, views, constraints, "HandTransformed", "Computation", run_time);
+  write_datapoint(3, dimensionality, problemSize, views, constraints, "HandTransformed", "Conversion", conv_time);
+  }
+  
+  permute_view(F, flayout01)();
+  permute_view(B, flayout01)();
+  permute_view(D, flayout01)();
+  init_e();
+  init_f();
+  init_g();
+  
+  if constexpr (Views == 1) {
+    auto dec = format_decisions(tie(B), comp1, comp2, comp3);
+    dec.set_format_for(B,flayout10, comp1);
+
+    auto breakdown = dec.time_execution();
+    auto conversion_time = get<0>(breakdown);
+    auto computation_time = get<1>(breakdown);
+    if(!quiet) {
+    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "Computation", computation_time);
+    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "Conversion", conversion_time);
+    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "Cost Estimation", dec.setup_time);
+    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "ISL Space", dec.space_time);
+    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "ISL Func", dec.map_time);
+    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "ISL Solve", dec.solve_time);
+    }
+  } else if constexpr (Views == 2) {
+    auto dec = format_decisions(tie(B,D), comp1, comp2, comp3);
+    dec.set_format_for(B,flayout10, comp1);
+    dec.set_format_for(D,flayout10, comp2);
+
+    auto breakdown = dec.time_execution();
+    auto conversion_time = get<0>(breakdown);
+    auto computation_time = get<1>(breakdown);
+    if(!quiet) {
+    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "Computation", computation_time);
+    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "Conversion", conversion_time);
+    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "Cost Estimation", dec.setup_time);
+    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "ISL Space", dec.space_time);
+    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "ISL Func", dec.map_time);
+    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "ISL Solve", dec.solve_time);
+    }
+  }
+  else if constexpr (Views == 3) {
+    auto dec = format_decisions(tie(B,D,F), comp1, comp2, comp3);
+    dec.set_format_for(B,flayout10, comp1);
+    dec.set_format_for(D,flayout10, comp2);
+    dec.set_format_for(F,flayout01, comp2);
+    dec.set_format_for(F,flayout10, comp3);
+
+    auto breakdown = dec.time_execution();
+    auto conversion_time = get<0>(breakdown);
+    auto computation_time = get<1>(breakdown);
+    if(!quiet) {
+    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "Computation", computation_time);
+    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "Conversion", conversion_time);
+    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "Cost Estimation", dec.setup_time);
+    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "ISL Space", dec.space_time);
+    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "ISL Func", dec.map_time);
+    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "ISL Solve", dec.solve_time);
+    }
+  }
+
+  
+}
+
+
+void experiment4_3(bool quiet=false) {
+  idx_t dimensionality = 3;
+  idx_t computation=3;
+  idx_t views = 3;
+  idx_t Views = views;
+  idx_t problemSize = std::pow(2,30); //2^24 
+std::string constraints = "BestLayoutsAnalytical";
   using VIEW = View<double, Layout<3>>;
-  double root = std::pow(problemSize, 1.0/3.0);
+  double root = std::pow(problemSize, 1.0/4.0);
   camp::idx_t  n = (camp::idx_t) root;
   VIEW A(new double[n*n*n], n,n,n);
   VIEW B(new double[n*n*n], n,n,n);
@@ -1373,90 +1562,220 @@ void experiment3(bool quiet=false) {
   comp3();
   auto baseRAJA = stop();
   if(!quiet) {
-    write_datapoint(3, dimensionality, problemSize, views, constraints, "BaseRAJA", "Computation", baseRAJA);
+    write_datapoint(4, dimensionality, problemSize, views, constraints, "BaseRAJA", "Computation", baseRAJA);
   }
 
   //HandTransformed
+  permute_view(F, flayout01)();
+  permute_view(B, flayout01)();
+  permute_view(D, flayout01)();
+  init_e();
+  init_f();
+  init_g();
+
   camp::idx_t run_time = 0;
   camp::idx_t conv_time = 0;
   
   start();
-    if constexpr (Views >= 1) {permute_view(B, flayout10)();}
+    permute_view(B, flayout10)();
   conv_time += stop();
   start();
     comp1();
   run_time += stop();
   start();
-    if constexpr (Views >= 2) {permute_view(D, flayout10)();}
-    if constexpr (Views >= 3) {permute_view(F, flayout01)();}
+    permute_view(D, flayout10)();
+    permute_view(F, flayout01)();
   conv_time += stop();
   start();
     comp2();
   run_time += stop();
   start();
-    if constexpr (Views >= 3) {permute_view(F, flayout10)();}
+    permute_view(F, flayout10)();
   conv_time += stop();
   start();
     comp3();
   run_time += stop();
   if(!quiet) {
-  write_datapoint(3, dimensionality, problemSize, views, constraints, "HandTransformed", "Computation", run_time);
-  write_datapoint(3, dimensionality, problemSize, views, constraints, "HandTransformed", "Conversion", conv_time);
+  write_datapoint(4, dimensionality, problemSize, views, constraints, "HandTransformed", "Computation", run_time);
+  write_datapoint(4, dimensionality, problemSize, views, constraints, "HandTransformed", "Conversion", conv_time);
   }
   
-  
-  
-  if constexpr (Views == 1) {
-    auto dec = format_decisions(tie(B), comp1, comp2, comp3);
-    dec.set_format_for(B,flayout10, comp1);
+  //Experiment 
+  permute_view(F, flayout01)();
+  permute_view(B, flayout01)();
+  permute_view(D, flayout01)();
+  init_e();
+  init_f();
+  init_g();
 
-    auto breakdown = dec.time_execution();
-    auto conversion_time = get<0>(breakdown);
-    auto computation_time = get<1>(breakdown);
-    if(!quiet) {
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "Computation", computation_time);
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "Conversion", conversion_time);
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "Cost Estimation", dec.setup_time);
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "ISL Space", dec.space_time);
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "ISL Func", dec.map_time);
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "ISL Solve", dec.solve_time);
-    }
-  } else if constexpr (Views == 2) {
-    auto dec = format_decisions(tie(B,D), comp1, comp2, comp3);
-    dec.set_format_for(B,flayout10, comp1);
-    dec.set_format_for(D,flayout10, comp2);
-
-    auto breakdown = dec.time_execution();
-    auto conversion_time = get<0>(breakdown);
-    auto computation_time = get<1>(breakdown);
-    if(!quiet) {
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "Computation", computation_time);
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "Conversion", conversion_time);
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "Cost Estimation", dec.setup_time);
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "ISL Space", dec.space_time);
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "ISL Func", dec.map_time);
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "ISL Solve", dec.solve_time);
-    }
+  auto dec = format_decisions(tie(B,D,F), comp1, comp2, comp3);
+  dec.set_format_for(B,flayout10, comp1);
+  dec.set_format_for(D,flayout10, comp2);
+  dec.set_format_for(F,flayout01, comp2);
+  dec.set_format_for(F,flayout10, comp3);
+  auto breakdown = dec.time_execution();
+  auto conversion_time = get<0>(breakdown);
+  auto computation_time = get<1>(breakdown);
+  if(!quiet) {
+  write_datapoint(4, dimensionality, problemSize, Views, constraints, "Experiment4", "Computation", computation_time);
+  write_datapoint(4, dimensionality, problemSize, Views, constraints, "Experiment4", "Conversion", conversion_time);
+  write_datapoint(4, dimensionality, problemSize, Views, constraints, "Experiment4", "Cost Estimation", dec.setup_time);
+  write_datapoint(4, dimensionality, problemSize, Views, constraints, "Experiment4", "ISL Space", dec.space_time);
+  write_datapoint(4, dimensionality, problemSize, Views, constraints, "Experiment4", "ISL Func", dec.map_time);
+  write_datapoint(4, dimensionality, problemSize, Views, constraints, "Experiment4", "ISL Solve", dec.solve_time);
   }
-  else if constexpr (Views == 3) {
-    auto dec = format_decisions(tie(B,D,F), comp1, comp2, comp3);
-    dec.set_format_for(B,flayout10, comp1);
-    dec.set_format_for(D,flayout10, comp2);
-    dec.set_format_for(F,flayout01, comp2);
-    dec.set_format_for(F,flayout10, comp3);
+  
 
-    auto breakdown = dec.time_execution();
-    auto conversion_time = get<0>(breakdown);
-    auto computation_time = get<1>(breakdown);
-    if(!quiet) {
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "Computation", computation_time);
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "Conversion", conversion_time);
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "Cost Estimation", dec.setup_time);
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "ISL Space", dec.space_time);
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "ISL Func", dec.map_time);
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "Experiment3", "ISL Solve", dec.solve_time);
-    }
+  
+}
+
+void experiment4_2(bool quiet=false) {
+  idx_t dimensionality = 2;
+  idx_t computation=3;
+  idx_t views = 3;
+  idx_t Views = views;
+  idx_t problemSize = std::pow(2,30); //2^24
+  double root = std::pow(problemSize, 1.0/3.0);
+  size_t n = (size_t) root;
+std::string constraints = "BestLayoutsAnalytical";
+ using VIEW = View<double, Layout<2>>;
+  VIEW A(new double[n*n], n,n);
+  VIEW B(new double[n*n], n,n);
+  VIEW C(new double[n*n], n,n);
+  VIEW D(new double[n*n], n,n);
+  VIEW E(new double[n*n], n,n);
+  VIEW F(new double[n*n], n,n);
+  VIEW G(new double[n*n], n,n);
+
+  auto lam_init_e = [&](auto i, auto j) {
+    E(i,j) = rand();
+  };
+  auto lam_init_f = [&](auto i, auto j) {
+    F(i,j) = rand();
+  };
+  auto lam_init_g = [&](auto i, auto j) {
+    G(i,j) = rand();
+  };
+
+  auto lam_comp1 = [&](auto i, auto j, auto k) {
+    E(i,j) += A(i,k) * B(k,j);
+  };
+  auto lam_comp2 = [&](auto i, auto j, auto k) {
+    F(i,j) += C(i,k) * D(k,j);
+  };
+  auto lam_comp3 = [&](auto i, auto j, auto k) {
+    G(i,j) += E(i,k) * F(k,j);
+  };
+
+  using INIT_POL = KernelPolicy<
+    statement::For<0, omp_parallel_for_exec,
+      statement::For<1, loop_exec,
+          statement::Lambda<0>
+        >
+    >
+  >;
+  using COMP_POL = KernelPolicy<
+    statement::For<0, omp_parallel_for_exec,
+      statement::For<1, loop_exec,
+        statement::For<2, loop_exec,
+            statement::Lambda<0>
+        >
+      >
+    >
+  >;
+
+
+  auto init_seg = make_tuple(RangeSegment(0,n), RangeSegment(0,n));
+  auto comp_seg = make_tuple(RangeSegment(0,n), RangeSegment(0,n), RangeSegment(0,n));
+
+  auto init_e = make_kernel<INIT_POL>(init_seg, lam_init_e);
+  auto init_f = make_kernel<INIT_POL>(init_seg, lam_init_f);
+  auto init_g = make_kernel<INIT_POL>(init_seg, lam_init_g);
+  
+  auto comp1 = make_kernel<COMP_POL>(comp_seg, lam_comp1);
+  auto comp2 = make_kernel<COMP_POL>(comp_seg, lam_comp2);
+  auto comp3 = make_kernel<COMP_POL>(comp_seg, lam_comp3);
+
+  std::array<idx_t, 2> sizes{{n,n}};
+  auto blayout = make_permuted_layout(sizes, {{1,0}});
+  auto dlayout = make_permuted_layout(sizes, {{1,0}});
+  auto flayout01 = make_permuted_layout(sizes, {{0,1}});
+  auto flayout10 = make_permuted_layout(sizes, {{1,0}});
+
+  
+  //BaseRAJA performance
+  init_e();
+  init_f();
+  init_g();
+  start();
+  comp1();
+  comp2();
+  comp3();
+  auto baseRAJA = stop();
+  if(!quiet) {
+    write_datapoint(4, dimensionality, problemSize, views, constraints, "BaseRAJA", "Computation", baseRAJA);
   }
+
+  //HandTransformed
+  permute_view(F, flayout01)();
+  permute_view(B, flayout01)();
+  permute_view(D, flayout01)();
+  init_e();
+  init_f();
+  init_g();
+
+  camp::idx_t run_time = 0;
+  camp::idx_t conv_time = 0;
+  
+  start();
+    permute_view(B, flayout10)();
+  conv_time += stop();
+  start();
+    comp1();
+  run_time += stop();
+  start();
+    permute_view(D, flayout10)();
+    permute_view(F, flayout01)();
+  conv_time += stop();
+  start();
+    comp2();
+  run_time += stop();
+  start();
+    permute_view(F, flayout10)();
+  conv_time += stop();
+  start();
+    comp3();
+  run_time += stop();
+  if(!quiet) {
+  write_datapoint(4, dimensionality, problemSize, views, constraints, "HandTransformed", "Computation", run_time);
+  write_datapoint(4, dimensionality, problemSize, views, constraints, "HandTransformed", "Conversion", conv_time);
+  }
+  
+  //Experiment 
+  permute_view(F, flayout01)();
+  permute_view(B, flayout01)();
+  permute_view(D, flayout01)();
+  init_e();
+  init_f();
+  init_g();
+
+  auto dec = format_decisions(tie(B,D,F), comp1, comp2, comp3);
+  dec.set_format_for(B,flayout10, comp1);
+  dec.set_format_for(D,flayout10, comp2);
+  dec.set_format_for(F,flayout01, comp2);
+  dec.set_format_for(F,flayout10, comp3);
+  auto breakdown = dec.time_execution();
+  auto conversion_time = get<0>(breakdown);
+  auto computation_time = get<1>(breakdown);
+  if(!quiet) {
+  write_datapoint(4, dimensionality, problemSize, Views, constraints, "Experiment4", "Computation", computation_time);
+  write_datapoint(4, dimensionality, problemSize, Views, constraints, "Experiment4", "Conversion", conversion_time);
+  write_datapoint(4, dimensionality, problemSize, Views, constraints, "Experiment4", "Cost Estimation", dec.setup_time);
+  write_datapoint(4, dimensionality, problemSize, Views, constraints, "Experiment4", "ISL Space", dec.space_time);
+  write_datapoint(4, dimensionality, problemSize, Views, constraints, "Experiment4", "ISL Func", dec.map_time);
+  write_datapoint(4, dimensionality, problemSize, Views, constraints, "Experiment4", "ISL Solve", dec.solve_time);
+  }
+  
 
   
 }
@@ -1507,5 +1826,11 @@ int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
   experiment3<3>();
   experiment3<3>();
 
+  experiment4_3();
+  experiment4_3();
+  experiment4_3();
   
+  experiment4_2();
+  experiment4_2();
+  experiment4_2();
 }
