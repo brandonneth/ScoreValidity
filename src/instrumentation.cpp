@@ -21,19 +21,19 @@ struct order_to_kpol3 {
   >;
 };
 
-void write_datapoint(auto experiment, auto dimensionality, auto problemSize, auto views, auto constraints, auto variant, auto component, auto time) {
+auto write_datapoint = [](auto experiment, auto dimensionality, auto problemSize, auto views, auto constraints, auto variant, auto component, auto time) {
   std::cout << experiment << "," << dimensionality << "," << problemSize << "," << views << "," << constraints << "," << variant << "," << component << "," << time << "\n";
-}
+};
 
-std::chrono::time_point<std::chrono::high_resolution_clock> _start;
+std::chrono::time_point<std::chrono::high_resolution_clock> start_;
 void start() {
-   _start = std::chrono::high_resolution_clock::now();
+   start_ = std::chrono::high_resolution_clock::now();
 }
 
 auto stop() {
   auto end = std::chrono::high_resolution_clock::now();
 
-  auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - _start).count();
+  auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start_).count();
   return duration;
 }
 
@@ -1696,7 +1696,8 @@ std::string constraints = "BestLayoutsAnalytical";
   auto comp2 = make_kernel<COMP_POL>(comp_seg, lam_comp2);
   auto comp3 = make_kernel<COMP_POL>(comp_seg, lam_comp3);
 
-  std::array<idx_t, 2> sizes{{n,n}};
+  std::array<idx_t, 2> sizes;
+  sizes[0] = n; sizes[1] = n;//{{n,n}};
   auto blayout = make_permuted_layout(sizes, {{1,0}});
   auto dlayout = make_permuted_layout(sizes, {{1,0}});
   auto flayout01 = make_permuted_layout(sizes, {{0,1}});
