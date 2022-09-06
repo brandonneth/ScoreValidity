@@ -1160,7 +1160,7 @@ void experiment1(idx_t problemSize, bool quiet=false) {
   }
 }
 
-
+/*
 void experiment2(idx_t constraints, bool quiet=false) {
   idx_t dimensionality = 2;
   idx_t computation=3;
@@ -1780,6 +1780,7 @@ std::string constraints = "BestLayoutsAnalytical";
 
   
 }
+*/
 
 int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
 {
@@ -1799,7 +1800,7 @@ int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
     experiment1((idx_t) p);
     experiment1((idx_t) p);
   }
-
+/*
   std::cerr << "Experiment2, warmup" << "\n";
   experiment2(3, true);
   experiment2(3, true);
@@ -1834,4 +1835,5 @@ int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
   experiment4_2();
   experiment4_2();
   experiment4_2();
+*/
 }
