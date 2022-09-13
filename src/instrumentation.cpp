@@ -1160,6 +1160,91 @@ void experiment1(idx_t problemSize, bool quiet=false) {
   }
 }
 
+
+void experiment2(idx_t problemSize, bool quiet=false) {
+  idx_t dimensionality = 2;
+  idx_t computation=3;
+  idx_t views=3;
+  std::string constraints="BestAnalytical";
+
+  double root = std::pow(problemSize, 1.0/dimensionality);
+  camp::idx_t n = (camp::idx_t) root;
+
+  //BaseRAJA definitions
+  using VIEW = View<double, Layout<2>>;
+  VIEW A(new double[n*n], n,n);
+  VIEW B(new double[n*n], n,n);
+  VIEW C(new double[n*n], n,n);
+  VIEW D(new double[n*n], n,n);
+  VIEW E(new double[n*n], n,n);
+  VIEW F(new double[n*n], n,n);
+  VIEW G(new double[n*n], n,n);
+
+  auto lam_init_e = [&](auto i, auto j) {
+    E(i,j) = rand();
+  };
+  auto lam_init_f = [&](auto i, auto j) {
+    F(i,j) = rand();
+  };
+  auto lam_init_g = [&](auto i, auto j) {
+    G(i,j) = rand();
+  };
+
+  auto lam_comp1 = [&](auto i, auto j, auto k) {
+    E(i,j) += A(i,k) * B(k,j);
+  };
+  auto lam_comp2 = [&](auto i, auto j, auto k) {
+    F(i,j) += C(i,k) * D(k,j);
+  };
+  auto lam_comp3 = [&](auto i, auto j, auto k) {
+    G(i,j) += E(i,k) * F(k,j);
+  };
+
+  using INIT_POL = KernelPolicy<
+    statement::For<0, omp_parallel_for_exec,
+      statement::For<1, loop_exec,
+          statement::Lambda<0>
+        >
+    >
+  >;
+  using COMP_POL = KernelPolicy<
+    statement::For<0, omp_parallel_for_exec,
+      statement::For<1, loop_exec,
+        statement::For<2, loop_exec,
+            statement::Lambda<0>
+        >
+      >
+    >
+  >;
+
+
+  auto init_seg = make_tuple(RangeSegment(0,n), RangeSegment(0,n));
+  auto comp_seg = make_tuple(RangeSegment(0,n), RangeSegment(0,n), RangeSegment(0,n));
+
+  auto init_e = make_kernel<INIT_POL>(init_seg, lam_init_e);
+  auto init_f = make_kernel<INIT_POL>(init_seg, lam_init_f);
+  auto init_g = make_kernel<INIT_POL>(init_seg, lam_init_g);
+  
+  auto comp1 = make_kernel<COMP_POL>(comp_seg, lam_comp1);
+  auto comp2 = make_kernel<COMP_POL>(comp_seg, lam_comp2);
+  auto comp3 = make_kernel<COMP_POL>(comp_seg, lam_comp3);
+
+  std::array<idx_t, 2> sizes{{n,n}};
+  auto blayout = make_permuted_layout(sizes, {{1,0}});
+  auto dlayout = make_permuted_layout(sizes, {{1,0}});
+  auto flayout01 = make_permuted_layout(sizes, {{0,1}});
+  auto flayout10 = make_permuted_layout(sizes, {{1,0}});
+
+  init_e();
+  init_f();
+  init_g();
+  //BaseRAJA performance
+
+  comp1();
+  comp2();
+  comp3();
+
+}
 /*
 void experiment2(idx_t constraints, bool quiet=false) {
   idx_t dimensionality = 2;

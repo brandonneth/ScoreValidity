@@ -21,9 +21,19 @@ def experiment1(data):
   data2 = data2[data2.Component != 'Computation']
   data2 = data2[data2.Component != 'Conversion']
   p2 = ggplot(data2, aes(x="Problem Size", y="Time (milliseconds)", fill="Component"))
-  p2 += facet_wrap(['Source'])
+  p2 += facet_wrap(['Source', 'Problem Size'])
   p2 += geom_col()
   p2.save(filename="instrumentation_experiment1_part2.pdf")
+
+  data3 = data[data.Component == 'Computation']
+  data4 = data[data.Component == 'Conversion']
+  data3 = pd.concat([data3,data4])
+
+  p3 = ggplot(data3,aes(x="Variant", y="Time (milliseconds)", fill="Component"))
+  p3 += facet_wrap(['Source', 'Problem Size'])
+  p3 += geom_col()
+  p3 += theme(axis_text_x=element_text(size=8,rotation=-30,ha='left'))
+  p3.save(filename="instrumentation_experiment1_part3.pdf")
 
 def experiment2(data):
   data = data[data.Component != 'Computation']
@@ -64,6 +74,13 @@ def experiment4(data):
   p1 += theme(axis_text_x=element_text(size=8,rotation=-30,ha='left'))
   p1.save(filename="instrumentation_experiment4_part2.pdf")
 
+def experiment5(data):
+  print(data)
+  p1 = ggplot(data, aes(x='Variant', y="Time (milliseconds)", fill="Component"))
+  #p1 += facet_grid(['Source', 'Dimensionality'])
+  p1 += geom_col()
+  p1 += theme(axis_text_x=element_text(size=8,rotation=-30,ha='left'))
+  p1.save(filename="instrumentation_experiment5_part1.pdf")
 
 
 sizeMap = {2**15 : '2^15', 2**16 : '2^16', 2**17 : '2^17', 2**18 : '2^18', 2**19 : '2^19', 2**20 : '2^20', 1000000 : '10^6', 2**24 : '2^24', 2**30 : "2^30"}
@@ -77,11 +94,13 @@ for filename in sys.argv[1:]:
 print(data)
 
 data['Dimensionality'] = data['Dimensionality'].apply(lambda x: str(x) + '-Dimensional')
-data['Problem Size'] = data['Problem Size'].apply(lambda x : sizeMap[x])
-data['Source'] = data['Source'].apply(lambda x : sourceMap[x])
+#data['Problem Size'] = data['Problem Size'].apply(lambda x : sizeMap[x])
+#data['Source'] = data['Source'].apply(lambda x : sourceMap[x])
 data['Time (milliseconds)'] = data['Time (microseconds)'].astype(int) / 1000
 
+#experiment5(data[data.Experiment==5])
+
 experiment1(data[data.Experiment==1])
-experiment2(data[data.Experiment==2])
-experiment3(data[data.Experiment==3])
-experiment4(data[data.Experiment==4])
+#experiment2(data[data.Experiment==2])
+#experiment3(data[data.Experiment==3])
+#experiment4(data[data.Experiment==4])
