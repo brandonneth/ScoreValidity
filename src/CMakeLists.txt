@@ -48,3 +48,8 @@ blt_add_executable(
   NAME instrumentation.exe
   SOURCES instrumentation.cpp
   DEPENDS_ON ${all_depends})
+
+  blt_add_executable(
+  NAME 2mm.exe
+  SOURCES 2mm.cpp
+  DEPENDS_ON ${all_depends})
