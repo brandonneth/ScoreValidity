@@ -29,4 +29,5 @@ if (ENABLE_CUDA)
   set (CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --expt-extended-lambda")
 endif ()
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto")
 add_subdirectory(src)
