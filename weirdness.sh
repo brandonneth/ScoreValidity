@@ -8,7 +8,7 @@ export OMP_PROC_BIND=spread
 echo "Variant,Component,Time,Size" > results
 
 for EXEC in original hand; do
-for FACTOR in 1 2 3 4 5 6; do
+for FACTOR in 0.5 0.7 0.8 0.9 1 1.2 1.3 1.5 1.7; do
   ./bin/2mm-$EXEC.exe $FACTOR >> results
 done
 done

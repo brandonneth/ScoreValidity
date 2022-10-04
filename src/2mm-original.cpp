@@ -63,14 +63,14 @@ void original(camp::idx_t n) {
   comp2();
   auto elapsed = stop();
 
-  std::cout << "Original,Computation," << elapsed << "," << n << "\n";
+  std::cout << "Original,Total," << elapsed << "," << n << "\n";
 }
 
 int main(int argc, char ** argv) {
   
   camp::idx_t n = 1000;
   if (argc > 1) {
-    n = n * std::atoi(argv[1]);
+    n = n * std::atof(argv[1]);
   }
   original(n);
   original(n);

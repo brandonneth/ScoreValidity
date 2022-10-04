@@ -86,7 +86,7 @@ int main(int argc, char ** argv) {
   
   camp::idx_t n = 1000;
   if(argc > 1) {
-    n *= std::atoi(argv[1]);
+    n *= std::atof(argv[1]);
   }
   hand(n);
   hand(n);
