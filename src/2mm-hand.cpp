@@ -16,9 +16,8 @@ auto stop() {
 
 
 
-void hand() {
+void hand(camp::idx_t n) {
   using namespace RAJA;
-  camp::idx_t n = (camp::idx_t) 1000;
 
   //BaseRAJA definitions
   using VIEW = View<double, Layout<2>>;
@@ -78,16 +77,19 @@ void hand() {
   start();
     comp2();
   run_time += stop();
-  std::cout << "Hand,Computation," << run_time << "\n";
-  std::cout << "Hand,Conversion," << conv_time << "\n";
-  std::cout << "Hand,Total," << conv_time+run_time << "\n";
+  std::cout << "Hand,Computation," << run_time << "," << n << "\n";
+  std::cout << "Hand,Conversion," << conv_time << "," << n << "\n";
+  std::cout << "Hand,Total," << conv_time+run_time << "," << n << "\n";
 }
 
-int main() {
-
+int main(int argc, char ** argv) {
   
-  hand();
-  hand();
-  hand();
+  camp::idx_t n = 1000;
+  if(argc > 1) {
+    n *= std::atoi(argv[1]);
+  }
+  hand(n);
+  hand(n);
+  hand(n);
   return 0;
 }

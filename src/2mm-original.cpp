@@ -15,9 +15,8 @@ auto stop() {
 }
 
 
-void original() {
+void original(camp::idx_t n) {
   using namespace RAJA;
-  camp::idx_t n = (camp::idx_t) 1000;
 
   //BaseRAJA definitions
   using VIEW = View<double, Layout<2>>;
@@ -64,13 +63,17 @@ void original() {
   comp2();
   auto elapsed = stop();
 
-  std::cout << "Original,Computation," << elapsed << "\n";
+  std::cout << "Original,Computation," << elapsed << "," << n << "\n";
 }
 
-int main() {
-
-  original();
-  original();
-  original();
+int main(int argc, char ** argv) {
+  
+  camp::idx_t n = 1000;
+  if (argc > 1) {
+    n = n * std::atoi(argv[1]);
+  }
+  original(n);
+  original(n);
+  original(n);
   return 0;
 }
