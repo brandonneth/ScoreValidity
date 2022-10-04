@@ -80,6 +80,12 @@ void hand(camp::idx_t n) {
   std::cout << "Hand,Computation," << run_time << "," << n << "\n";
   std::cout << "Hand,Conversion," << conv_time << "," << n << "\n";
   std::cout << "Hand,Total," << conv_time+run_time << "," << n << "\n";
+
+  delete[] A.get_data();
+  delete[] B.get_data();
+  delete[] C.get_data();
+  delete[] D.get_data();
+  delete[] T.get_data();
 }
 
 int main(int argc, char ** argv) {

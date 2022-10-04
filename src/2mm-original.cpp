@@ -64,6 +64,11 @@ void original(camp::idx_t n) {
   auto elapsed = stop();
 
   std::cout << "Original,Total," << elapsed << "," << n << "\n";
+  delete[] A.get_data();
+  delete[] B.get_data();
+  delete[] C.get_data();
+  delete[] D.get_data();
+  delete[] T.get_data();
 }
 
 int main(int argc, char ** argv) {
