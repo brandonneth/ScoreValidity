@@ -63,3 +63,8 @@ blt_add_executable(
   NAME 2mm-lock.exe
   SOURCES 2mm-lock.cpp
   DEPENDS_ON ${all_depends})
+  blt_add_executable(
+  NAME 2mm-right.exe
+  SOURCES 2mm-right.cpp
+  DEPENDS_ON ${all_depends})
+
