@@ -38,7 +38,7 @@ void hand(camp::idx_t n) {
   }
 
   using COMP_POL = KernelPolicy<
-    statement::For<0, omp_parallel_for_exec,
+    statement::For<0, loop_exec, //omp_parallel_for_exec,
       statement::For<1, loop_exec,
         statement::For<2, loop_exec,
             statement::Lambda<0>
