@@ -2,23 +2,22 @@
 #include <algorithm>
 #include <chrono>
 #include <papi.h>
- long long counters[3];
+ long long counters[2];
   int PAPI_events[] = {
-                PAPI_L1_DCM,
                 PAPI_L2_DCM,
                 PAPI_L2_DCA };
 
 std::chrono::time_point<std::chrono::high_resolution_clock> start_;
 void start() {
    start_ = std::chrono::high_resolution_clock::now();
-  PAPI_start_counters(PAPI_events, 3);
+  PAPI_start_counters(PAPI_events, 2);
 }
 
 auto stop() {
   auto end = std::chrono::high_resolution_clock::now();
 
   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start_).count();
-  PAPI_read_counters(counters, 3);
+  PAPI_read_counters(counters, 2);
 
   return duration;
 }
@@ -75,7 +74,7 @@ void original(camp::idx_t n) {
   auto elapsed = stop();
 
   std::cout << "Right,Total," << elapsed << "," << n << ",";
-  std::cout << counters[0] << "," << counters[1] << "," << counters[2] << "," << counters[1] / counters[2] << "\n";
+  std::cout << counters[0] << "," << counters[1] <<  "," << (double) counters[0] / (double) counters[1] << "\n";
 
   delete[] A.get_data();
   delete[] B.get_data();

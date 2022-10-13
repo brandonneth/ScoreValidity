@@ -2,9 +2,8 @@
 #include <algorithm>
 #include <chrono>
 #include <papi.h>
- long long counters[3];
+ long long counters[2];
   int PAPI_events[] = {
-                PAPI_L1_DCM,
                 PAPI_L2_DCM,
                 PAPI_L2_DCA };
 
@@ -68,7 +67,7 @@ void hand(camp::idx_t n) {
   auto l10 = make_permuted_layout(sizes, {{1,0}});
   auto l01 = make_permuted_layout(sizes, {{0,1}});
 
-  PAPI_start_counters(PAPI_events, 3);
+  PAPI_start_counters(PAPI_events, 2);
   camp::idx_t run_time = 0;
   camp::idx_t conv_time = 0;
   start();
@@ -84,11 +83,11 @@ void hand(camp::idx_t n) {
     comp2();
   run_time += stop();
 
-  PAPI_read_counters(counters, 3);
+  PAPI_read_counters(counters, 2);
   //std::cout << "Hand,Computation," << run_time << "," << n << "\n";
   //std::cout << "Hand,Conversion," << conv_time << "," << n << "\n";
   std::cout << "Hand,Total," << conv_time+run_time << "," << n << ",";
-  std::cout << counters[0] << "," << counters[1] << "," << counters[2] << "," << counters[1] / counters[2] << "\n";
+  std::cout << counters[0] << "," << counters[1] << "," << (double) counters[0] / (double) counters[1] << "\n";
   delete[] A.get_data();
   delete[] B.get_data();
   delete[] C.get_data();
