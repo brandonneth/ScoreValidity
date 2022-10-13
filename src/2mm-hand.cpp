@@ -1,6 +1,12 @@
 #include "RAJA/RAJA.hpp"
 #include <algorithm>
 #include <chrono>
+#include <papi.h>
+ long long counters[3];
+  int PAPI_events[] = {
+                PAPI_L1_DCM,
+                PAPI_L2_DCM,
+                PAPI_L2_DCA };
 
 std::chrono::time_point<std::chrono::high_resolution_clock> start_;
 void start() {
@@ -11,10 +17,9 @@ auto stop() {
   auto end = std::chrono::high_resolution_clock::now();
 
   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start_).count();
+
   return duration;
 }
-
-
 
 void hand(camp::idx_t n) {
   using namespace RAJA;
@@ -63,6 +68,7 @@ void hand(camp::idx_t n) {
   auto l10 = make_permuted_layout(sizes, {{1,0}});
   auto l01 = make_permuted_layout(sizes, {{0,1}});
 
+  PAPI_start_counters(PAPI_events, 3);
   camp::idx_t run_time = 0;
   camp::idx_t conv_time = 0;
   start();
@@ -77,10 +83,12 @@ void hand(camp::idx_t n) {
   start();
     comp2();
   run_time += stop();
-  std::cout << "Hand,Computation," << run_time << "," << n << "\n";
-  std::cout << "Hand,Conversion," << conv_time << "," << n << "\n";
-  std::cout << "Hand,Total," << conv_time+run_time << "," << n << "\n";
 
+  PAPI_read_counters(counters, 3);
+  //std::cout << "Hand,Computation," << run_time << "," << n << "\n";
+  //std::cout << "Hand,Conversion," << conv_time << "," << n << "\n";
+  std::cout << "Hand,Total," << conv_time+run_time << "," << n << ",";
+  std::cout << counters[0] << "," << counters[1] << "," << counters[2] << "," << counters[1] / counters[2] << "\n";
   delete[] A.get_data();
   delete[] B.get_data();
   delete[] C.get_data();
@@ -89,7 +97,7 @@ void hand(camp::idx_t n) {
 }
 
 int main(int argc, char ** argv) {
-  
+   PAPI_library_init(PAPI_VER_CURRENT); 
   camp::idx_t n = 1000;
   if(argc > 1) {
     n *= std::atof(argv[1]);

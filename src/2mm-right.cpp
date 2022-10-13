@@ -1,19 +1,27 @@
 #include "RAJA/RAJA.hpp"
 #include <algorithm>
 #include <chrono>
+#include <papi.h>
+ long long counters[3];
+  int PAPI_events[] = {
+                PAPI_L1_DCM,
+                PAPI_L2_DCM,
+                PAPI_L2_DCA };
 
 std::chrono::time_point<std::chrono::high_resolution_clock> start_;
 void start() {
    start_ = std::chrono::high_resolution_clock::now();
+  PAPI_start_counters(PAPI_events, 3);
 }
 
 auto stop() {
   auto end = std::chrono::high_resolution_clock::now();
 
   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start_).count();
+  PAPI_read_counters(counters, 3);
+
   return duration;
 }
-
 
 void original(camp::idx_t n) {
   using namespace RAJA;
@@ -66,7 +74,9 @@ void original(camp::idx_t n) {
   comp2();
   auto elapsed = stop();
 
-  std::cout << "Right,Total," << elapsed << "," << n << "\n";
+  std::cout << "Right,Total," << elapsed << "," << n << ",";
+  std::cout << counters[0] << "," << counters[1] << "," << counters[2] << "," << counters[1] / counters[2] << "\n";
+
   delete[] A.get_data();
   delete[] B.get_data();
   delete[] C.get_data();
@@ -75,7 +85,7 @@ void original(camp::idx_t n) {
 }
 
 int main(int argc, char ** argv) {
-  
+  PAPI_library_init(PAPI_VER_CURRENT);
   camp::idx_t n = 1000;
   if (argc > 1) {
     n = n * std::atof(argv[1]);

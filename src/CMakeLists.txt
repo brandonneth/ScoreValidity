@@ -52,12 +52,12 @@ blt_add_executable(
   blt_add_executable(
   NAME 2mm-original.exe
   SOURCES 2mm-original.cpp
-  DEPENDS_ON ${all_depends})
+  DEPENDS_ON ${all_depends} papi)
 
   blt_add_executable(
   NAME 2mm-hand.exe
   SOURCES 2mm-hand.cpp
-  DEPENDS_ON ${all_depends})
+  DEPENDS_ON ${all_depends} papi )
 
   blt_add_executable(
   NAME 2mm-lock.exe
@@ -66,5 +66,5 @@ blt_add_executable(
   blt_add_executable(
   NAME 2mm-right.exe
   SOURCES 2mm-right.cpp
-  DEPENDS_ON ${all_depends})
+  DEPENDS_ON ${all_depends} papi)
 
