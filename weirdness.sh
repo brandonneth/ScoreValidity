@@ -5,10 +5,10 @@ make -j
 rm results
 export OMP_PLACES=cores
 export OMP_PROC_BIND=spread
-echo "Variant,Component,Time,Size,L1 Misses,L2 Misses,L2 Accesses,L2 Miss Ratio" > results
+echo "Variant,Component,Time,Size,L3 Misses,L3 Accesses,L3 Miss Ratio" > results
 
+for FACTOR in 0.5 1 1.25 1.5 1.75 2 2.5; do
 for EXEC in original hand right; do
-for FACTOR in 0.5 0.7 0.8 0.9 1 1.2 1.3 1.5 1.55 1.6 1.65 1.7 2 3 4; do
   ./bin/2mm-$EXEC.exe $FACTOR >> results
 done
 done

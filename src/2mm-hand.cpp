@@ -4,8 +4,8 @@
 #include <papi.h>
  long long counters[2];
   int PAPI_events[] = {
-                PAPI_L2_DCM,
-                PAPI_L2_DCA };
+                PAPI_L3_TCM,
+                PAPI_L3_TCA };
 
 std::chrono::time_point<std::chrono::high_resolution_clock> start_;
 void start() {
