@@ -16,14 +16,19 @@ set (ENABLE_DOCUMENTATION Off CACHE BOOL "")
 set (ENABLE_BENCHMARKS Off CACHE BOOL "")
 set(BLT_CXX_STD "c++17" CACHE STRING "")
 set(ENABLE_OPENMP On)
-include(blt/SetupBLT.cmake)
 
-if (DEFINED RAJA_DIR)
-  find_package(RAJA REQUIRED)
-  blt_print_target_properties(TARGET RAJA)
-else ()
-  add_subdirectory(RAJA)
-endif ()
+set(CMAKE_CXX_STANDARD 17)
+set(BLT_CXX_STD c++17)
+
+
+include(../blt/SetupBLT.cmake)
+
+find_package(RAJA REQUIRED)
+blt_print_target_properties(TARGET RAJA)
+
+include(FindPkgConfig)
+pkg_check_modules(ISL REQUIRED IMPORTED_TARGET isl)
+pkg_check_modules(BARVINOK REQUIRED IMPORTED_TARGET barvinok)
 
 if (ENABLE_CUDA)
   set (CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --expt-extended-lambda")
