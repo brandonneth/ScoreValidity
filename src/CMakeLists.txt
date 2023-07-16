@@ -7,11 +7,9 @@
 
 set(all_depends RAJA)
 
-if (ENABLE_OPENMP)
   set(all_depends 
     ${all_depends}
     openmp)
-endif ()
 
 if (ENABLE_CUDA)
   set(all_depends 
