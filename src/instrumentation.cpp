@@ -746,7 +746,7 @@ auto stop() {
 //   }
 //   if(numDecisions >= 1) {
 //     dec.set_format_for(F, flayout01, init_e);
-//   }
+// G  }
 //   if(numDecisions >= 2) {
 //     dec.set_format_for(F, flayout01, comp1);
 //   }
@@ -1677,6 +1677,22 @@ std::string constraints = "BestLayoutsAnalytical";
   
 }
 */
+ using INIT_POL = KernelPolicy<
+    statement::For<0, omp_parallel_for_exec,
+      statement::For<1, loop_exec,
+          statement::Lambda<0>
+        >
+    >
+  >;
+  using COMP_POL = KernelPolicy<
+    statement::For<0, omp_parallel_for_exec,
+      statement::For<1, loop_exec,
+        statement::For<2, loop_exec,
+            statement::Lambda<0>
+        >
+      >
+    >
+  >;
 
 
 template <idx_t Views>
@@ -1721,23 +1737,7 @@ void view_count_experiment(bool quiet=false) {
     G(i,j) += E(i,k) * F(k,j);
   };
 
-  using INIT_POL = KernelPolicy<
-    statement::For<0, omp_parallel_for_exec,
-      statement::For<1, loop_exec,
-          statement::Lambda<0>
-        >
-    >
-  >;
-  using COMP_POL = KernelPolicy<
-    statement::For<0, omp_parallel_for_exec,
-      statement::For<1, loop_exec,
-        statement::For<2, loop_exec,
-            statement::Lambda<0>
-        >
-      >
-    >
-  >;
-
+ 
 
   auto init_seg = make_tuple(RangeSegment(0,n), RangeSegment(0,n));
   auto comp_seg = make_tuple(RangeSegment(0,n), RangeSegment(0,n), RangeSegment(0,n));
@@ -1758,12 +1758,12 @@ void view_count_experiment(bool quiet=false) {
     auto conversion_time = get<0>(breakdown);
     auto computation_time = get<1>(breakdown);
     if(!quiet) {
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "View Count", "Computation", computation_time);
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "View Count", "Conversion", conversion_time);
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "View Count", "Cost Estimation", dec.setup_time);
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "View Count", "ISL Space", dec.space_time);
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "View Count", "ISL Func", dec.map_time);
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "View Count", "ISL Solve", dec.solve_time);
+    write_datapoint("View Count", dimensionality, problemSize, Views, constraints, "View Count", "Computation", computation_time);
+    write_datapoint("View Count", dimensionality, problemSize, Views, constraints, "View Count", "Conversion", conversion_time);
+    write_datapoint("View Count", dimensionality, problemSize, Views, constraints, "View Count", "Cost Estimation", dec.setup_time);
+    write_datapoint("View Count", dimensionality, problemSize, Views, constraints, "View Count", "ISL Space", dec.space_time);
+    write_datapoint("View Count", dimensionality, problemSize, Views, constraints, "View Count", "ISL Func", dec.map_time);
+    write_datapoint("View Count", dimensionality, problemSize, Views, constraints, "View Count", "ISL Solve", dec.solve_time);
     }
   } else if constexpr (Views == 2) {
     auto dec = format_decisions(tie(B,D), comp1, comp2, comp3);
@@ -1772,12 +1772,12 @@ void view_count_experiment(bool quiet=false) {
     auto conversion_time = get<0>(breakdown);
     auto computation_time = get<1>(breakdown);
     if(!quiet) {
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "View Count", "Computation", computation_time);
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "View Count", "Conversion", conversion_time);
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "View Count", "Cost Estimation", dec.setup_time);
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "View Count", "ISL Space", dec.space_time);
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "View Count", "ISL Func", dec.map_time);
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "View Count", "ISL Solve", dec.solve_time);
+    write_datapoint("View Count", dimensionality, problemSize, Views, constraints, "View Count", "Computation", computation_time);
+    write_datapoint("View Count", dimensionality, problemSize, Views, constraints, "View Count", "Conversion", conversion_time);
+    write_datapoint("View Count", dimensionality, problemSize, Views, constraints, "View Count", "Cost Estimation", dec.setup_time);
+    write_datapoint("View Count", dimensionality, problemSize, Views, constraints, "View Count", "ISL Space", dec.space_time);
+    write_datapoint("View Count", dimensionality, problemSize, Views, constraints, "View Count", "ISL Func", dec.map_time);
+    write_datapoint("View Count", dimensionality, problemSize, Views, constraints, "View Count", "ISL Solve", dec.solve_time);
     }
   }
   else if constexpr (Views == 3) {
@@ -1787,16 +1787,388 @@ void view_count_experiment(bool quiet=false) {
     auto conversion_time = get<0>(breakdown);
     auto computation_time = get<1>(breakdown);
     if(!quiet) {
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "View Count", "Computation", computation_time);
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "View Count", "Conversion", conversion_time);
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "View Count", "Cost Estimation", dec.setup_time);
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "View Count", "ISL Space", dec.space_time);
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "View Count", "ISL Func", dec.map_time);
-    write_datapoint(3, dimensionality, problemSize, Views, constraints, "View Count", "ISL Solve", dec.solve_time);
+    write_datapoint("View Count", dimensionality, problemSize, Views, constraints, "View Count", "Computation", computation_time);
+    write_datapoint("View Count", dimensionality, problemSize, Views, constraints, "View Count", "Conversion", conversion_time);
+    write_datapoint("View Count", dimensionality, problemSize, Views, constraints, "View Count", "Cost Estimation", dec.setup_time);
+    write_datapoint("View Count", dimensionality, problemSize, Views, constraints, "View Count", "ISL Space", dec.space_time);
+    write_datapoint("View Count", dimensionality, problemSize, Views, constraints, "View Count", "ISL Func", dec.map_time);
+    write_datapoint("View Count", dimensionality, problemSize, Views, constraints, "View Count", "ISL Solve", dec.solve_time);
+    }
+  } 
+  else if constexpr (Views == 4) {
+    auto dec = format_decisions(tie(B,D,F,C), comp1, comp2, comp3);
+
+    auto breakdown = dec.time_execution();
+    auto conversion_time = get<0>(breakdown);
+    auto computation_time = get<1>(breakdown);
+    if(!quiet) {
+    write_datapoint("View Count", dimensionality, problemSize, Views, constraints, "View Count", "Computation", computation_time);
+    write_datapoint("View Count", dimensionality, problemSize, Views, constraints, "View Count", "Conversion", conversion_time);
+    write_datapoint("View Count", dimensionality, problemSize, Views, constraints, "View Count", "Cost Estimation", dec.setup_time);
+    write_datapoint("View Count", dimensionality, problemSize, Views, constraints, "View Count", "ISL Space", dec.space_time);
+    write_datapoint("View Count", dimensionality, problemSize, Views, constraints, "View Count", "ISL Func", dec.map_time);
+    write_datapoint("View Count", dimensionality, problemSize, Views, constraints, "View Count", "ISL Solve", dec.solve_time);
     }
   } 
 
 }
+
+template <idx_t Constraints>
+void constraint_count_experiment(bool quiet = false) {
+
+  idx_t dimensionality = 2;
+  idx_t computation=3;
+  idx_t Views = 1;
+  std::string constraints=std::to_string(Constraints);
+  idx_t problemSize = 10000;
+
+  double root = std::pow(problemSize, 1.0/dimensionality);
+  camp::idx_t n = (camp::idx_t) root;
+
+  //BaseRAJA definitions
+  using VIEW = View<double, Layout<2>>;
+  VIEW A(new double[n*n], n,n);
+  VIEW B(new double[n*n], n,n);
+  VIEW C(new double[n*n], n,n);
+  VIEW D(new double[n*n], n,n);
+  VIEW E(new double[n*n], n,n);
+  VIEW F(new double[n*n], n,n);
+  VIEW G(new double[n*n], n,n);
+  VIEW H(new double[n*n], n,n);
+
+  for(int i = 0; i < n; i++) {
+    for(int j = 0; j < n; j++) {
+      A(i,j) = std::rand();
+      B(i,j) = std::rand();
+      C(i,j) = std::rand();
+      D(i,j) = std::rand();
+      E(i,j) = std::rand();
+      F(i,j) = std::rand();
+      G(i,j) = std::rand();
+      H(i,j) = std::rand();
+    }
+  }
+  auto lam1 = [&](auto i, auto j, auto k) {
+    C(i,j) += A(i,k) * B(k,j);
+  };
+  auto lam2 = [&](auto i, auto j, auto k) {
+    D(i,j) += E(i,k) * C(k,j);
+  };
+  auto lam3 = [&](auto i, auto j, auto k) { 
+    F(i,j) += C(i,k) * G(k,j);
+  };
+  auto lam4 = [&](auto i, auto j, auto k) { 
+    H(i,j) += E(i,k) * C(k,j);
+  };
+
+  auto segs = tuple_repeat<3>(RangeSegment(0,n));
+  auto knl1 = make_kernel<COMP_POL>(segs, lam1);
+  auto knl2 = make_kernel<COMP_POL>(segs, lam2);
+  auto knl3 = make_kernel<COMP_POL>(segs, lam3);
+  auto knl4 = make_kernel<COMP_POL>(segs, lam4);
+
+  auto dec = format_decisions(tie(C), knl1, knl2, knl3, knl4);
+  if constexpr (Constraints > 0) {
+    dec.set_format_for(C, {0,1}, knl1);
+  }
+  if constexpr (Constraints > 1) {
+    dec.set_format_for(C, {1,0}, knl2);
+  }
+  if constexpr (Constraints > 2) {
+    dec.set_format_for(C, {0,1}, knl3);
+  }
+  if constexpr (Constraints > 3) {
+    dec.set_format_for(C, {1,0}, knl4);
+  } 
+  auto breakdown = dec.time_execution();
+  auto conversion_time = get<0>(breakdown);
+  auto computation_time = get<1>(breakdown);
+  if(!quiet) {
+    write_datapoint("Constraint Count", dimensionality, problemSize, Views, constraints, "Variant", "Computation", computation_time);
+    write_datapoint("Constraint Count", dimensionality, problemSize, Views, constraints, "Variant", "Conversion", conversion_time);
+    write_datapoint("Constraint Count", dimensionality, problemSize, Views, constraints, "NA", "Cost Estimation", dec.setup_time);
+    write_datapoint("Constraint Count", dimensionality, problemSize, Views, constraints, "NA", "ISL Space", dec.space_time);
+    write_datapoint("Constraint Count", dimensionality, problemSize, Views, constraints, "NA", "ISL Func", dec.map_time);
+    write_datapoint("Constraint Count", dimensionality, problemSize, Views, constraints, "NA", "ISL Solve", dec.solve_time);
+  }
+} // constraint_count_experiment
+
+template <idx_t... Loops> 
+void loop_count_experiment_impl(camp::idx_seq<Loops...>, bool quiet=false) {
+
+   idx_t dimensionality = 2;
+  idx_t computation=sizeof...(Loops);
+  idx_t Views = 1;
+  std::string constraints="0";
+  idx_t problemSize = 10000;
+
+
+  double root = std::pow(problemSize, 1.0/dimensionality);
+  camp::idx_t n = (camp::idx_t) root;
+
+  //BaseRAJA definitions
+  using VIEW = View<double, Layout<2>>;
+  VIEW A(new double[n*n], n,n);
+  VIEW B(new double[n*n], n,n);
+  VIEW C(new double[n*n], n,n);
+  VIEW D(new double[n*n], n,n);
+  VIEW E(new double[n*n], n,n);
+  VIEW F(new double[n*n], n,n);
+  VIEW G(new double[n*n], n,n);
+  VIEW H(new double[n*n], n,n);
+
+  for(int i = 0; i < n; i++) {
+    for(int j = 0; j < n; j++) {
+      A(i,j) = std::rand();
+      B(i,j) = std::rand();
+      C(i,j) = std::rand();
+      D(i,j) = std::rand();
+      E(i,j) = std::rand();
+      F(i,j) = std::rand();
+      G(i,j) = std::rand();
+      H(i,j) = std::rand();
+    }
+  }
+  auto lam1 = [&](auto i, auto j, auto k) {
+    C(i,j) += A(i,k) * B(k,j);
+  };
+  auto lam2 = [&](auto i, auto j, auto k) {
+    D(i,j) += E(i,k) * C(k,j);
+  };
+  auto lam3 = [&](auto i, auto j, auto k) { 
+    F(i,j) += C(i,k) * G(k,j);
+  };
+  auto lam4 = [&](auto i, auto j, auto k) { 
+    H(i,j) += E(i,k) * C(k,j);
+  };
+  auto lam5 = [&](auto i, auto j, auto k) {
+    C(j,i) += A(i,k) * B(k,j);
+  };
+  auto lam6 = [&](auto i, auto j, auto k) {
+    D(i,j) += E(i,k) * C(i,k);
+  };
+  auto lam7 = [&](auto i, auto j, auto k) { 
+    F(i,j) += C(j,i) * G(k,j);
+  };
+  auto lam8 = [&](auto i, auto j, auto k) { 
+    H(i,j) += E(i,k) * C(k,i);
+  };
+
+  auto segs = tuple_repeat<3>(RangeSegment(0,n));
+  auto knl1 = make_kernel<COMP_POL>(segs, lam1);
+  auto knl2 = make_kernel<COMP_POL>(segs, lam2);
+  auto knl3 = make_kernel<COMP_POL>(segs, lam3);
+  auto knl4 = make_kernel<COMP_POL>(segs, lam4);
+  auto knl5 = make_kernel<COMP_POL>(segs, lam5);
+  auto knl6 = make_kernel<COMP_POL>(segs, lam6);
+  auto knl7 = make_kernel<COMP_POL>(segs, lam7);
+  auto knl8 = make_kernel<COMP_POL>(segs, lam8);
+
+  auto allKnls = make_tuple(knl1, knl2, knl3, knl4, knl5, knl6, knl7, knl8);
+
+  auto dec = format_decisions(tie(C), camp::get<Loops>(allKnls)...);
+
+  auto breakdown = dec.time_execution();
+  auto conversion_time = get<0>(breakdown);
+  auto computation_time = get<1>(breakdown);
+  if(!quiet) {
+    write_datapoint("Loop Count", dimensionality, problemSize, Views, constraints, "NA", "Computation", computation_time);
+    write_datapoint("Loop Count", dimensionality, problemSize, Views, constraints, "NA", "Conversion", conversion_time);
+    write_datapoint("Loop Count", dimensionality, problemSize, Views, constraints, "NA", "Cost Estimation", dec.setup_time);
+    write_datapoint("Loop Count", dimensionality, problemSize, Views, constraints, "NA", "ISL Space", dec.space_time);
+    write_datapoint("Loop Count", dimensionality, problemSize, Views, constraints, "NA", "ISL Func", dec.map_time);
+    write_datapoint("Loop Count", dimensionality, problemSize, Views, constraints, "NA", "ISL Solve", dec.solve_time);
+  } 
+
+} // loop_count_experiment_impl
+template <idx_t NumLoops>
+void loop_count_experiment(bool quiet=false) {
+  auto seq = idx_seq_from_to<0,NumLoops>();
+  loop_count_experiment_impl(seq, quiet);
+}
+
+void dim_count_experiment_2(bool quiet=false) {
+ idx_t dimensionality = 2;
+  idx_t computation=3;
+  idx_t views = 3;
+  idx_t Views = views;
+  idx_t problemSize = std::pow(65,2); //2^24
+  idx_t constraints = 0;
+  using VIEW = View<double, Layout<2>>;
+  double root = std::pow(problemSize, 1.0/2.0);
+  camp::idx_t  n = (camp::idx_t) root;
+  VIEW A(new double[n*n], n,n);
+  VIEW B(new double[n*n], n,n);
+  VIEW C(new double[n*n], n,n);
+  VIEW D(new double[n*n], n,n);
+  VIEW E(new double[n*n], n,n);
+  VIEW F(new double[n*n], n,n);
+  VIEW G(new double[n*n], n,n);
+  auto lam_comp1 = [&]( auto i, auto j, auto k) {
+    E(i,j) += A(i,k) * B(k,j);
+  };
+  auto lam_comp2 = [&](auto i, auto j, auto k) {
+    F(i,j) += C(i,k) * D(k,j);
+  };
+  auto lam_comp3 = [&]( auto i, auto j, auto k) {
+    G(i,j) += E(i,k) * F(k,j);
+  };
+
+  using COMP_POL = KernelPolicy<
+    statement::For<0, omp_parallel_for_exec,
+      statement::For<1, loop_exec,
+        statement::For<2, loop_exec,
+            statement::Lambda<0>
+        >
+      >
+    >
+  >;
+  auto init_seg = make_tuple(RangeSegment(0,n), RangeSegment(0,n), RangeSegment(0,n));
+  auto comp_seg = make_tuple(RangeSegment(0,n), RangeSegment(0,n), RangeSegment(0,n));
+
+  auto knl1 = make_kernel<COMP_POL>(comp_seg, lam_comp1);
+  auto knl2 = make_kernel<COMP_POL>(comp_seg, lam_comp2);
+  auto knl3 = make_kernel<COMP_POL>(comp_seg, lam_comp3);
+
+  auto dec = format_decisions(tie(B,D,F), knl1, knl2, knl3);
+
+  auto breakdown = dec.time_execution();
+  auto conversion_time = get<0>(breakdown);
+  auto computation_time = get<1>(breakdown);
+  if(!quiet) {
+    write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, "NA", "Computation", computation_time);
+    write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, "NA", "Conversion", conversion_time);
+    write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, "NA", "Cost Estimation", dec.setup_time);
+    write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, "NA", "ISL Space", dec.space_time);
+    write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, "NA", "ISL Func", dec.map_time);
+    write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, "NA", "ISL Solve", dec.solve_time);
+  } 
+
+}
+
+
+
+void dim_count_experiment_3(bool quiet=false) {
+ idx_t dimensionality = 3;
+  idx_t computation=3;
+  idx_t views = 3;
+  idx_t Views = views;
+  idx_t problemSize = std::pow(65,3); //2^24
+  idx_t constraints = 0;
+  using VIEW = View<double, Layout<3>>;
+  double root = std::pow(problemSize, 1.0/3.0);
+  camp::idx_t  n = (camp::idx_t) root;
+  VIEW A(new double[n*n*n], n,n,n);
+  VIEW B(new double[n*n*n], n,n,n);
+  VIEW C(new double[n*n*n], n,n,n);
+  VIEW D(new double[n*n*n], n,n,n);
+  VIEW E(new double[n*n*n], n,n,n);
+  VIEW F(new double[n*n*n], n,n,n);
+  VIEW G(new double[n*n*n], n,n,n);
+  auto lam_comp1 = [&](auto l, auto i, auto j, auto k) {
+    E(l,i,j) += A(l,i,k) * B(l,k,j);
+  };
+  auto lam_comp2 = [&](auto l, auto i, auto j, auto k) {
+    F(l,i,j) += C(l,i,k) * D(l,k,j);
+  };
+  auto lam_comp3 = [&](auto l, auto i, auto j, auto k) {
+    G(l,i,j) += E(l,i,k) * F(l,k,j);
+  };
+
+  using COMP_POL = KernelPolicy<
+    statement::For<0, omp_parallel_for_exec,
+      statement::For<1, loop_exec,
+        statement::For<2, loop_exec,
+          statement::For<3, loop_exec,
+            statement::Lambda<0>
+          >
+        >
+      >
+    >
+  >;
+  auto init_seg = make_tuple(RangeSegment(0,n), RangeSegment(0,n), RangeSegment(0,n));
+  auto comp_seg = make_tuple(RangeSegment(0,n), RangeSegment(0,n), RangeSegment(0,n), RangeSegment(0,n));
+
+  auto knl1 = make_kernel<COMP_POL>(comp_seg, lam_comp1);
+  auto knl2 = make_kernel<COMP_POL>(comp_seg, lam_comp2);
+  auto knl3 = make_kernel<COMP_POL>(comp_seg, lam_comp3);
+
+  auto dec = format_decisions(tie(B,D,F), knl1, knl2, knl3);
+
+  auto breakdown = dec.time_execution();
+  auto conversion_time = get<0>(breakdown);
+  auto computation_time = get<1>(breakdown);
+  if(!quiet) {
+    write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, "NA", "Computation", computation_time);
+    write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, "NA", "Conversion", conversion_time);
+    write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, "NA", "Cost Estimation", dec.setup_time);
+    write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, "NA", "ISL Space", dec.space_time);
+    write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, "NA", "ISL Func", dec.map_time);
+    write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, "NA", "ISL Solve", dec.solve_time);
+  } 
+}
+
+void dim_count_experiment_4(bool quiet=false) {
+ idx_t dimensionality = 4;
+  idx_t computation=3;
+  idx_t views = 3;
+  idx_t Views = views;
+  idx_t problemSize = std::pow(65,4); //2^24
+  idx_t constraints = 0;
+  using VIEW = View<double, Layout<4>>;
+  double root = std::pow(problemSize, 1.0/4.0);
+  camp::idx_t  n = (camp::idx_t) root;
+  VIEW A(new double[n*n*n*n], n,n,n,n);
+  VIEW B(new double[n*n*n*n], n,n,n,n);
+  VIEW C(new double[n*n*n*n], n,n,n,n);
+  VIEW D(new double[n*n*n*n], n,n,n,n);
+  VIEW E(new double[n*n*n*n], n,n,n,n);
+  VIEW F(new double[n*n*n*n], n,n,n,n);
+  VIEW G(new double[n*n*n*n], n,n,n,n);
+  auto lam_comp1 = [&](auto m, auto l, auto i, auto j, auto k) {
+    E(m,l,i,j) += A(m,l,i,k) * B(m,l,k,j);
+  };
+  auto lam_comp2 = [&](auto m, auto l, auto i, auto j, auto k) {
+    F(l,i,m,j) += C(l,m,i,k) * D(l,k,j,m);
+  };
+  auto lam_comp3 = [&](auto m, auto l, auto i, auto j, auto k) {
+    G(l,m,i,j) += E(m,l,i,k) * F(l,k,j,m);
+  };
+
+  using COMP_POL = KernelPolicy<
+    statement::For<0, omp_parallel_for_exec,
+      statement::For<1, loop_exec,
+        statement::For<2, loop_exec,
+          statement::For<3, loop_exec,
+            statement::For<4, loop_exec,
+              statement::Lambda<0>
+            >
+          >
+        >
+      >
+    >
+  >;
+  auto comp_seg = make_tuple(RangeSegment(0,n), RangeSegment(0,n), RangeSegment(0,n), RangeSegment(0,n), RangeSegment(0,n));
+
+  auto knl1 = make_kernel<COMP_POL>(comp_seg, lam_comp1);
+  auto knl2 = make_kernel<COMP_POL>(comp_seg, lam_comp2);
+  auto knl3 = make_kernel<COMP_POL>(comp_seg, lam_comp3);
+
+  auto dec = format_decisions(tie(B,D,F), knl1, knl2, knl3);
+
+  auto breakdown = dec.time_execution();
+  auto conversion_time = get<0>(breakdown);
+  auto computation_time = get<1>(breakdown);
+  if(!quiet) {
+    write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, "NA", "Computation", computation_time);
+    write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, "NA", "Conversion", conversion_time);
+    write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, "NA", "Cost Estimation", dec.setup_time);
+    write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, "NA", "ISL Space", dec.space_time);
+    write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, "NA", "ISL Func", dec.map_time);
+    write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, "NA", "ISL Solve", dec.solve_time);
+  } 
+}
+
 
 int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
 {
@@ -1814,6 +2186,25 @@ int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
   view_count_experiment<1>();
   view_count_experiment<2>();
   view_count_experiment<3>();
+  view_count_experiment<4>();
+
+  constraint_count_experiment<0>();
+  constraint_count_experiment<1>();
+  constraint_count_experiment<2>();
+  constraint_count_experiment<3>();
+  constraint_count_experiment<4>();
+
+  loop_count_experiment<2>();
+  loop_count_experiment<3>();
+  loop_count_experiment<4>();
+  loop_count_experiment<5>();
+  loop_count_experiment<6>();
+  loop_count_experiment<7>();
+  loop_count_experiment<8>();
+
+  dim_count_experiment_2();
+  dim_count_experiment_3();
+  dim_count_experiment_4();
 /*
   std::cerr << "Experiment2, warmup" << "\n";
   experiment2(3, true);
