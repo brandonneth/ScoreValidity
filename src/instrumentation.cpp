@@ -2057,7 +2057,7 @@ int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
   std::cerr << "lc 8\n";
   loop_count_experiment<8>();
 
-  std::cout << "Dim Count Experiment\n";
+  std::cerr << "Dim Count Experiment\n";
   dim_count_experiment_2();
   dim_count_experiment_3();
   //dim_count_experiment_4();
