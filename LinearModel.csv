@@ -1,0 +1,109 @@
+Experiment,Dimensionality,Problem Size,Views,Constraints,Loops,Component,Time (microseconds)
+View Count,2,10000,1,0,3,Computation,23097
+View Count,2,10000,1,0,3,Conversion,5642
+View Count,2,10000,1,0,3,Cost Estimation,1318
+View Count,2,10000,1,0,3,ISL Space,15491
+View Count,2,10000,1,0,3,ISL Func,4537
+View Count,2,10000,1,0,3,ISL Solve,3519
+View Count,2,10000,2,0,3,Computation,21196
+View Count,2,10000,2,0,3,Conversion,13791
+View Count,2,10000,2,0,3,Cost Estimation,19838
+View Count,2,10000,2,0,3,ISL Space,30425
+View Count,2,10000,2,0,3,ISL Func,9147
+View Count,2,10000,2,0,3,ISL Solve,6965
+View Count,2,10000,3,0,3,Computation,23771
+View Count,2,10000,3,0,3,Conversion,17133
+View Count,2,10000,3,0,3,Cost Estimation,16695
+View Count,2,10000,3,0,3,ISL Space,44691
+View Count,2,10000,3,0,3,ISL Func,13833
+View Count,2,10000,3,0,3,ISL Solve,10323
+View Count,2,10000,4,0,3,Computation,17511
+View Count,2,10000,4,0,3,Conversion,23839
+View Count,2,10000,4,0,3,Cost Estimation,17194
+View Count,2,10000,4,0,3,ISL Space,58676
+View Count,2,10000,4,0,3,ISL Func,18289
+View Count,2,10000,4,0,3,ISL Solve,13911
+Constraint Count,2,10000,1,0,3,Computation,25606
+Constraint Count,2,10000,1,0,3,Conversion,20670
+Constraint Count,2,10000,1,0,3,Cost Estimation,15539
+Constraint Count,2,10000,1,0,3,ISL Space,21134
+Constraint Count,2,10000,1,0,3,ISL Func,6098
+Constraint Count,2,10000,1,0,3,ISL Solve,5013
+Constraint Count,2,10000,1,1,3,Computation,2081
+Constraint Count,2,10000,1,1,3,Conversion,836
+Constraint Count,2,10000,1,1,3,Cost Estimation,10869
+Constraint Count,2,10000,1,1,3,ISL Space,20468
+Constraint Count,2,10000,1,1,3,ISL Func,6099
+Constraint Count,2,10000,1,1,3,ISL Solve,4213
+Constraint Count,2,10000,1,2,3,Computation,2115
+Constraint Count,2,10000,1,2,3,Conversion,879
+Constraint Count,2,10000,1,2,3,Cost Estimation,5910
+Constraint Count,2,10000,1,2,3,ISL Space,20384
+Constraint Count,2,10000,1,2,3,ISL Func,6072
+Constraint Count,2,10000,1,2,3,ISL Solve,4017
+Constraint Count,2,10000,1,3,3,Computation,2126
+Constraint Count,2,10000,1,3,3,Conversion,844
+Constraint Count,2,10000,1,3,3,Cost Estimation,5923
+Constraint Count,2,10000,1,3,3,ISL Space,20524
+Constraint Count,2,10000,1,3,3,ISL Func,6087
+Constraint Count,2,10000,1,3,3,ISL Solve,3129
+Constraint Count,2,10000,1,4,3,Computation,2128
+Constraint Count,2,10000,1,4,3,Conversion,1269
+Constraint Count,2,10000,1,4,3,Cost Estimation,5987
+Constraint Count,2,10000,1,4,3,ISL Space,20573
+Constraint Count,2,10000,1,4,3,ISL Func,6065
+Constraint Count,2,10000,1,4,3,ISL Solve,2700
+Loop Count,2,10000,1,0,2,Computation,1176
+Loop Count,2,10000,1,0,2,Conversion,297
+Loop Count,2,10000,1,0,2,Cost Estimation,5300
+Loop Count,2,10000,1,0,2,ISL Space,9937
+Loop Count,2,10000,1,0,2,ISL Func,3493
+Loop Count,2,10000,1,0,2,ISL Solve,2125
+Loop Count,2,10000,1,0,3,Computation,1573
+Loop Count,2,10000,1,0,3,Conversion,1217
+Loop Count,2,10000,1,0,3,Cost Estimation,5695
+Loop Count,2,10000,1,0,3,ISL Space,14465
+Loop Count,2,10000,1,0,3,ISL Func,4756
+Loop Count,2,10000,1,0,3,ISL Solve,3519
+Loop Count,2,10000,1,0,4,Computation,2129
+Loop Count,2,10000,1,0,4,Conversion,844
+Loop Count,2,10000,1,0,4,Cost Estimation,5926
+Loop Count,2,10000,1,0,4,ISL Space,20495
+Loop Count,2,10000,1,0,4,ISL Func,6086
+Loop Count,2,10000,1,0,4,ISL Solve,4964
+Loop Count,2,10000,1,0,5,Computation,2585
+Loop Count,2,10000,1,0,5,Conversion,909
+Loop Count,2,10000,1,0,5,Cost Estimation,6093
+Loop Count,2,10000,1,0,5,ISL Space,27460
+Loop Count,2,10000,1,0,5,ISL Func,7936
+Loop Count,2,10000,1,0,5,ISL Solve,7148
+Loop Count,2,10000,1,0,6,Computation,3122
+Loop Count,2,10000,1,0,6,Conversion,1702
+Loop Count,2,10000,1,0,6,Cost Estimation,6237
+Loop Count,2,10000,1,0,6,ISL Space,36095
+Loop Count,2,10000,1,0,6,ISL Func,9986
+Loop Count,2,10000,1,0,6,ISL Solve,9444
+Loop Count,2,10000,1,0,7,Computation,5548
+Loop Count,2,10000,1,0,7,Conversion,1461
+Loop Count,2,10000,1,0,7,Cost Estimation,6377
+Loop Count,2,10000,1,0,7,ISL Space,45997
+Loop Count,2,10000,1,0,7,ISL Func,12284
+Loop Count,2,10000,1,0,7,ISL Solve,13962
+Loop Count,2,10000,1,0,8,Computation,3924
+Loop Count,2,10000,1,0,8,Conversion,1521
+Loop Count,2,10000,1,0,8,Cost Estimation,6644
+Loop Count,2,10000,1,0,8,ISL Space,57914
+Loop Count,2,10000,1,0,8,ISL Func,14777
+Loop Count,2,10000,1,0,8,ISL Solve,22573
+Dimension Count,2,4225,3,0,3,Computation,937
+Dimension Count,2,4225,3,0,3,Conversion,1171
+Dimension Count,2,4225,3,0,3,Cost Estimation,7155
+Dimension Count,2,4225,3,0,3,ISL Space,43511
+Dimension Count,2,4225,3,0,3,ISL Func,13791
+Dimension Count,2,4225,3,0,3,ISL Solve,10305
+Dimension Count,3,274625,3,0,3,Computation,3317
+Dimension Count,3,274625,3,0,3,Conversion,12059
+Dimension Count,3,274625,3,0,3,Cost Estimation,39127
+Dimension Count,3,274625,3,0,3,ISL Space,1815157
+Dimension Count,3,274625,3,0,3,ISL Func,419267
+Dimension Count,3,274625,3,0,3,ISL Solve,1317888
