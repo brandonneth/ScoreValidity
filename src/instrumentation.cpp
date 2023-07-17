@@ -1907,7 +1907,7 @@ void dim_count_experiment_3(bool quiet=false) {
   idx_t constraints = 0;
   using VIEW = View<double, Layout<3>>;
   double root = std::pow(problemSize, 1.0/3.0);
-  camp::idx_t  n = (camp::idx_t) root;
+  camp::idx_t  n = 66;
   VIEW A(new double[n*n*n], n,n,n);
   VIEW B(new double[n*n*n], n,n,n);
   VIEW C(new double[n*n*n], n,n,n);
@@ -2027,8 +2027,9 @@ int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
 
 
   //problem sizes are 2^{15..20}
-  std::cerr << "Warmup" << "\n";
-  view_count_experiment<1>(true);
+  //std::cerr << "Warmup" << "\n";
+  experiment2(3,true);
+  //view_count_experiment<1>(true);
 
   std::cout << "Experiment,Dimensionality,Problem Size,Views,Constraints,Loops,Component,Time (microseconds)\n";
 
