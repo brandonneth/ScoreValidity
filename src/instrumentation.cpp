@@ -2029,6 +2029,8 @@ int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
   //problem sizes are 2^{15..20}
   //std::cerr << "Warmup" << "\n";
   experiment2(3,true);
+  dim_count_experiment_2(true);
+  dim_count_experiment_3(true);
   //view_count_experiment<1>(true);
 
   std::cout << "Experiment,Dimensionality,Problem Size,Views,Constraints,Loops,Component,Time (microseconds)\n";
