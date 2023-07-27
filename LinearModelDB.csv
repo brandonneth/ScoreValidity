@@ -1,0 +1,49 @@
+Experiment Name, Loop Nest Count,Loop Nest Depth,Memory Footprint,Data Dimensionality,View Count,Constraint Count,Component,Execution Time
+Loop Count,1,3,30000,2,1,0,Cost Estimation,19047
+Loop Count,1,3,30000,2,1,0,ISL Setup,8484
+Loop Count,1,3,30000,2,1,0,ISL Solve,999
+Loop Count,2,3,30000,2,1,0,Cost Estimation,16607
+Loop Count,2,3,30000,2,1,0,ISL Setup,13131
+Loop Count,2,3,30000,2,1,0,ISL Solve,2168
+Loop Count,3,3,30000,2,1,0,Cost Estimation,15182
+Loop Count,3,3,30000,2,1,0,ISL Setup,20280
+Loop Count,3,3,30000,2,1,0,ISL Solve,3529
+Loop Count,4,3,30000,2,1,0,Cost Estimation,15558
+Loop Count,4,3,30000,2,1,0,ISL Setup,26808
+Loop Count,4,3,30000,2,1,0,ISL Solve,4990
+Loop Count,5,3,30000,2,1,0,Cost Estimation,16002
+Loop Count,5,3,30000,2,1,0,ISL Setup,35788
+Loop Count,5,3,30000,2,1,0,ISL Solve,7155
+Loop Count,6,3,30000,2,1,0,Cost Estimation,16060
+Loop Count,6,3,30000,2,1,0,ISL Setup,46279
+Loop Count,6,3,30000,2,1,0,ISL Solve,9572
+Loop Count,7,3,30000,2,1,0,Cost Estimation,6472
+Loop Count,7,3,30000,2,1,0,ISL Setup,58182
+Loop Count,7,3,30000,2,1,0,ISL Solve,12320
+Loop Count,8,3,30000,2,1,0,Cost Estimation,6581
+Loop Count,8,3,30000,2,1,0,ISL Setup,72069
+Loop Count,8,3,30000,2,1,0,ISL Solve,22943
+Nest Depth,3,2,30000,2,1,0,Cost Estimation,5651
+Nest Depth,3,2,30000,2,1,0,ISL Setup,19141
+Nest Depth,3,2,30000,2,1,0,ISL Solve,3482
+Nest Depth,3,3,30000,2,1,0,Cost Estimation,5690
+Nest Depth,3,3,30000,2,1,0,ISL Setup,19071
+Nest Depth,3,3,30000,2,1,0,ISL Solve,3526
+Nest Depth,3,4,30000,2,1,0,Cost Estimation,5697
+Nest Depth,3,4,30000,2,1,0,ISL Setup,19184
+Nest Depth,3,4,30000,2,1,0,ISL Solve,3553
+Footprint,3,3,30000,2,1,0,Cost Estimation,5734
+Footprint,3,3,30000,2,1,0,ISL Setup,19081
+Footprint,3,3,30000,2,1,0,ISL Solve,3524
+Footprint,3,3,59643,2,1,0,Cost Estimation,5667
+Footprint,3,3,59643,2,1,0,ISL Setup,19213
+Footprint,3,3,59643,2,1,0,ISL Solve,3531
+Footprint,3,3,89787,2,1,0,Cost Estimation,5678
+Footprint,3,3,89787,2,1,0,ISL Setup,19080
+Footprint,3,3,89787,2,1,0,ISL Solve,3512
+Footprint,3,3,120000,2,1,0,Cost Estimation,5722
+Footprint,3,3,120000,2,1,0,ISL Setup,19104
+Footprint,3,3,120000,2,1,0,ISL Solve,3503
+Footprint,3,3,3000000,2,1,0,Cost Estimation,7932
+Footprint,3,3,3000000,2,1,0,ISL Setup,19194
+Footprint,3,3,3000000,2,1,0,ISL Solve,3617
