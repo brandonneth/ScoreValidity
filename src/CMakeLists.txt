@@ -18,6 +18,11 @@ if (ENABLE_CUDA)
 endif ()
 
 blt_add_executable(
+  NAME dave_and_bronis.exe
+  SOURCES dave_and_bronis.cpp
+  DEPENDS_ON ${all_depends})
+
+blt_add_executable(
   NAME benchmark1.exe
   SOURCES benchmark1.cpp
   DEPENDS_ON ${all_depends})
