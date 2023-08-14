@@ -296,17 +296,17 @@ int main() {
   
   std::cerr << "Running Loop Count Experiment...\n";
   std::cerr << "Loop Count = 1...\n";
-  loop_count_experiment<1>();
+  //loop_count_experiment<1>();
   std::cerr << "Loop Count = 2...\n";
-  loop_count_experiment<2>();
+  //loop_count_experiment<2>();
   std::cerr << "Loop Count = 3...\n";
-  loop_count_experiment<3>();
+  //loop_count_experiment<3>();
   std::cerr << "Loop Count = 4...\n";
-  loop_count_experiment<4>();
+  //loop_count_experiment<4>();
   std::cerr << "Loop Count = 5...\n";
-  loop_count_experiment<5>();
+  //loop_count_experiment<5>();
   std::cerr << "Loop Count = 6...\n";
-  loop_count_experiment<6>();
+  //loop_count_experiment<6>();
   std::cerr << "Loop Count = 7...\n";
   loop_count_experiment<7>();
   std::cerr << "Loop Count = 8...\n";
@@ -315,22 +315,22 @@ int main() {
 
   std::cerr << "Running Nest Depth Experiment...\n";
   std::cerr << "Nest Depth = 2...\n";
-  nest_depth_experiment<2>();
+  //nest_depth_experiment<2>();
   std::cerr << "Nest Depth = 3...\n";
-  nest_depth_experiment<3>();
+  //nest_depth_experiment<3>();
   std::cerr << "Nest Depth = 4...\n";
-  nest_depth_experiment<4>();
+  //nest_depth_experiment<4>();
   std::cerr << "Neth Depth Experiment Complete!\n";
 
   std::cerr << "Running Memory Footprint Experiment...\n";
   std::cerr << "View Side Length = 100...\n";
-  footprint_experiment<100>();
+  //footprint_experiment<100>();
   std::cerr << "View Side Length = 141...\n";
-  footprint_experiment<141>();
+  //footprint_experiment<141>();
   std::cerr << "View Side Length = 173...\n";
-  footprint_experiment<173>();
+  //footprint_experiment<173>();
   std::cerr << "View Side Length = 200...\n";
-  footprint_experiment<200>();
+  //footprint_experiment<200>();
   std::cerr << "View Side Length = 1000...\n";
   footprint_experiment<1000>();
   std::cerr << "Memory Footprint Experiment Complete!\n";

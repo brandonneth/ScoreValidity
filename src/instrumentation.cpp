@@ -2020,6 +2020,136 @@ void dim_count_experiment_4(bool quiet=false) {
     write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, computation, "ISL Solve", dec.solve_time);
   } 
 }
+void dim_count_experiment_5(bool quiet=false) {
+ idx_t dimensionality = 5;
+  idx_t computation=3;
+  idx_t views = 3;
+  idx_t Views = views;
+  idx_t problemSize = std::pow(65,5); //2^24
+  idx_t constraints = 0;
+  using VIEW = View<double, Layout<5>>;
+  double root = std::pow(problemSize, 1.0/5.0);
+  camp::idx_t  n = (camp::idx_t) root;
+  VIEW A(new double[n*n*n*n*n], n,n,n,n,n);
+  VIEW B(new double[n*n*n*n*n], n,n,n,n,n);
+  VIEW C(new double[n*n*n*n*n], n,n,n,n,n);
+  VIEW D(new double[n*n*n*n*n], n,n,n,n,n);
+  VIEW E(new double[n*n*n*n*n], n,n,n,n,n);
+  VIEW F(new double[n*n*n*n*n], n,n,n,n,n);
+  VIEW G(new double[n*n*n*n*n], n,n,n,n,n);
+  auto lam_comp1 = [&](auto p, auto m, auto l, auto i, auto j, auto k) {
+    E(p,m,l,i,j) += A(p,m,l,i,k) * B(p,m,l,k,j);
+  };
+  auto lam_comp2 = [&](auto p, auto m, auto l, auto i, auto j, auto k) {
+    F(l,i,m,j,p) += C(l,m,i,k,p) * D(l,k,p,j,m);
+  };
+  auto lam_comp3 = [&](auto p, auto m, auto l, auto i, auto j, auto k) {
+    G(l,m,i,p,j) += E(p,m,l,i,k) * F(l,k,j,m,p);
+  };
+
+  using COMP_POL = KernelPolicy<
+    statement::For<0, omp_parallel_for_exec,
+      statement::For<1, loop_exec,
+        statement::For<2, loop_exec,
+          statement::For<3, loop_exec,
+            statement::For<4, loop_exec,
+              statement::For<5, loop_exec,
+                statement::Lambda<0>
+              >
+            >
+          >
+        >
+      >
+    >
+  >;
+  n /= 4;
+  auto comp_seg = make_tuple(RangeSegment(0,n), RangeSegment(0,n),RangeSegment(0,n), RangeSegment(0,n), RangeSegment(0,n), RangeSegment(0,n));
+
+  auto knl1 = make_kernel<COMP_POL>(comp_seg, lam_comp1);
+  auto knl2 = make_kernel<COMP_POL>(comp_seg, lam_comp2);
+  auto knl3 = make_kernel<COMP_POL>(comp_seg, lam_comp3);
+
+  auto dec = format_decisions(tie(B,D,F), knl1, knl2, knl3);
+
+  auto breakdown = dec.time_execution();
+  auto conversion_time = get<0>(breakdown);
+  auto computation_time = get<1>(breakdown);
+  if(!quiet) {
+    write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, computation, "Computation", computation_time);
+    write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, computation, "Conversion", conversion_time);
+    write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, computation, "Cost Estimation", dec.setup_time);
+    write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, computation, "ISL Space", dec.space_time);
+    write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, computation, "ISL Func", dec.map_time);
+    write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, computation, "ISL Solve", dec.solve_time);
+  } 
+}
+
+void dim_count_experiment_6(bool quiet=false) {
+ idx_t dimensionality = 6;
+  idx_t computation=3;
+  idx_t views = 3;
+  idx_t Views = views;
+  idx_t problemSize = std::pow(65,6); //2^24
+  idx_t constraints = 0;
+  using VIEW = View<double, Layout<6>>;
+  double root = std::pow(problemSize, 1.0/6.0);
+  camp::idx_t  n = (camp::idx_t) root;
+  VIEW A(new double[n*n*n*n*n*n], n,n,n,n,n,n);
+  VIEW B(new double[n*n*n*n*n*n], n,n,n,n,n,n);
+  VIEW C(new double[n*n*n*n*n*n], n,n,n,n,n,n);
+  VIEW D(new double[n*n*n*n*n*n], n,n,n,n,n,n);
+  VIEW E(new double[n*n*n*n*n*n], n,n,n,n,n,n);
+  VIEW F(new double[n*n*n*n*n*n], n,n,n,n,n,n);
+  VIEW G(new double[n*n*n*n*n*n], n,n,n,n,n,n);
+  auto lam_comp1 = [&](auto q, auto p, auto m, auto l, auto i, auto j, auto k) {
+    E(q,p,m,l,i,j) += A(p,m,l,i,k,q) * B(p,m,l,q,k,j);
+  };
+  auto lam_comp2 = [&](auto q, auto p, auto m, auto l, auto i, auto j, auto k) {
+    F(l,i,m,q,j,p) += C(l,q,m,i,k,p) * D(l,k,p,q,j,m);
+  };
+  auto lam_comp3 = [&](auto q, auto p, auto m, auto l, auto i, auto j, auto k) {
+    G(l,m,i,q,p,j) += E(p,m,l,i,q,k) * F(l,k,j,m,p,q);
+  };
+
+  using COMP_POL = KernelPolicy<
+    statement::For<0, omp_parallel_for_exec,
+      statement::For<1, loop_exec,
+        statement::For<2, loop_exec,
+          statement::For<3, loop_exec,
+            statement::For<4, loop_exec,
+              statement::For<5, loop_exec,
+                statement::For<6, loop_exec,
+                  statement::Lambda<0>
+                >
+              >
+            >
+          >
+        >
+      >
+    >
+  >;
+  n /= 65;
+  auto comp_seg = make_tuple(RangeSegment(0,n),RangeSegment(0,n),RangeSegment(0,n), RangeSegment(0,n), RangeSegment(0,n), RangeSegment(0,n), RangeSegment(0,n));
+
+  auto knl1 = make_kernel<COMP_POL>(comp_seg, lam_comp1);
+  auto knl2 = make_kernel<COMP_POL>(comp_seg, lam_comp2);
+  auto knl3 = make_kernel<COMP_POL>(comp_seg, lam_comp3);
+
+  auto dec = format_decisions(tie(B,D,F), knl1, knl2, knl3);
+
+  auto breakdown = dec.time_execution();
+  auto conversion_time = get<0>(breakdown);
+  auto computation_time = get<1>(breakdown);
+  if(!quiet) {
+    write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, computation, "Computation", computation_time);
+    write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, computation, "Conversion", conversion_time);
+    write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, computation, "Cost Estimation", dec.setup_time);
+    write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, computation, "ISL Space", dec.space_time);
+    write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, computation, "ISL Func", dec.map_time);
+    write_datapoint("Dimension Count", dimensionality, problemSize, Views, constraints, computation, "ISL Solve", dec.solve_time);
+  } 
+}
+
 
 
 int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
@@ -2028,10 +2158,8 @@ int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
 
   //problem sizes are 2^{15..20}
   //std::cerr << "Warmup" << "\n";
-  experiment2(3,true);
-  dim_count_experiment_2(true);
-  dim_count_experiment_3(true);
-  //view_count_experiment<1>(true);
+  //experiment2(3,true);
+    //view_count_experiment<1>(true);
 
   std::cout << "Experiment,Dimensionality,Problem Size,Views,Constraints,Loops,Component,Time (microseconds)\n";
 
@@ -2063,7 +2191,10 @@ int main(int RAJA_UNUSED_ARG(argc), char** RAJA_UNUSED_ARG(argv[]))
   std::cerr << "Dim Count Experiment\n";
   dim_count_experiment_2();
   dim_count_experiment_3();
-  //dim_count_experiment_4();
+  dim_count_experiment_4();
+  dim_count_experiment_5();
+  dim_count_experiment_6();
+ 
 /*
   std::cerr << "Experiment2, warmup" << "\n";
   experiment2(3, true);

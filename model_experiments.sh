@@ -2,6 +2,8 @@
 
 # Script to run the model timing experiments
 
+LINEARMODEL=0
+if [[ $LINEARMODEL -ne 0 ]]; then
 echo Running Linear Model Implementation
 rm $HOME/libs/lassen/lib/libRAJA.a
 rm -r $HOME/libs/lassen/include/RAJA
@@ -36,7 +38,7 @@ fi
 
 cd $HOME/ScoreValidity
 build/bin/instrumentation.exe > LinearModel.csv
-
+fi
 
 
 

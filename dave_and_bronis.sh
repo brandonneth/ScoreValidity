@@ -35,7 +35,7 @@ if [[ $? -ne 0 ]]; then
 fi
 
 cd $HOME/ScoreValidity
-build/bin/dave_and_bronis.exe > LinearModelDB.csv
+build/bin/dave_and_bronis.exe > LinearModelDB2.csv
 
 
 
@@ -61,5 +61,5 @@ cmake ..  -DENABLE_OPENMP=On -DBLT_CXX_STD=c++17 -DCMAKE_INSTALL_PREFIX=$HOME/li
 make -j
 
 cd $HOME/ScoreValidity
-build/bin/dave_and_bronis.exe > NonLinearModelDB.csv
+build/bin/dave_and_bronis.exe > NonLinearModelDB2.csv
 
