@@ -280,13 +280,107 @@ void footprint_experiment() {
   auto breakdown = dec.time_execution();
   auto conversion_time = get<0>(breakdown);
   auto computation_time = get<1>(breakdown);
-
-  
   write_datapoint("Footprint",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "Cost Estimation", dec.setup_time);
   write_datapoint("Footprint",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "ISL Setup", dec.space_time + dec.map_time);
   write_datapoint("Footprint",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "ISL Solve", dec.solve_time);
 
 }
+
+
+//creates the decision object for the different dimensionalities.
+//the point of this function is to contain boilerplate so 
+// the data_dim_experiment function is comprehensible
+template <idx_t... DataDimIdxs>
+auto data_dims_experiment_decision_object(auto & A, auto & B, auto & C, idx_t n) {
+  constexpr idx_t NumDataDims = sizeof...(DataDimIdxs);
+  
+  using POL = typename order_to_kpol<DataDimIdxs...>::Policy;
+  auto segs = tuple_repeat<NumDataDims>(RangeSegment(0,n));
+
+  if constexpr (NumDataDims == 2) {
+    auto knl1 = make_kernel<POL>(segs, [&](auto i, auto j) {
+      A(i,j) = B(i,j) * C(j,i);
+    });
+    auto knl2 = make_kernel<POL>(segs, [&](auto i, auto j) {
+      A(j,i) = B(j,i) * C(j,i);
+    });
+    auto dec = format_decisions(tie(A,B,C), knl1, knl2);
+    return dec; 
+  } else if constexpr (NumDataDims == 3) {
+    auto knl1 = make_kernel<POL>(segs, [&](auto i, auto j, auto k) {
+      A(k,i,j) = B(i,k,j) * C(j,i,k);
+    });
+    auto knl2 = make_kernel<POL>(segs, [&](auto i, auto j, auto k) {
+      A(j,i,k) = B(k,j,i) * C(j,i,k);
+    });
+    auto dec = format_decisions(tie(A,B,C), knl1, knl2);
+    return dec; 
+  } else if constexpr (NumDataDims == 4) {
+    auto knl1 = make_kernel<POL>(segs, [&](auto i, auto j, auto k, auto l) {
+      A(k,i,j,l) = B(l,i,k,j) * C(j,i,k,l);
+    });
+    auto knl2 = make_kernel<POL>(segs, [&](auto i, auto j, auto k, auto l) {
+      A(j,l,i,k) = B(k,j,i,l) * C(j,i,l,k);
+    });
+    auto dec = format_decisions(tie(A,B,C), knl1, knl2);
+    return dec; 
+  } else if constexpr (NumDataDims == 5) {
+    auto knl1 = make_kernel<POL>(segs, [&](auto i, auto j, auto k, auto l, auto m) {
+      A(k,i,j,l,m) = B(m,l,i,k,j) * C(j,i,m,k,l);
+    });
+    auto knl2 = make_kernel<POL>(segs, [&](auto i, auto j, auto k, auto l, auto m) {
+      A(j,m,l,i,k) = B(k,m,j,i,l) * C(j,i,l,k,m);
+    });
+    auto dec = format_decisions(tie(A,B,C), knl1, knl2);
+    return dec; 
+  } else if constexpr (NumDataDims == 6) {
+    auto knl1 = make_kernel<POL>(segs, [&](auto i, auto j, auto k, auto l, auto m, auto n) {
+      A(k,i,j,l,n,m) = B(m,l,n,i,k,j) * C(j,i,m,k,l,n);
+    });
+    auto knl2 = make_kernel<POL>(segs, [&](auto i, auto j, auto k, auto l, auto m, auto n) {
+      A(j,m,l,i,k,n) = B(k,m,j,n,i,l) * C(n,j,i,l,k,m);
+    });
+    auto dec = format_decisions(tie(A,B,C), knl1, knl2);
+    return dec; 
+  } else {
+  return 0.0;
+  }
+}
+
+
+template <camp::idx_t...DataDimIdxs>
+void data_dims_experiment(idx_t footprint, camp::idx_seq<DataDimIdxs...>) {
+  constexpr idx_t NumDataDims = sizeof...(DataDimIdxs);
+  auto numLoops = 2;
+  auto loopDepth = NumDataDims;
+  idx_t n = std::pow((footprint / 3.0),(double) 1.0 / NumDataDims);
+  footprint = std::pow(n, NumDataDims);
+  auto dataDimensionality = NumDataDims;
+  auto viewCount = 1;
+  auto constraintCount = 0;
+  using VIEW = View<double, Layout<NumDataDims>>;
+  
+  auto nTuple = tuple_repeat<NumDataDims>(n);
+  VIEW A(new double[footprint], camp::get<DataDimIdxs>(nTuple)...);
+  VIEW B(new double[footprint], camp::get<DataDimIdxs>(nTuple)...);
+  VIEW C(new double[footprint], camp::get<DataDimIdxs>(nTuple)...);
+  
+
+  auto dec = data_dims_experiment_decision_object<DataDimIdxs...>(A,B,C,n);
+  
+  auto breakdown = dec.time_execution();
+  auto conversion_time = get<0>(breakdown);
+  auto computation_time = get<1>(breakdown);
+  write_datapoint("Footprint",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "Cost Estimation", dec.setup_time);
+  write_datapoint("Footprint",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "ISL Setup", dec.space_time + dec.map_time);
+  write_datapoint("Footprint",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "ISL Solve", dec.solve_time);
+
+}
+template <camp::idx_t NumDataDims>
+void data_dims_experiment(auto footprint) {
+  data_dims_experiment(footprint, idx_seq_from_to<0,NumDataDims>());
+}
+
 
 
 int main() {
@@ -334,4 +428,18 @@ int main() {
   std::cerr << "View Side Length = 1000...\n";
   footprint_experiment<1000>();
   std::cerr << "Memory Footprint Experiment Complete!\n";
+
+  std::cerr <<"Running Data Dimensionality Experiment...\n";
+  auto footprint = 30000000;
+  std::cerr <<"Num Data Dims = 2...\n";
+  data_dims_experiment<2>(footprint);
+  std::cerr <<"Num Data Dims = 3...\n";
+  data_dims_experiment<3>(footprint);
+  std::cerr <<"Num Data Dims = 4...\n";
+  data_dims_experiment<4>(footprint);
+std::cerr <<"Num Data Dims = 5...\n";
+  data_dims_experiment<5>(footprint);
+std::cerr <<"Num Data Dims = 6...\n";
+  data_dims_experiment<6>(footprint);
+
 }

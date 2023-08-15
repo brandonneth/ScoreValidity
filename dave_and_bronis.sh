@@ -35,7 +35,7 @@ if [[ $? -ne 0 ]]; then
 fi
 
 cd $HOME/ScoreValidity
-build/bin/dave_and_bronis.exe > LinearModelDB2.csv
+timeout 20s build/bin/dave_and_bronis.exe > LinearModelDB2.csv
 
 
 
