@@ -45,10 +45,10 @@ void warmup() {
 };
 
 auto write_header = []() {
-  std::cout << "Experiment Name, Loop Nest Count,Loop Nest Depth,Memory Footprint,Data Dimensionality,View Count,Constraint Count,Component,Execution Time\n";
+  std::cout << "Experiment Name, Loop Nest Count,Loop Nest Depth,Memory Footprint,Data Dimensionality,View Count,Constraint Count,Access Count,Component,Execution Time\n";
 };
-auto write_datapoint = [](auto experimentName, auto numLoopNests, auto depthLoopNests, auto memoryFootprint, auto dataDimensionality, auto viewCount, auto constraintCount, auto component, auto time) {
-  std::cout << experimentName << "," << numLoopNests << "," << depthLoopNests << "," << memoryFootprint << "," << dataDimensionality << "," << viewCount << "," << constraintCount << "," << component << "," << time << "\n";
+auto write_datapoint = [](auto experimentName, auto numLoopNests, auto depthLoopNests, auto memoryFootprint, auto dataDimensionality, auto viewCount, auto constraintCount, auto accessCount, auto component, auto time) {
+  std::cout << experimentName << "," << numLoopNests << "," << depthLoopNests << "," << memoryFootprint << "," << dataDimensionality << "," << viewCount << "," << constraintCount << "," << accessCount << "," << component << "," << time << "\n";
 };
 
 std::chrono::time_point<std::chrono::high_resolution_clock> start_;
@@ -80,6 +80,7 @@ void loop_count_experiment_impl(camp::idx_seq<Loops...>) {
   auto dataDimensionality = 2;
   auto viewCount = 1;
   auto constraintCount = 0;
+  auto accessCount = 1;
   using VIEW = View<double, Layout<2>>;
   VIEW A(new double[n*n], n,n);
   VIEW B(new double[n*n], n,n);
@@ -137,9 +138,9 @@ void loop_count_experiment_impl(camp::idx_seq<Loops...>) {
   camp::sink(breakdown);
 
   
-  write_datapoint("Loop Count",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "Cost Estimation", dec.setup_time);
-  write_datapoint("Loop Count",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "ISL Setup", dec.space_time + dec.map_time);
-  write_datapoint("Loop Count",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "ISL Solve", dec.solve_time);
+  write_datapoint("Loop Count",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, accessCount, "Cost Estimation", dec.setup_time);
+  write_datapoint("Loop Count",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, accessCount, "ISL Setup", dec.space_time + dec.map_time);
+  write_datapoint("Loop Count",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, accessCount, "ISL Solve", dec.solve_time);
 
 }
 template<idx_t NumLoops>
@@ -164,6 +165,7 @@ void nest_depth_experiment_impl(camp::idx_seq<Is...>) {
   auto dataDimensionality = 2;
   auto viewCount = 1;
   auto constraintCount = 0;
+  auto accessCount = 1;
   using VIEW = View<double, Layout<2>>;
   VIEW A(new double[n*n], n,n);
   VIEW B(new double[n*n], n,n);
@@ -200,9 +202,9 @@ void nest_depth_experiment_impl(camp::idx_seq<Is...>) {
     auto dec = format_decisions(tie(C), knl1, knl2, knl3);
     auto breakdown = dec.time_execution();
     camp::sink(breakdown);
-    write_datapoint("Nest Depth",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "Cost Estimation", dec.setup_time);
-    write_datapoint("Nest Depth",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "ISL Setup", dec.space_time + dec.map_time);
-    write_datapoint("Nest Depth",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "ISL Solve", dec.solve_time);
+    write_datapoint("Nest Depth",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, accessCount, "Cost Estimation", dec.setup_time);
+    write_datapoint("Nest Depth",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, accessCount, "ISL Setup", dec.space_time + dec.map_time);
+    write_datapoint("Nest Depth",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, accessCount, "ISL Solve", dec.solve_time);
 
   }
   if constexpr (loopDepth == 3) {
@@ -212,9 +214,9 @@ void nest_depth_experiment_impl(camp::idx_seq<Is...>) {
     auto dec = format_decisions(tie(C), knl1, knl2, knl3);
     auto breakdown = dec.time_execution();
     camp::sink(breakdown);
-    write_datapoint("Nest Depth",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "Cost Estimation", dec.setup_time);
-    write_datapoint("Nest Depth",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "ISL Setup", dec.space_time + dec.map_time);
-    write_datapoint("Nest Depth",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "ISL Solve", dec.solve_time);
+    write_datapoint("Nest Depth",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, accessCount, "Cost Estimation", dec.setup_time);
+    write_datapoint("Nest Depth",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, accessCount, "ISL Setup", dec.space_time + dec.map_time);
+    write_datapoint("Nest Depth",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, accessCount, "ISL Solve", dec.solve_time);
 
   }
   if constexpr (loopDepth == 4) {
@@ -224,9 +226,9 @@ void nest_depth_experiment_impl(camp::idx_seq<Is...>) {
     auto dec = format_decisions(tie(C), knl1, knl2, knl3);
     auto breakdown = dec.time_execution();
     camp::sink(breakdown);
-    write_datapoint("Nest Depth",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "Cost Estimation", dec.setup_time);
-    write_datapoint("Nest Depth",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "ISL Setup", dec.space_time + dec.map_time);
-    write_datapoint("Nest Depth",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "ISL Solve", dec.solve_time);
+    write_datapoint("Nest Depth",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, accessCount, "Cost Estimation", dec.setup_time);
+    write_datapoint("Nest Depth",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, accessCount, "ISL Setup", dec.space_time + dec.map_time);
+    write_datapoint("Nest Depth",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, accessCount, "ISL Solve", dec.solve_time);
 
   }
 
@@ -253,6 +255,7 @@ void footprint_experiment() {
   auto dataDimensionality = 2;
   auto viewCount = 1;
   auto constraintCount = 0;
+  auto accessCount = 1;
   using VIEW = View<double, Layout<2>>;
   VIEW A(new double[n*n], n,n);
   VIEW B(new double[n*n], n,n);
@@ -284,9 +287,9 @@ void footprint_experiment() {
   auto dec = format_decisions(tie(C), knl1, knl2, knl3);
   auto breakdown = dec.time_execution();
   camp::sink(breakdown);
-  write_datapoint("Footprint",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "Cost Estimation", dec.setup_time);
-  write_datapoint("Footprint",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "ISL Setup", dec.space_time + dec.map_time);
-  write_datapoint("Footprint",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "ISL Solve", dec.solve_time);
+  write_datapoint("Footprint",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, accessCount, "Cost Estimation", dec.setup_time);
+  write_datapoint("Footprint",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, accessCount, "ISL Setup", dec.space_time + dec.map_time);
+  write_datapoint("Footprint",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, accessCount, "ISL Solve", dec.solve_time);
 
 }
 
@@ -362,6 +365,7 @@ void data_dims_experiment(idx_t footprint, camp::idx_seq<DataDimIdxs...>) {
   auto dataDimensionality = NumDataDims;
   auto viewCount = 1;
   auto constraintCount = 0;
+  auto accessCount = 1;
   using VIEW = View<double, Layout<NumDataDims>>;
   
   auto nTuple = tuple_repeat<NumDataDims>(n);
@@ -376,9 +380,9 @@ void data_dims_experiment(idx_t footprint, camp::idx_seq<DataDimIdxs...>) {
   camp::sink(breakdown);
   //auto conversion_time = get<0>(breakdown);
   //auto computation_time = get<1>(breakdown);
-  write_datapoint("Data Dimensionality",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "Cost Estimation", dec.setup_time);
-  write_datapoint("Data Dimensionality",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "ISL Setup", dec.space_time + dec.map_time);
-  write_datapoint("Data Dimensionality",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "ISL Solve", dec.solve_time);
+  write_datapoint("Data Dimensionality",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, accessCount, "Cost Estimation", dec.setup_time);
+  write_datapoint("Data Dimensionality",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, accessCount, "ISL Setup", dec.space_time + dec.map_time);
+  write_datapoint("Data Dimensionality",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, accessCount, "ISL Solve", dec.solve_time);
 
 }
 template <camp::idx_t NumDataDims>
@@ -396,6 +400,7 @@ void constraint_count_experiment() {
   auto footprint = 3 * n * n;
   auto dataDimensionality = 2;
   auto viewCount = 1;
+  auto accessCount = 1;
   using VIEW = View<double, Layout<2>>;
   VIEW A(new double[n*n], n,n);
   VIEW B(new double[n*n], n,n);
@@ -423,7 +428,7 @@ void constraint_count_experiment() {
   auto knl3 = make_kernel<COMP_POL>(segs, lam3);
   auto knl4 = make_kernel<COMP_POL>(segs, lam4);
   auto knl5 = make_kernel<COMP_POL>(segs, lam5);
-  auto dec = format_decisions(tie(C), knl1, knl2, knl3);
+  auto dec = format_decisions(tie(C), knl1, knl2, knl3, knl4, knl5);
 
   if constexpr (constraintCount > 0) {
     dec.set_format_for(C,{0,1},knl1);
@@ -448,10 +453,101 @@ void constraint_count_experiment() {
 
   camp::sink(breakdown);
 
-  write_datapoint("Constraint Count",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "Cost Estimation", dec.setup_time);
-  write_datapoint("Constraint Count",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "ISL Setup", dec.space_time + dec.map_time);
-  write_datapoint("Constraint Count",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "ISL Solve", dec.solve_time);
+  write_datapoint("Constraint Count",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, accessCount, "Cost Estimation", dec.setup_time);
+  write_datapoint("Constraint Count",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, accessCount, "ISL Setup", dec.space_time + dec.map_time);
+  write_datapoint("Constraint Count",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, accessCount, "ISL Solve", dec.solve_time);
+}
 
+//creates the decision object for the different number of accesses. 
+////the point of this function is to contain boilerplate so 
+// the access_count_experiment function is comprehensible
+template <typename ViewType, idx_t accessCount>
+auto access_count_experiment_decision_object(ViewType & A, ViewType & B, ViewType & C, idx_t n) {
+  using POL = typename order_to_kpol<0,1>::Policy;
+  auto segs = tuple_repeat<2>(RangeSegment(0,n));
+
+  if constexpr (accessCount == 1) {
+    auto knl1 = make_kernel<POL>(segs, [&](auto i, auto j) {
+      A(i,j) = B(i,j) * C(j,i);
+    });
+    auto knl2 = make_kernel<POL>(segs, [&](auto i, auto j) {
+      A(j,i) = B(j,i) * C(j,i);
+    });
+    auto dec = format_decisions(tie(C), knl1, knl2);
+    return dec; 
+  } else if constexpr (accessCount == 2) {
+    auto knl1 = make_kernel<POL>(segs, [&](auto i, auto j) {
+      A(i,j) = B(i,j) * C(j,i) + C(i,j);
+    });
+    auto knl2 = make_kernel<POL>(segs, [&](auto i, auto j) {
+      A(j,i) = B(j,i) * C(j,i) + C(j,i);
+    });
+    auto dec = format_decisions(tie(C), knl1, knl2);
+    return dec; 
+
+  } else if constexpr (accessCount == 3) {
+    auto knl1 = make_kernel<POL>(segs, [&](auto i, auto j) {
+      A(i,j) = B(i,j) * C(j,i) + C(i,j) * C(i,j);
+    });
+    auto knl2 = make_kernel<POL>(segs, [&](auto i, auto j) {
+      A(j,i) = B(j,i) * C(j,i) + C(j,i) * C(i,j);
+    });
+    auto dec = format_decisions(tie(C), knl1, knl2);
+    return dec; 
+
+  } else if constexpr (accessCount == 4) {
+    auto knl1 = make_kernel<POL>(segs, [&](auto i, auto j) {
+      A(i,j) = B(i,j) * C(j,i) + C(i,j) * C(i,j) + C(i,j);
+    });
+    auto knl2 = make_kernel<POL>(segs, [&](auto i, auto j) {
+      A(j,i) = B(j,i) * C(j,i) + C(j,i) * C(i,j) + C(j, i);
+    });
+    auto dec = format_decisions(tie(C), knl1, knl2);
+    return dec; 
+
+  } else if constexpr (accessCount == 5) {
+    auto knl1 = make_kernel<POL>(segs, [&](auto i, auto j) {
+      A(i,j) = B(i,j) * C(j,i) + C(i,j) * C(i,j) + C(i,j) * C(i,j);
+    });
+    auto knl2 = make_kernel<POL>(segs, [&](auto i, auto j) {
+      A(j,i) = B(j,i) * C(j,i) + C(j,i) * C(i,j) + C(j, i) * C(i,j);
+    });
+    auto dec = format_decisions(tie(C), knl1, knl2);
+    return dec; 
+
+  }else {
+    return 0.0;
+  }
+}
+
+template <camp::idx_t accessCount>
+void access_count_experiment() {
+  idx_t n = 100;
+  auto numLoops = 2;
+  idx_t constexpr loopDepth = 2;
+  auto footprint = 3 * n * n;
+  auto dataDimensionality = 2;
+  auto viewCount = 1;
+  auto constraintCount = 0;
+  using VIEW = View<double, Layout<2>>;
+  VIEW A(new double[n*n], n,n);
+  VIEW B(new double[n*n], n,n);
+  VIEW C(new double[n*n], n,n);
+
+   for(int i = 0; i < n; i++) {
+    for(int j = 0; j < n; j++) {
+      A(i,j) = std::rand();
+      B(i,j) = std::rand();
+      C(i,j) = std::rand();
+    }
+  }
+
+  auto dec = access_count_experiment_decision_object<VIEW, accessCount>(A,B,C,n);
+  camp::sink(dec.time_execution());
+
+  write_datapoint("Access Count",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, accessCount, "Cost Estimation", dec.setup_time);
+  write_datapoint("Access Count",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, accessCount, "ISL Setup", dec.space_time + dec.map_time);
+  write_datapoint("Access Count",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, accessCount, "ISL Solve", dec.solve_time);
 
 }
 
@@ -517,6 +613,20 @@ int main() {
   std::cerr << "Num Constraints = 6...\n";
   constraint_count_experiment<6>();
   std::cerr << "Constraint Count Experiment Complete!\n";
+
+  std::cerr << "Running Access Count Experiment...\n";
+  std::cerr << "Num Accesses = 1\n";
+  access_count_experiment<1>();
+  std::cerr << "Num Accesses = 2\n";
+  access_count_experiment<2>();
+  std::cerr << "Num Accesses = 3\n";
+  access_count_experiment<3>();
+  std::cerr << "Num Accesses = 4\n";
+  access_count_experiment<4>();
+  std::cerr << "Num Accesses = 5\n";
+  access_count_experiment<5>();
+
+
 
   std::cerr <<"Running Data Dimensionality Experiment...\n";
   auto footprint = 30000000;
