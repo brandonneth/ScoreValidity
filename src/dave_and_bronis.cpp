@@ -371,9 +371,9 @@ void data_dims_experiment(idx_t footprint, camp::idx_seq<DataDimIdxs...>) {
   auto breakdown = dec.time_execution();
   auto conversion_time = get<0>(breakdown);
   auto computation_time = get<1>(breakdown);
-  write_datapoint("Footprint",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "Cost Estimation", dec.setup_time);
-  write_datapoint("Footprint",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "ISL Setup", dec.space_time + dec.map_time);
-  write_datapoint("Footprint",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "ISL Solve", dec.solve_time);
+  write_datapoint("Data Dims",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "Cost Estimation", dec.setup_time);
+  write_datapoint("Data Dims",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "ISL Setup", dec.space_time + dec.map_time);
+  write_datapoint("Data Dims",numLoops,loopDepth, footprint, dataDimensionality, viewCount, constraintCount, "ISL Solve", dec.solve_time);
 
 }
 template <camp::idx_t NumDataDims>

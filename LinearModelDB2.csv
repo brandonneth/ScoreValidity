@@ -1,0 +1,16 @@
+Experiment Name, Loop Nest Count,Loop Nest Depth,Memory Footprint,Data Dimensionality,View Count,Constraint Count,Component,Execution Time
+Loop Count,7,3,30000,2,1,0,Cost Estimation,17819
+Loop Count,7,3,30000,2,1,0,ISL Setup,58650
+Loop Count,7,3,30000,2,1,0,ISL Solve,12295
+Loop Count,8,3,30000,2,1,0,Cost Estimation,20641
+Loop Count,8,3,30000,2,1,0,ISL Setup,72230
+Loop Count,8,3,30000,2,1,0,ISL Solve,23076
+Footprint,3,3,3000000,2,1,0,Cost Estimation,15099
+Footprint,3,3,3000000,2,1,0,ISL Setup,19134
+Footprint,3,3,3000000,2,1,0,ISL Solve,3568
+Data Dims,2,2,9998244,2,1,0,Cost Estimation,7949
+Data Dims,2,2,9998244,2,1,0,ISL Setup,39767
+Data Dims,2,2,9998244,2,1,0,ISL Solve,6587
+Data Dims,2,3,9938375,3,1,0,Cost Estimation,39466
+Data Dims,2,3,9938375,3,1,0,ISL Setup,1158050
+Data Dims,2,3,9938375,3,1,0,ISL Solve,620636
