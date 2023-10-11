@@ -621,16 +621,17 @@ int main() {
   std::cerr << "Constraint Count Experiment Complete!\n";
 
   std::cerr << "Running Access Count Experiment...\n";
-  std::cerr << "Num Accesses = 1\n";
-  access_count_experiment<1>();
-  std::cerr << "Num Accesses = 2\n";
-  access_count_experiment<2>();
   std::cerr << "Num Accesses = 3\n";
   access_count_experiment<3>();
-  std::cerr << "Num Accesses = 4\n";
-  access_count_experiment<4>();
   std::cerr << "Num Accesses = 5\n";
   access_count_experiment<5>();
+  std::cerr << "Num Accesses = 1\n";
+  access_count_experiment<1>();
+  std::cerr << "Num Accesses = 4\n";
+  access_count_experiment<4>();
+  std::cerr << "Num Accesses = 2\n";
+  access_count_experiment<2>();
+
 
 
 
