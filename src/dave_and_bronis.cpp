@@ -585,6 +585,8 @@ int main() {
   std::cerr << "Neth Depth Experiment Complete!\n";
 
   std::cerr << "Running Memory Footprint Experiment...\n";
+  std::cerr << "View Side Length = 73...\n";
+  footprint_experiment<73>();
   std::cerr << "View Side Length = 100...\n";
   footprint_experiment<100>();
   std::cerr << "View Side Length = 141...\n";
@@ -593,6 +595,10 @@ int main() {
   footprint_experiment<173>();
   std::cerr << "View Side Length = 200...\n";
   footprint_experiment<200>();
+  std::cerr << "View Side Length = 205...\n";
+  footprint_experiment<205>();
+  std::cerr << "View Side Length = 292...\n";
+  footprint_experiment<292>();
   std::cerr << "View Side Length = 1000...\n";
   footprint_experiment<1000>();
   std::cerr << "Memory Footprint Experiment Complete!\n";
