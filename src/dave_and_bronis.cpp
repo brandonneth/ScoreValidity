@@ -19,7 +19,7 @@ template <idx_t I, idx_t...Is>
 struct order_to_kpol {
   using SubPolicy = typename order_to_kpol_helper<Is...>::Policy;
   using Policy = KernelPolicy<
-    statement::For<I,omp_parallel_for_exec,
+    statement::For<I,loop_exec,
       SubPolicy
     >
   >;
@@ -250,7 +250,7 @@ void nest_depth_experiment() {
 template <idx_t n>
 void footprint_experiment() {
   auto numLoops = 3;
-  auto loopDepth = 3;
+  auto loopDepth = 2;
   auto footprint = 3 * n * n;
   auto dataDimensionality = 2;
   auto viewCount = 1;
@@ -268,18 +268,18 @@ void footprint_experiment() {
       C(i,j) = std::rand();
     }
   }
-  auto lam1 = [&](auto i, auto j, auto k) {
-    A(i,j) += B(i,k) * C(k,j);
+  auto lam1 = [&](auto i, auto j) {
+    A(i,j) += B(i,j) * C(i,j);
   };
-  auto lam2 = [&](auto i, auto j, auto k) {
-    A(i,j) += C(i,k) * B(k,j);
+  auto lam2 = [&](auto i, auto j) {
+    A(j,i) += C(j,i) * B(i,j);
   };
-  auto lam3 = [&](auto i, auto j, auto k) {
-    A(i,j) += B(i,k) * C(k,j);
+  auto lam3 = [&](auto i, auto j) {
+    A(i,j) += B(j,i) * C(i,j);
   };
 
-  using COMP_POL = typename order_to_kpol<0,1,2>::Policy;
-  auto segs = tuple_repeat<3>(RangeSegment(0,n));
+  using COMP_POL = typename order_to_kpol<0,1>::Policy;
+  auto segs = tuple_repeat<2>(RangeSegment(0,n));
   auto knl1 = make_kernel<COMP_POL>(segs, lam1);
   auto knl2 = make_kernel<COMP_POL>(segs, lam2);
   auto knl3 = make_kernel<COMP_POL>(segs, lam3);
