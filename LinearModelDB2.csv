@@ -1,100 +1,58 @@
 Experiment Name, Loop Nest Count,Loop Nest Depth,Memory Footprint,Data Dimensionality,View Count,Constraint Count,Access Count,Component,Execution Time
-Loop Count,1,3,30000,2,1,0,1,Cost Estimation,15555
-Loop Count,1,3,30000,2,1,0,1,ISL Setup,9567
-Loop Count,1,3,30000,2,1,0,1,ISL Solve,997
-Loop Count,2,3,30000,2,1,0,1,Cost Estimation,15988
-Loop Count,2,3,30000,2,1,0,1,ISL Setup,14474
-Loop Count,2,3,30000,2,1,0,1,ISL Solve,2106
-Loop Count,3,3,30000,2,1,0,1,Cost Estimation,16738
-Loop Count,3,3,30000,2,1,0,1,ISL Setup,20215
-Loop Count,3,3,30000,2,1,0,1,ISL Solve,3505
-Loop Count,4,3,30000,2,1,0,1,Cost Estimation,17663
-Loop Count,4,3,30000,2,1,0,1,ISL Setup,27289
-Loop Count,4,3,30000,2,1,0,1,ISL Solve,4995
-Loop Count,5,3,30000,2,1,0,1,Cost Estimation,15218
-Loop Count,5,3,30000,2,1,0,1,ISL Setup,35376
-Loop Count,5,3,30000,2,1,0,1,ISL Solve,7151
-Loop Count,6,3,30000,2,1,0,1,Cost Estimation,15330
-Loop Count,6,3,30000,2,1,0,1,ISL Setup,46002
-Loop Count,6,3,30000,2,1,0,1,ISL Solve,9603
-Loop Count,7,3,30000,2,1,0,1,Cost Estimation,16054
-Loop Count,7,3,30000,2,1,0,1,ISL Setup,58206
-Loop Count,7,3,30000,2,1,0,1,ISL Solve,12308
-Loop Count,8,3,30000,2,1,0,1,Cost Estimation,6619
-Loop Count,8,3,30000,2,1,0,1,ISL Setup,71948
-Loop Count,8,3,30000,2,1,0,1,ISL Solve,22987
-Nest Depth,3,2,30000,2,1,0,1,Cost Estimation,5674
-Nest Depth,3,2,30000,2,1,0,1,ISL Setup,19095
-Nest Depth,3,2,30000,2,1,0,1,ISL Solve,3505
-Nest Depth,3,3,30000,2,1,0,1,Cost Estimation,5760
-Nest Depth,3,3,30000,2,1,0,1,ISL Setup,19085
-Nest Depth,3,3,30000,2,1,0,1,ISL Solve,3527
-Nest Depth,3,4,30000,2,1,0,1,Cost Estimation,5730
-Nest Depth,3,4,30000,2,1,0,1,ISL Setup,19103
-Nest Depth,3,4,30000,2,1,0,1,ISL Solve,3539
-Footprint,3,3,15987,2,1,0,1,Cost Estimation,5807
-Footprint,3,3,15987,2,1,0,1,ISL Setup,19131
-Footprint,3,3,15987,2,1,0,1,ISL Solve,3497
-Footprint,3,3,30000,2,1,0,1,Cost Estimation,5737
-Footprint,3,3,30000,2,1,0,1,ISL Setup,19133
-Footprint,3,3,30000,2,1,0,1,ISL Solve,3510
-Footprint,3,3,59643,2,1,0,1,Cost Estimation,5661
-Footprint,3,3,59643,2,1,0,1,ISL Setup,19144
-Footprint,3,3,59643,2,1,0,1,ISL Solve,3535
-Footprint,3,3,89787,2,1,0,1,Cost Estimation,5674
-Footprint,3,3,89787,2,1,0,1,ISL Setup,20808
-Footprint,3,3,89787,2,1,0,1,ISL Solve,3557
-Footprint,3,3,120000,2,1,0,1,Cost Estimation,5805
-Footprint,3,3,120000,2,1,0,1,ISL Setup,19148
-Footprint,3,3,120000,2,1,0,1,ISL Solve,3504
-Footprint,3,3,126075,2,1,0,1,Cost Estimation,5782
-Footprint,3,3,126075,2,1,0,1,ISL Setup,19141
-Footprint,3,3,126075,2,1,0,1,ISL Solve,3538
-Footprint,3,3,255792,2,1,0,1,Cost Estimation,6154
-Footprint,3,3,255792,2,1,0,1,ISL Setup,19108
-Footprint,3,3,255792,2,1,0,1,ISL Solve,3532
-Footprint,3,3,3000000,2,1,0,1,Cost Estimation,6766
-Footprint,3,3,3000000,2,1,0,1,ISL Setup,19283
-Footprint,3,3,3000000,2,1,0,1,ISL Solve,3590
-Constraint Count,5,2,30000,2,1,0,1,Cost Estimation,10171
-Constraint Count,5,2,30000,2,1,0,1,ISL Setup,35589
-Constraint Count,5,2,30000,2,1,0,1,ISL Solve,7334
-Constraint Count,5,2,30000,2,1,1,1,Cost Estimation,8575
-Constraint Count,5,2,30000,2,1,1,1,ISL Setup,35635
-Constraint Count,5,2,30000,2,1,1,1,ISL Solve,6759
-Constraint Count,5,2,30000,2,1,2,1,Cost Estimation,6815
-Constraint Count,5,2,30000,2,1,2,1,ISL Setup,35587
-Constraint Count,5,2,30000,2,1,2,1,ISL Solve,5745
-Constraint Count,5,2,30000,2,1,3,1,Cost Estimation,6758
-Constraint Count,5,2,30000,2,1,3,1,ISL Setup,35659
-Constraint Count,5,2,30000,2,1,3,1,ISL Solve,5414
-Constraint Count,5,2,30000,2,1,4,1,Cost Estimation,6729
-Constraint Count,5,2,30000,2,1,4,1,ISL Setup,35706
-Constraint Count,5,2,30000,2,1,4,1,ISL Solve,4386
-Constraint Count,5,2,30000,2,1,5,1,Cost Estimation,6141
-Constraint Count,5,2,30000,2,1,5,1,ISL Setup,35714
-Constraint Count,5,2,30000,2,1,5,1,ISL Solve,3776
-Constraint Count,5,2,30000,2,1,6,1,Cost Estimation,6157
-Constraint Count,5,2,30000,2,1,6,1,ISL Setup,35864
-Constraint Count,5,2,30000,2,1,6,1,ISL Solve,3259
-Access Count,2,2,30000,2,1,0,3,Cost Estimation,5855
-Access Count,2,2,30000,2,1,0,3,ISL Setup,13305
-Access Count,2,2,30000,2,1,0,3,ISL Solve,2000
-Access Count,2,2,30000,2,1,0,5,Cost Estimation,6263
-Access Count,2,2,30000,2,1,0,5,ISL Setup,13169
-Access Count,2,2,30000,2,1,0,5,ISL Solve,2011
-Access Count,2,2,30000,2,1,0,1,Cost Estimation,5334
-Access Count,2,2,30000,2,1,0,1,ISL Setup,13458
-Access Count,2,2,30000,2,1,0,1,ISL Solve,2091
-Access Count,2,2,30000,2,1,0,4,Cost Estimation,6097
-Access Count,2,2,30000,2,1,0,4,ISL Setup,13204
-Access Count,2,2,30000,2,1,0,4,ISL Solve,2016
-Access Count,2,2,30000,2,1,0,2,Cost Estimation,5563
-Access Count,2,2,30000,2,1,0,2,ISL Setup,13383
-Access Count,2,2,30000,2,1,0,2,ISL Solve,2048
-Data Dimensionality,2,2,9998244,2,1,0,1,Cost Estimation,6647
-Data Dimensionality,2,2,9998244,2,1,0,1,ISL Setup,39607
-Data Dimensionality,2,2,9998244,2,1,0,1,ISL Solve,6378
-Data Dimensionality,2,3,9938375,3,1,0,1,Cost Estimation,38263
-Data Dimensionality,2,3,9938375,3,1,0,1,ISL Setup,1160041
-Data Dimensionality,2,3,9938375,3,1,0,1,ISL Solve,610556
+Loop Count,1,3,30000,2,1,0,1,Cost Estimation,18803
+Loop Count,1,3,30000,2,1,0,1,ISL Setup,8569
+Loop Count,1,3,30000,2,1,0,1,ISL Solve,1002
+Loop Count,2,3,30000,2,1,0,1,Cost Estimation,19076
+Loop Count,2,3,30000,2,1,0,1,ISL Setup,13387
+Loop Count,2,3,30000,2,1,0,1,ISL Solve,2161
+Loop Count,3,3,30000,2,1,0,1,Cost Estimation,16183
+Loop Count,3,3,30000,2,1,0,1,ISL Setup,20298
+Loop Count,3,3,30000,2,1,0,1,ISL Solve,3533
+Loop Count,4,3,30000,2,1,0,1,Cost Estimation,14909
+Loop Count,4,3,30000,2,1,0,1,ISL Setup,26384
+Loop Count,4,3,30000,2,1,0,1,ISL Solve,5000
+Loop Count,5,3,30000,2,1,0,1,Cost Estimation,14857
+Loop Count,5,3,30000,2,1,0,1,ISL Setup,35409
+Loop Count,5,3,30000,2,1,0,1,ISL Solve,7168
+Loop Count,6,3,30000,2,1,0,1,Cost Estimation,6883
+Loop Count,6,3,30000,2,1,0,1,ISL Setup,45931
+Loop Count,6,3,30000,2,1,0,1,ISL Solve,9551
+Loop Count,7,3,30000,2,1,0,1,Cost Estimation,6412
+Loop Count,7,3,30000,2,1,0,1,ISL Setup,58019
+Loop Count,7,3,30000,2,1,0,1,ISL Solve,12325
+Loop Count,8,3,30000,2,1,0,1,Cost Estimation,6582
+Loop Count,8,3,30000,2,1,0,1,ISL Setup,71928
+Loop Count,8,3,30000,2,1,0,1,ISL Solve,23008
+Nest Depth,3,2,30000,2,1,0,1,Cost Estimation,5678
+Nest Depth,3,2,30000,2,1,0,1,ISL Setup,19108
+Nest Depth,3,2,30000,2,1,0,1,ISL Solve,3489
+Nest Depth,3,3,30000,2,1,0,1,Cost Estimation,5733
+Nest Depth,3,3,30000,2,1,0,1,ISL Setup,19087
+Nest Depth,3,3,30000,2,1,0,1,ISL Solve,3533
+Nest Depth,3,4,30000,2,1,0,1,Cost Estimation,5733
+Nest Depth,3,4,30000,2,1,0,1,ISL Setup,19173
+Nest Depth,3,4,30000,2,1,0,1,ISL Solve,3538
+Footprint,3,3,175692,2,1,0,1,Cost Estimation,5777
+Footprint,3,3,175692,2,1,0,1,ISL Setup,19121
+Footprint,3,3,175692,2,1,0,1,ISL Solve,3511
+Footprint,3,3,350892,2,1,0,1,Cost Estimation,8598
+Footprint,3,3,350892,2,1,0,1,ISL Setup,19105
+Footprint,3,3,350892,2,1,0,1,ISL Solve,3509
+Footprint,3,3,702768,2,1,0,1,Cost Estimation,6577
+Footprint,3,3,702768,2,1,0,1,ISL Setup,19164
+Footprint,3,3,702768,2,1,0,1,ISL Solve,3675
+Footprint,3,3,4219788,2,1,0,1,Cost Estimation,8939
+Footprint,3,3,4219788,2,1,0,1,ISL Setup,19307
+Footprint,3,3,4219788,2,1,0,1,ISL Solve,3841
+Footprint,3,3,8447052,2,1,0,1,Cost Estimation,6469
+Footprint,3,3,8447052,2,1,0,1,ISL Setup,19230
+Footprint,3,3,8447052,2,1,0,1,ISL Solve,3609
+Footprint,3,3,16893387,2,1,0,1,Cost Estimation,13348
+Footprint,3,3,16893387,2,1,0,1,ISL Setup,19249
+Footprint,3,3,16893387,2,1,0,1,ISL Solve,3666
+Footprint,3,3,29994732,2,1,0,1,Cost Estimation,16235
+Footprint,3,3,29994732,2,1,0,1,ISL Setup,19382
+Footprint,3,3,29994732,2,1,0,1,ISL Solve,3661
+Footprint,3,3,59996352,2,1,0,1,Cost Estimation,15046
+Footprint,3,3,59996352,2,1,0,1,ISL Setup,19253
+Footprint,3,3,59996352,2,1,0,1,ISL Solve,3718
